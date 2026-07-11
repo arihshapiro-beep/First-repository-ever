@@ -18,19 +18,25 @@ Built as a single-page web app — no accounts, no server. Everything runs in yo
    - Credit-card / service fee as a **percent** or **flat dollar** amount.
 6. **Per-person breakdown** — each person's items, tax, tip, and fee share, plus the grand total. One tap to copy a text summary.
 
-## Tax rates
+## Tax by location — you don't look rates up, the app does
 
-The app ships with **Evanston, IL** defaults:
+In Step 5, type a **city, ZIP code, or state** and the app fills in the food, alcohol, and "other"
+tax rates for you. It understands formats like `Evanston, IL`, `evanston`, `60201`, `chicago il`,
+`washington dc`, or just `Illinois`.
 
-| Category | Rate | Why |
-|----------|------|-----|
-| Food (restaurant) | **10.25%** | Standard combined sales tax |
-| Alcohol | **16.25%** | Sales tax **+ Evanston's 6% liquor tax** |
-| Other | 10.25% | Standard sales tax |
+Each result is labeled with a confidence:
 
-All rates are **editable** — pick a preset or type your own. Tax law changes, so confirm the
-official rates for your location before relying on them. (Sources: City of Evanston home-rule
-liquor tax; Illinois Dept. of Revenue.)
+- **exact** — a hand-verified local rate, including places where alcohol is taxed differently from
+  food. Examples: **Evanston, IL** (food 10.25% / alcohol **16.25%** with the city's 6% liquor tax),
+  **Washington, DC** (10% meals tax), plus ~35 major cities.
+- **typical** — for anywhere without a special entry, the app uses that **state's typical combined
+  restaurant tax**. It's a close estimate; the exact rate can vary by street address.
+
+Everything the lookup fills in stays **editable**, so you can always correct a rate by hand.
+
+> ⚠️ Tax law changes and local surcharges vary. Treat the numbers as a strong starting point and
+> confirm anything important. Sources: Tax Foundation state & local sales-tax data; City of Evanston
+> home-rule liquor tax; DC Office of the CFO; Illinois Dept. of Revenue.
 
 ## Run it
 
@@ -48,6 +54,7 @@ load the text-recognition library.)
 ## Files
 
 - `index.html` — layout and styles
+- `taxData.js` — the built-in location → tax-rate database and lookup logic
 - `app.js` — OCR, receipt parsing, assignment, and the tax/tip/fee math
 
 ## Notes & limits

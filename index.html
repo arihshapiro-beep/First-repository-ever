@@ -134,6 +134,14 @@
   .split-note { font-size: 11px; color: var(--accent); }
   .hidden { display: none !important; }
   a { color: var(--accent); }
+  .loc-result { font-size: 13px; margin-top: 10px; display: none; padding: 10px 12px; border-radius: 10px; background: var(--card-2); border: 1px solid var(--line); }
+  .loc-result.show { display: block; }
+  .loc-result .lbl { font-weight: 700; }
+  .loc-result .conf { font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
+  .loc-result .conf.exact { background: rgba(52,211,153,.15); color: var(--ok); border: 1px solid var(--ok); }
+  .loc-result .conf.typical { background: rgba(251,191,36,.15); color: var(--other); border: 1px solid var(--other); }
+  .loc-result .conf.miss { background: rgba(248,113,113,.12); color: var(--danger); border: 1px solid var(--danger); }
+  .loc-result .sub { color: var(--muted); margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -185,13 +193,13 @@
   <section class="card">
     <h2><span class="step">5</span> Tax, tip &amp; fees</h2>
 
-    <label>Location preset</label>
-    <select id="taxPreset">
-      <option value="evanston">Evanston, IL — food 10.25% / alcohol 16.25%</option>
-      <option value="chicago">Chicago, IL — food 10.25% / alcohol 10.25%</option>
-      <option value="none">No tax (0%)</option>
-      <option value="custom">Custom…</option>
-    </select>
+    <label>Where are you? (city, ZIP, or state — we fill in the tax)</label>
+    <div class="row">
+      <input type="text" id="locationInput" list="citySuggest" placeholder="e.g. Evanston, IL or 60201" autocomplete="off" />
+      <button class="small" id="lookupBtn" style="flex:0 0 auto;width:auto">Look up</button>
+    </div>
+    <datalist id="citySuggest"></datalist>
+    <div id="locResult" class="loc-result"></div>
 
     <div class="row" style="margin-top:12px">
       <div>
@@ -207,7 +215,7 @@
         <input type="number" id="taxOther" step="0.01" inputmode="decimal" />
       </div>
     </div>
-    <p class="hint">Defaults are Evanston, IL (restaurant food = 10.25% sales tax; alcohol adds Evanston's 6% liquor tax = 16.25%). Verify rates for your spot and edit freely.</p>
+    <p class="hint">Type a location above and we auto-fill the rates. Exact for cities with known rules (e.g. Evanston's higher alcohol tax); a typical statewide estimate elsewhere. Always editable — verify before you rely on it.</p>
 
     <div style="margin-top:16px">
       <label>Tip</label>
@@ -258,6 +266,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="taxData.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

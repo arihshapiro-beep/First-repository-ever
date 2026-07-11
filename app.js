@@ -6,19 +6,13 @@ const state = {
   people: [],       // {id, name}
   assignments: {},  // itemId -> [personId, ...]
   tax: { food: 10.25, alcohol: 16.25, other: 10.25 },
-  preset: 'evanston',
+  location: '',
   tip: { percent: 20, base: 'subtotal' }, // base: 'subtotal' | 'taxed'
   fee: { mode: 'percent', value: 0 },     // mode: 'percent' | 'flat'
 };
 
 const CATS = ['food', 'alcohol', 'other'];
 const CAT_COLOR = { food: 'var(--food)', alcohol: 'var(--alcohol)', other: 'var(--other)' };
-
-const PRESETS = {
-  evanston: { food: 10.25, alcohol: 16.25, other: 10.25 },
-  chicago:  { food: 10.25, alcohol: 10.25, other: 10.25 },
-  none:     { food: 0, alcohol: 0, other: 0 },
-};
 
 let idSeq = 1;
 const uid = () => 'id' + (idSeq++);
@@ -35,7 +29,7 @@ function load() {
     const d = JSON.parse(raw);
     Object.assign(state, {
       items: d.items || [], people: d.people || [], assignments: d.assignments || {},
-      tax: d.tax || state.tax, preset: d.preset || state.preset,
+      tax: d.tax || state.tax, location: d.location || '',
       tip: d.tip || state.tip, fee: d.fee || state.fee,
     });
     idSeq = d.idSeq || 1;
@@ -271,34 +265,63 @@ function renderAssign() {
 }
 
 // ---------- Tax / tip / fee controls ----------
-const taxPreset = document.getElementById('taxPreset');
+const locationInput = document.getElementById('locationInput');
+const lookupBtn = document.getElementById('lookupBtn');
+const locResult = document.getElementById('locResult');
+const citySuggest = document.getElementById('citySuggest');
 const taxFood = document.getElementById('taxFood');
 const taxAlcohol = document.getElementById('taxAlcohol');
 const taxOther = document.getElementById('taxOther');
 const tipPercent = document.getElementById('tipPercent');
 const feeValue = document.getElementById('feeValue');
 
+// Autocomplete list of known cities
+if (typeof CITY_SUGGESTIONS !== 'undefined') {
+  citySuggest.innerHTML = CITY_SUGGESTIONS.map(s => `<option value="${s}"></option>`).join('');
+}
+
 function syncTaxInputs() {
   taxFood.value = state.tax.food;
   taxAlcohol.value = state.tax.alcohol;
   taxOther.value = state.tax.other;
-  taxPreset.value = state.preset;
 }
 
-taxPreset.addEventListener('change', () => {
-  state.preset = taxPreset.value;
-  if (PRESETS[state.preset]) {
-    state.tax = { ...PRESETS[state.preset] };
-    syncTaxInputs();
+function showLocResult(res, query) {
+  locResult.classList.add('show');
+  if (!res) {
+    locResult.innerHTML = `<span class="conf miss">no match</span> Couldn't find “${escapeHtml(query)}”. Try a ZIP code, “City, ST”, or a state name — or just type the rates in below.`;
+    return;
   }
-  renderSummary(); save();
-});
+  const diff = res.alcohol !== res.food
+    ? ` <span class="split-note">· alcohol taxed higher here</span>` : '';
+  locResult.innerHTML =
+    `<span class="lbl">${escapeHtml(res.label)}</span>` +
+    `<span class="conf ${res.confidence}">${res.confidence}</span>${diff}` +
+    `<div class="sub">Food ${res.food}% · Alcohol ${res.alcohol}% · Other ${res.other}% — ${escapeHtml(res.note)}</div>`;
+}
+
+function doLookup() {
+  const q = locationInput.value.trim();
+  state.location = q;
+  if (!q) { locResult.classList.remove('show'); save(); return; }
+  const res = (typeof lookupTax !== 'undefined') ? lookupTax(q) : null;
+  if (res) {
+    state.tax = { food: res.food, alcohol: res.alcohol, other: res.other };
+    syncTaxInputs();
+    renderSummary();
+  }
+  showLocResult(res, q);
+  save();
+}
+
+lookupBtn.addEventListener('click', doLookup);
+locationInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doLookup(); } });
+locationInput.addEventListener('change', doLookup); // fires when picking a datalist suggestion
 
 function bindTax(input, key) {
   input.addEventListener('input', () => {
     state.tax[key] = parseFloat(input.value) || 0;
-    state.preset = 'custom';
-    taxPreset.value = 'custom';
+    locResult.classList.remove('show'); // manual override clears the lookup note
     renderSummary(); save();
   });
 }
@@ -455,6 +478,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   state.items = []; state.people = []; state.assignments = {};
   localStorage.removeItem(STORAGE_KEY);
   ocrStatus.textContent = ''; preview.style.display = 'none'; fileInput.value = '';
+  state.location = ''; locationInput.value = ''; locResult.classList.remove('show');
   renderAll();
 });
 
@@ -474,4 +498,9 @@ function renderAll() {
 load();
 syncTaxInputs();
 syncTipFeeInputs();
+if (state.location) {
+  locationInput.value = state.location;
+  const res = (typeof lookupTax !== 'undefined') ? lookupTax(state.location) : null;
+  if (res) showLocResult(res, state.location); // show the note; keep any saved/edited rates
+}
 renderAll();
