@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0f766e" />
+<title>Check Splitter</title>
+<style>
+  :root {
+    --bg: #0b1220;
+    --card: #131c2e;
+    --card-2: #1b2740;
+    --line: #263450;
+    --text: #e8edf6;
+    --muted: #93a1bd;
+    --accent: #14b8a6;
+    --accent-2: #0f766e;
+    --food: #38bdf8;
+    --alcohol: #f472b6;
+    --other: #fbbf24;
+    --danger: #f87171;
+    --ok: #34d399;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+    padding-bottom: 90px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  header {
+    padding: 18px 16px 12px;
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(180deg, var(--bg) 70%, rgba(11,18,32,0));
+  }
+  header h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  main { padding: 0 16px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  .card h2 .step { background: var(--accent-2); color:#fff; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size: 12px; font-weight: 700; }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  input, select {
+    width: 100%; background: var(--card-2); border: 1px solid var(--line);
+    color: var(--text); border-radius: 10px; padding: 11px 12px; font-size: 15px;
+    outline: none; appearance: none;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  button {
+    border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+    padding: 12px 14px; cursor: pointer; color: #fff; background: var(--accent-2);
+    transition: filter .15s; width: 100%;
+  }
+  button:active { filter: brightness(1.2); }
+  button.ghost { background: transparent; border: 1px solid var(--line); color: var(--text); font-weight: 500; }
+  button.small { width: auto; padding: 8px 12px; font-size: 13px; }
+  button.danger { background: transparent; color: var(--danger); border: 1px solid transparent; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* Item rows */
+  .item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: none; }
+  .item .grow { flex: 1; min-width: 0; }
+  .item input.name { padding: 8px 10px; font-size: 14px; }
+  .item input.price { width: 84px; text-align: right; padding: 8px 10px; font-size: 14px; }
+  .cat-pills { display: flex; gap: 4px; margin-top: 6px; }
+  .cat-pill {
+    font-size: 11px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line);
+    color: var(--muted); background: transparent; cursor: pointer; width: auto; font-weight: 600;
+  }
+  .cat-pill.active[data-cat="food"] { background: var(--food); border-color: var(--food); color: #04263a; }
+  .cat-pill.active[data-cat="alcohol"] { background: var(--alcohol); border-color: var(--alcohol); color: #3a0a24; }
+  .cat-pill.active[data-cat="other"] { background: var(--other); border-color: var(--other); color: #3a2a04; }
+  .icon-btn { width: 32px; height: 32px; flex: 0 0 auto; padding: 0; background: transparent; color: var(--muted); font-size: 18px; }
+
+  /* People chips */
+  .people-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .person-chip {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--card-2);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 12px; font-size: 13px; width: auto;
+  }
+  .person-chip .x { cursor: pointer; color: var(--muted); font-size: 16px; padding: 0 4px; }
+
+  /* Assignment */
+  .assign-item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .assign-item:last-child { border-bottom: none; }
+  .assign-head { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+  .assign-head .cat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .who { display: flex; flex-wrap: wrap; gap: 6px; }
+  .who button {
+    width: auto; padding: 6px 12px; font-size: 13px; background: var(--card-2);
+    border: 1px solid var(--line); color: var(--muted); font-weight: 500;
+  }
+  .who button.on { background: var(--accent); border-color: var(--accent); color: #04302b; font-weight: 700; }
+
+  /* Summary */
+  .sum-person { border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 12px; background: var(--card-2); }
+  .sum-person .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .sum-person .name { font-size: 16px; font-weight: 700; }
+  .sum-person .total { font-size: 20px; font-weight: 800; color: var(--ok); }
+  .sum-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); padding: 2px 0; }
+  .sum-line.b { color: var(--text); }
+  .sum-items { font-size: 12px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
+  .grand { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; }
+  .grand.big { font-size: 17px; font-weight: 800; color: var(--text); border-top: 1px solid var(--line); margin-top: 6px; padding-top: 10px; }
+
+  .toggle-group { display: flex; background: var(--card-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+  .toggle-group button {
+    width: auto; flex: 1; background: transparent; color: var(--muted); font-weight: 600; padding: 8px; font-size: 13px;
+  }
+  .toggle-group button.on { background: var(--accent-2); color: #fff; }
+
+  .ocr-status { font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center; }
+  .progress { height: 6px; background: var(--card-2); border-radius: 4px; overflow: hidden; margin-top: 8px; display: none; }
+  .progress > div { height: 100%; width: 0%; background: var(--accent); transition: width .2s; }
+  .preview { margin-top: 12px; border-radius: 10px; max-width: 100%; display: none; border: 1px solid var(--line); }
+
+  .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 16px 0; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--card-2); border: 1px solid var(--line); color: var(--muted); width:auto; }
+  .split-note { font-size: 11px; color: var(--accent); }
+  .hidden { display: none !important; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧾 Check Splitter</h1>
+  <p>Snap a receipt, split by who ordered what — with location-aware tax, tip &amp; fees.</p>
+</header>
+
+<main>
+  <!-- STEP 1: RECEIPT -->
+  <section class="card">
+    <h2><span class="step">1</span> Scan the receipt</h2>
+    <label>Take a photo or upload a picture of the receipt</label>
+    <input type="file" id="fileInput" accept="image/*" capture="environment" />
+    <div class="progress" id="progress"><div id="progressBar"></div></div>
+    <div class="ocr-status" id="ocrStatus"></div>
+    <img id="preview" class="preview" alt="receipt preview" />
+    <p class="hint">The app reads the text and auto-fills the items below. OCR isn't perfect — check the list and fix anything in Step 2. You can also skip this and add items by hand.</p>
+  </section>
+
+  <!-- STEP 2: ITEMS -->
+  <section class="card">
+    <h2><span class="step">2</span> Items &amp; categories</h2>
+    <div id="itemList"></div>
+    <div class="empty" id="itemsEmpty">No items yet. Scan a receipt above or add one below.</div>
+    <div style="margin-top:12px"><button class="ghost" id="addItemBtn">+ Add item</button></div>
+    <p class="hint">Tap a category pill on each item — tax is applied per category. Alcohol is often taxed higher.</p>
+  </section>
+
+  <!-- STEP 3: PEOPLE -->
+  <section class="card">
+    <h2><span class="step">3</span> Who's splitting?</h2>
+    <div class="row">
+      <input type="text" id="personInput" placeholder="Add a name…" />
+      <button class="small" id="addPersonBtn" style="flex:0 0 auto;width:auto">Add</button>
+    </div>
+    <div class="people-chips" id="peopleChips"></div>
+  </section>
+
+  <!-- STEP 4: ASSIGN -->
+  <section class="card">
+    <h2><span class="step">4</span> Assign items</h2>
+    <p class="muted" style="margin-top:-4px">Tap each person who shared an item. Shared items split evenly.</p>
+    <div id="assignList"></div>
+    <div class="empty" id="assignEmpty">Add items and people first.</div>
+  </section>
+
+  <!-- STEP 5: TAX / TIP / FEES -->
+  <section class="card">
+    <h2><span class="step">5</span> Tax, tip &amp; fees</h2>
+
+    <label>Location preset</label>
+    <select id="taxPreset">
+      <option value="evanston">Evanston, IL — food 10.25% / alcohol 16.25%</option>
+      <option value="chicago">Chicago, IL — food 10.25% / alcohol 10.25%</option>
+      <option value="none">No tax (0%)</option>
+      <option value="custom">Custom…</option>
+    </select>
+
+    <div class="row" style="margin-top:12px">
+      <div>
+        <label>Food tax %</label>
+        <input type="number" id="taxFood" step="0.01" inputmode="decimal" />
+      </div>
+      <div>
+        <label>Alcohol tax %</label>
+        <input type="number" id="taxAlcohol" step="0.01" inputmode="decimal" />
+      </div>
+      <div>
+        <label>Other tax %</label>
+        <input type="number" id="taxOther" step="0.01" inputmode="decimal" />
+      </div>
+    </div>
+    <p class="hint">Defaults are Evanston, IL (restaurant food = 10.25% sales tax; alcohol adds Evanston's 6% liquor tax = 16.25%). Verify rates for your spot and edit freely.</p>
+
+    <div style="margin-top:16px">
+      <label>Tip</label>
+      <div class="row">
+        <input type="number" id="tipPercent" step="1" inputmode="decimal" value="20" />
+        <div class="toggle-group" style="flex:2">
+          <button data-tipbase="subtotal" class="on">On subtotal (pre-tax)</button>
+          <button data-tipbase="taxed">On taxed total</button>
+        </div>
+      </div>
+      <p class="hint">Tip % applied to your chosen base, then split in proportion to each person's share.</p>
+    </div>
+
+    <div style="margin-top:16px">
+      <label>Credit card / service fee</label>
+      <div class="row">
+        <div class="toggle-group" style="flex:2">
+          <button data-feemode="percent" class="on">Percent %</button>
+          <button data-feemode="flat">Flat $</button>
+        </div>
+        <input type="number" id="feeValue" step="0.01" inputmode="decimal" value="0" />
+      </div>
+      <p class="hint">Applied to the grand total (items + tax + tip), then split proportionally.</p>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="card">
+    <h2>💰 Per-person breakdown</h2>
+    <div id="summary"></div>
+    <div class="empty" id="summaryEmpty">Assign items to people to see the split.</div>
+    <div id="grandTotals" class="hidden" style="margin-top:12px">
+      <div class="grand"><span>Subtotal</span><span id="gSub"></span></div>
+      <div class="grand"><span>Tax</span><span id="gTax"></span></div>
+      <div class="grand"><span>Tip</span><span id="gTip"></span></div>
+      <div class="grand"><span>Fees</span><span id="gFee"></span></div>
+      <div class="grand big"><span>Grand total</span><span id="gTotal"></span></div>
+    </div>
+  </section>
+
+  <div style="display:flex;gap:10px;margin-bottom:20px">
+    <button class="ghost" id="resetBtn">Start over</button>
+    <button id="shareBtn">Copy summary</button>
+  </div>
+  <p class="muted" style="text-align:center;font-size:11px;margin-bottom:30px">
+    Everything stays on your device. Tax rates are editable estimates — confirm official rates for your location.
+  </p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
