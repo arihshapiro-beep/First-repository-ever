@@ -52,12 +52,16 @@
   .card h2 { font-size: 15px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
   .card h2 .step { background: var(--accent-2); color:#fff; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size: 12px; font-weight: 700; }
   label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
-  input, select {
+  input, select, textarea {
     width: 100%; background: var(--card-2); border: 1px solid var(--line);
     color: var(--text); border-radius: 10px; padding: 11px 12px; font-size: 15px;
-    outline: none; appearance: none;
+    outline: none; appearance: none; font-family: inherit;
   }
-  input:focus, select:focus { border-color: var(--accent); }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; line-height: 1.4; }
+  .raw-wrap { display: none; margin-top: 12px; }
+  .raw-wrap summary { cursor: pointer; font-size: 13px; color: var(--accent); padding: 4px 0; }
+  .raw-wrap textarea { margin: 8px 0; }
   button {
     border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
     padding: 12px 14px; cursor: pointer; color: #fff; background: var(--accent-2);
@@ -160,7 +164,12 @@
     <div class="progress" id="progress"><div id="progressBar"></div></div>
     <div class="ocr-status" id="ocrStatus"></div>
     <img id="preview" class="preview" alt="receipt preview" />
-    <p class="hint">The app reads the text and auto-fills the items below. OCR isn't perfect — check the list and fix anything in Step 2. You can also skip this and add items by hand.</p>
+    <details id="rawWrap" class="raw-wrap">
+      <summary>📝 Show / edit the scanned text</summary>
+      <textarea id="rawText" rows="7" placeholder="Scanned receipt text appears here. Fix any misread lines (keep the price at the end of each item line), then tap Re-scan. You can also paste text in."></textarea>
+      <button class="ghost" id="reparseBtn">Re-scan items from this text</button>
+    </details>
+    <p class="hint">Tip for good scans: flatten the receipt, good light, fill the frame. The app reads the text and auto-fills items below — always check them in Step 2. You can also skip scanning and add items by hand.</p>
   </section>
 
   <!-- STEP 2: ITEMS -->
@@ -591,30 +600,88 @@ function guessCategory(name) {
 }
 
 // ---------- Receipt parsing ----------
-const SKIP_WORDS = ['subtotal','sub total','total','tax','tip','gratuity','balance','change','cash','visa','master',
-  'amex','discover','card','payment','due','amount','tend','tendered','server','table','guest','order','check #',
-  'thank','www','http','phone','tel','#','qty','ttl','auth','ref','trans'];
+const SKIP_WORDS = ['subtotal','sub total','sub-total','total','tax','tip','gratuity','balance','change','cash','visa',
+  'master','mastercard','amex','discover','credit','debit','card','payment','paid','due','amount','tender','tendered',
+  'server','table','guest','order #','check #','receipt','thank','www','http','phone','tel','qty','ttl','auth','ref',
+  'trans','approval','account','acct','sale','date','time','host','station','terminal','店','copy','merchant'];
 
 function parseReceipt(text) {
-  const lines = text.split('\n');
+  const lines = (text || '').split('\n');
   const found = [];
-  const priceRe = /(.+?)[\s.]*\$?\s*(\d{1,4}[.,]\d{2})\s*$/;
+  // Any money-looking token: optional $, 1-4 digits, . or , then 2 digits.
+  const priceTokenRe = /\$?\s*(\d{1,4}[.,]\d{2})\b/g;
   for (let raw of lines) {
-    const line = raw.replace(/\t/g, ' ').trim();
+    let line = raw.replace(/\t/g, ' ').replace(/\s{2,}/g, ' ').trim();
     if (line.length < 3) continue;
     const low = line.toLowerCase();
     if (SKIP_WORDS.some(w => low.includes(w))) continue;
-    const m = line.match(priceRe);
-    if (!m) continue;
-    let name = m[1].replace(/\s{2,}/g, ' ').replace(/[.·•*_]+$/g, '').trim();
-    // strip leading quantity like "2 " or "2x "
-    name = name.replace(/^(\d+)\s*[xX]?\s+/, '');
-    const price = parseFloat(m[2].replace(',', '.'));
-    if (!name || isNaN(price) || price <= 0 || price > 999) continue;
-    if (!/[a-zA-Z]/.test(name)) continue; // needs a real word
+
+    const prices = [...line.matchAll(priceTokenRe)];
+    if (!prices.length) continue;
+    const last = prices[prices.length - 1];          // rightmost number = the line price
+    const price = parseFloat(last[1].replace(',', '.'));
+    if (isNaN(price) || price <= 0 || price > 999) continue;
+
+    // Name = everything before that price token
+    let name = line.slice(0, last.index)
+      .replace(/[$]/g, '')
+      .replace(/[-–—.·•*_=\s]+$/g, '')              // trailing separators/dots
+      .replace(/^(\d+)\s*[xX@]?\s+/, '')            // leading quantity "2 " / "2x " / "2@ "
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+    if (name.length < 2 || !/[a-zA-Z]/.test(name)) continue; // needs a real word
     found.push({ id: uid(), name, price, category: guessCategory(name) });
   }
   return found;
+}
+
+// ---------- Image pre-processing (big quality win for OCR) ----------
+function otsuBinarize(data) {
+  const n = data.length / 4;
+  const gray = new Uint8Array(n);
+  const hist = new Array(256).fill(0);
+  for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+    const g = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114) | 0;
+    gray[j] = g; hist[g]++;
+  }
+  let sum = 0; for (let t = 0; t < 256; t++) sum += t * hist[t];
+  let sumB = 0, wB = 0, maxVar = 0, threshold = 127;
+  for (let t = 0; t < 256; t++) {
+    wB += hist[t]; if (wB === 0) continue;
+    const wF = n - wB; if (wF === 0) break;
+    sumB += t * hist[t];
+    const mB = sumB / wB, mF = (sum - sumB) / wF;
+    const between = wB * wF * (mB - mF) * (mB - mF);
+    if (between > maxVar) { maxVar = between; threshold = t; }
+  }
+  for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+    const v = gray[j] > threshold ? 255 : 0;
+    data[i] = data[i + 1] = data[i + 2] = v;
+  }
+}
+
+function preprocessImage(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const targetW = Math.min(2000, Math.max(1200, img.width)); // upscale small, cap large
+      const scale = targetW / img.width;
+      const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      try {
+        const d = ctx.getImageData(0, 0, w, h);
+        otsuBinarize(d.data);
+        ctx.putImageData(d, 0, 0);
+      } catch (e) { /* fall back to the plain draw */ }
+      URL.revokeObjectURL(img.src);
+      resolve(canvas);
+    };
+    img.onerror = () => { URL.revokeObjectURL(img.src); resolve(null); };
+    img.src = URL.createObjectURL(file);
+  });
 }
 
 // ---------- OCR ----------
@@ -623,13 +690,15 @@ const progress = document.getElementById('progress');
 const progressBar = document.getElementById('progressBar');
 const ocrStatus = document.getElementById('ocrStatus');
 const preview = document.getElementById('preview');
+const rawWrap = document.getElementById('rawWrap');
+const rawText = document.getElementById('rawText');
+const reparseBtn = document.getElementById('reparseBtn');
 
 fileInput.addEventListener('change', async (e) => {
   const file = e.target.files && e.target.files[0];
   if (!file) return;
 
-  const url = URL.createObjectURL(file);
-  preview.src = url;
+  preview.src = URL.createObjectURL(file);
   preview.style.display = 'block';
 
   if (typeof Tesseract === 'undefined') {
@@ -639,32 +708,59 @@ fileInput.addEventListener('change', async (e) => {
 
   progress.style.display = 'block';
   progressBar.style.width = '0%';
-  ocrStatus.textContent = 'Reading receipt…';
+  ocrStatus.textContent = 'Sharpening image…';
 
+  let source = file;
+  try { const c = await preprocessImage(file); if (c) source = c; } catch (e) {}
+
+  ocrStatus.textContent = 'Reading receipt…';
+  let worker;
   try {
-    const { data } = await Tesseract.recognize(file, 'eng', {
+    worker = await Tesseract.createWorker('eng', 1, {
       logger: (m) => {
-        if (m.status === 'recognizing text') {
-          progressBar.style.width = Math.round(m.progress * 100) + '%';
-        } else {
-          ocrStatus.textContent = m.status.charAt(0).toUpperCase() + m.status.slice(1) + '…';
-        }
+        if (m.status === 'recognizing text') progressBar.style.width = Math.round(m.progress * 100) + '%';
       },
     });
-    const parsed = parseReceipt(data.text || '');
+    await worker.setParameters({ tessedit_pageseg_mode: '6', preserve_interword_spaces: '1' });
+    const { data } = await worker.recognize(source);
+    const text = data.text || '';
+
+    rawText.value = text;
+    rawWrap.style.display = 'block';
+    rawWrap.open = false;
+
+    const parsed = parseReceipt(text);
     if (parsed.length) {
       state.items = state.items.concat(parsed);
-      ocrStatus.textContent = `✅ Found ${parsed.length} item${parsed.length > 1 ? 's' : ''}. Review them in Step 2.`;
+      ocrStatus.textContent = `✅ Found ${parsed.length} item${parsed.length > 1 ? 's' : ''}. Check them in Step 2 — fix any misreads there.`;
     } else {
-      ocrStatus.textContent = '🤔 Couldn\'t pick out line items. Add them by hand in Step 2.';
+      rawWrap.open = true;
+      ocrStatus.textContent = '🤔 Couldn\'t auto-detect priced items. Open the scanned text below, tidy it up, and tap “Re-scan” — or just add items by hand.';
     }
     renderAll();
     save();
   } catch (err) {
     ocrStatus.textContent = '⚠️ Reading failed. Add items by hand below.';
   } finally {
+    if (worker) { try { await worker.terminate(); } catch (e) {} }
     progress.style.display = 'none';
   }
+});
+
+// Re-parse items from the (possibly hand-edited) scanned text
+reparseBtn.addEventListener('click', () => {
+  const parsed = parseReceipt(rawText.value || '');
+  if (!parsed.length) {
+    ocrStatus.textContent = '⚠️ Still no priced items found. Each item line needs a price like 12.99 at the end.';
+    return;
+  }
+  if (state.items.length &&
+      !confirm(`Replace the current ${state.items.length} item(s) with ${parsed.length} from this text?`)) return;
+  state.items = parsed;
+  state.assignments = {};
+  renderAll();
+  save();
+  ocrStatus.textContent = `✅ Loaded ${parsed.length} item${parsed.length > 1 ? 's' : ''} from the text.`;
 });
 
 // ---------- Rendering: Items ----------

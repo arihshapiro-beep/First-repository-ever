@@ -51,12 +51,16 @@
   .card h2 { font-size: 15px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
   .card h2 .step { background: var(--accent-2); color:#fff; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size: 12px; font-weight: 700; }
   label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
-  input, select {
+  input, select, textarea {
     width: 100%; background: var(--card-2); border: 1px solid var(--line);
     color: var(--text); border-radius: 10px; padding: 11px 12px; font-size: 15px;
-    outline: none; appearance: none;
+    outline: none; appearance: none; font-family: inherit;
   }
-  input:focus, select:focus { border-color: var(--accent); }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; line-height: 1.4; }
+  .raw-wrap { display: none; margin-top: 12px; }
+  .raw-wrap summary { cursor: pointer; font-size: 13px; color: var(--accent); padding: 4px 0; }
+  .raw-wrap textarea { margin: 8px 0; }
   button {
     border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
     padding: 12px 14px; cursor: pointer; color: #fff; background: var(--accent-2);
@@ -159,7 +163,12 @@
     <div class="progress" id="progress"><div id="progressBar"></div></div>
     <div class="ocr-status" id="ocrStatus"></div>
     <img id="preview" class="preview" alt="receipt preview" />
-    <p class="hint">The app reads the text and auto-fills the items below. OCR isn't perfect — check the list and fix anything in Step 2. You can also skip this and add items by hand.</p>
+    <details id="rawWrap" class="raw-wrap">
+      <summary>📝 Show / edit the scanned text</summary>
+      <textarea id="rawText" rows="7" placeholder="Scanned receipt text appears here. Fix any misread lines (keep the price at the end of each item line), then tap Re-scan. You can also paste text in."></textarea>
+      <button class="ghost" id="reparseBtn">Re-scan items from this text</button>
+    </details>
+    <p class="hint">Tip for good scans: flatten the receipt, good light, fill the frame. The app reads the text and auto-fills items below — always check them in Step 2. You can also skip scanning and add items by hand.</p>
   </section>
 
   <!-- STEP 2: ITEMS -->
