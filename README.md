@@ -40,22 +40,32 @@ Everything the lookup fills in stays **editable**, so you can always correct a r
 
 ## Run it
 
-It's just static files — no build step.
+It's just static files — no build step, no server, no account.
 
-**Locally:** open `index.html` in a browser. (OCR needs an internet connection the first time to
-load the text-recognition library.)
+### Easiest: one file, no hosting
+Open **`checksplitter-standalone.html`** — the whole app inlined into a single file. Email or
+AirDrop it to your phone, tap it, and it runs in the browser. Nothing to sign up for.
+(OCR still needs internet to load the text-recognition library the first time; typing items in by
+hand works fully offline.)
 
-**On your phone (recommended):** host it free with **GitHub Pages**:
+### Free public URL: GitHub Pages
+GitHub Pages is **free for public repositories** (private repos require a paid plan). If you're fine
+with the code being public — it's just a calculator, no secrets or personal data — then:
 
-1. Push this repo to GitHub.
-2. Repo → **Settings → Pages** → Source: **Deploy from a branch** → pick your branch, folder `/ (root)` → **Save**.
-3. Open the published URL on your phone and "Add to Home Screen" so it feels like an app.
+1. Repo → **Settings → Change visibility → Make public**.
+2. Repo → **Settings → Pages** → Source: **Deploy from a branch** → pick your branch, folder
+   `/ (root)` → **Save**.
+3. Wait ~1 minute for the URL, open it on your phone, and "Add to Home Screen" so it feels like an app.
+
+### Local
+Open `index.html` in a browser (keep `app.js` and `taxData.js` in the same folder).
 
 ## Files
 
 - `index.html` — layout and styles
 - `taxData.js` — the built-in location → tax-rate database and lookup logic
 - `app.js` — OCR, receipt parsing, assignment, and the tax/tip/fee math
+- `checksplitter-standalone.html` — all of the above bundled into one file you can open directly
 
 ## Notes & limits
 

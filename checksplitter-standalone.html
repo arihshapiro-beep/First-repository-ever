@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0f766e" />
+<title>Check Splitter</title>
+<!-- Standalone single-file build. Open directly in any browser; no server needed. -->
+<style>
+  :root {
+    --bg: #0b1220;
+    --card: #131c2e;
+    --card-2: #1b2740;
+    --line: #263450;
+    --text: #e8edf6;
+    --muted: #93a1bd;
+    --accent: #14b8a6;
+    --accent-2: #0f766e;
+    --food: #38bdf8;
+    --alcohol: #f472b6;
+    --other: #fbbf24;
+    --danger: #f87171;
+    --ok: #34d399;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+    padding-bottom: 90px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  header {
+    padding: 18px 16px 12px;
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(180deg, var(--bg) 70%, rgba(11,18,32,0));
+  }
+  header h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  main { padding: 0 16px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  .card h2 .step { background: var(--accent-2); color:#fff; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size: 12px; font-weight: 700; }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  input, select {
+    width: 100%; background: var(--card-2); border: 1px solid var(--line);
+    color: var(--text); border-radius: 10px; padding: 11px 12px; font-size: 15px;
+    outline: none; appearance: none;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  button {
+    border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+    padding: 12px 14px; cursor: pointer; color: #fff; background: var(--accent-2);
+    transition: filter .15s; width: 100%;
+  }
+  button:active { filter: brightness(1.2); }
+  button.ghost { background: transparent; border: 1px solid var(--line); color: var(--text); font-weight: 500; }
+  button.small { width: auto; padding: 8px 12px; font-size: 13px; }
+  button.danger { background: transparent; color: var(--danger); border: 1px solid transparent; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* Item rows */
+  .item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: none; }
+  .item .grow { flex: 1; min-width: 0; }
+  .item input.name { padding: 8px 10px; font-size: 14px; }
+  .item input.price { width: 84px; text-align: right; padding: 8px 10px; font-size: 14px; }
+  .cat-pills { display: flex; gap: 4px; margin-top: 6px; }
+  .cat-pill {
+    font-size: 11px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line);
+    color: var(--muted); background: transparent; cursor: pointer; width: auto; font-weight: 600;
+  }
+  .cat-pill.active[data-cat="food"] { background: var(--food); border-color: var(--food); color: #04263a; }
+  .cat-pill.active[data-cat="alcohol"] { background: var(--alcohol); border-color: var(--alcohol); color: #3a0a24; }
+  .cat-pill.active[data-cat="other"] { background: var(--other); border-color: var(--other); color: #3a2a04; }
+  .icon-btn { width: 32px; height: 32px; flex: 0 0 auto; padding: 0; background: transparent; color: var(--muted); font-size: 18px; }
+
+  /* People chips */
+  .people-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .person-chip {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--card-2);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 12px; font-size: 13px; width: auto;
+  }
+  .person-chip .x { cursor: pointer; color: var(--muted); font-size: 16px; padding: 0 4px; }
+
+  /* Assignment */
+  .assign-item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .assign-item:last-child { border-bottom: none; }
+  .assign-head { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+  .assign-head .cat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .who { display: flex; flex-wrap: wrap; gap: 6px; }
+  .who button {
+    width: auto; padding: 6px 12px; font-size: 13px; background: var(--card-2);
+    border: 1px solid var(--line); color: var(--muted); font-weight: 500;
+  }
+  .who button.on { background: var(--accent); border-color: var(--accent); color: #04302b; font-weight: 700; }
+
+  /* Summary */
+  .sum-person { border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 12px; background: var(--card-2); }
+  .sum-person .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .sum-person .name { font-size: 16px; font-weight: 700; }
+  .sum-person .total { font-size: 20px; font-weight: 800; color: var(--ok); }
+  .sum-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); padding: 2px 0; }
+  .sum-line.b { color: var(--text); }
+  .sum-items { font-size: 12px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
+  .grand { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; }
+  .grand.big { font-size: 17px; font-weight: 800; color: var(--text); border-top: 1px solid var(--line); margin-top: 6px; padding-top: 10px; }
+
+  .toggle-group { display: flex; background: var(--card-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+  .toggle-group button {
+    width: auto; flex: 1; background: transparent; color: var(--muted); font-weight: 600; padding: 8px; font-size: 13px;
+  }
+  .toggle-group button.on { background: var(--accent-2); color: #fff; }
+
+  .ocr-status { font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center; }
+  .progress { height: 6px; background: var(--card-2); border-radius: 4px; overflow: hidden; margin-top: 8px; display: none; }
+  .progress > div { height: 100%; width: 0%; background: var(--accent); transition: width .2s; }
+  .preview { margin-top: 12px; border-radius: 10px; max-width: 100%; display: none; border: 1px solid var(--line); }
+
+  .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 16px 0; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--card-2); border: 1px solid var(--line); color: var(--muted); width:auto; }
+  .split-note { font-size: 11px; color: var(--accent); }
+  .hidden { display: none !important; }
+  a { color: var(--accent); }
+  .loc-result { font-size: 13px; margin-top: 10px; display: none; padding: 10px 12px; border-radius: 10px; background: var(--card-2); border: 1px solid var(--line); }
+  .loc-result.show { display: block; }
+  .loc-result .lbl { font-weight: 700; }
+  .loc-result .conf { font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
+  .loc-result .conf.exact { background: rgba(52,211,153,.15); color: var(--ok); border: 1px solid var(--ok); }
+  .loc-result .conf.typical { background: rgba(251,191,36,.15); color: var(--other); border: 1px solid var(--other); }
+  .loc-result .conf.miss { background: rgba(248,113,113,.12); color: var(--danger); border: 1px solid var(--danger); }
+  .loc-result .sub { color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧾 Check Splitter</h1>
+  <p>Snap a receipt, split by who ordered what — with location-aware tax, tip &amp; fees.</p>
+</header>
+
+<main>
+  <!-- STEP 1: RECEIPT -->
+  <section class="card">
+    <h2><span class="step">1</span> Scan the receipt</h2>
+    <label>Take a photo or upload a picture of the receipt</label>
+    <input type="file" id="fileInput" accept="image/*" capture="environment" />
+    <div class="progress" id="progress"><div id="progressBar"></div></div>
+    <div class="ocr-status" id="ocrStatus"></div>
+    <img id="preview" class="preview" alt="receipt preview" />
+    <p class="hint">The app reads the text and auto-fills the items below. OCR isn't perfect — check the list and fix anything in Step 2. You can also skip this and add items by hand.</p>
+  </section>
+
+  <!-- STEP 2: ITEMS -->
+  <section class="card">
+    <h2><span class="step">2</span> Items &amp; categories</h2>
+    <div id="itemList"></div>
+    <div class="empty" id="itemsEmpty">No items yet. Scan a receipt above or add one below.</div>
+    <div style="margin-top:12px"><button class="ghost" id="addItemBtn">+ Add item</button></div>
+    <p class="hint">Tap a category pill on each item — tax is applied per category. Alcohol is often taxed higher.</p>
+  </section>
+
+  <!-- STEP 3: PEOPLE -->
+  <section class="card">
+    <h2><span class="step">3</span> Who's splitting?</h2>
+    <div class="row">
+      <input type="text" id="personInput" placeholder="Add a name…" />
+      <button class="small" id="addPersonBtn" style="flex:0 0 auto;width:auto">Add</button>
+    </div>
+    <div class="people-chips" id="peopleChips"></div>
+  </section>
+
+  <!-- STEP 4: ASSIGN -->
+  <section class="card">
+    <h2><span class="step">4</span> Assign items</h2>
+    <p class="muted" style="margin-top:-4px">Tap each person who shared an item. Shared items split evenly.</p>
+    <div id="assignList"></div>
+    <div class="empty" id="assignEmpty">Add items and people first.</div>
+  </section>
+
+  <!-- STEP 5: TAX / TIP / FEES -->
+  <section class="card">
+    <h2><span class="step">5</span> Tax, tip &amp; fees</h2>
+
+    <label>Where are you? (city, ZIP, or state — we fill in the tax)</label>
+    <div class="row">
+      <input type="text" id="locationInput" list="citySuggest" placeholder="e.g. Evanston, IL or 60201" autocomplete="off" />
+      <button class="small" id="lookupBtn" style="flex:0 0 auto;width:auto">Look up</button>
+    </div>
+    <datalist id="citySuggest"></datalist>
+    <div id="locResult" class="loc-result"></div>
+
+    <div class="row" style="margin-top:12px">
+      <div>
+        <label>Food tax %</label>
+        <input type="number" id="taxFood" step="0.01" inputmode="decimal" />
+      </div>
+      <div>
+        <label>Alcohol tax %</label>
+        <input type="number" id="taxAlcohol" step="0.01" inputmode="decimal" />
+      </div>
+      <div>
+        <label>Other tax %</label>
+        <input type="number" id="taxOther" step="0.01" inputmode="decimal" />
+      </div>
+    </div>
+    <p class="hint">Type a location above and we auto-fill the rates. Exact for cities with known rules (e.g. Evanston's higher alcohol tax); a typical statewide estimate elsewhere. Always editable — verify before you rely on it.</p>
+
+    <div style="margin-top:16px">
+      <label>Tip</label>
+      <div class="row">
+        <input type="number" id="tipPercent" step="1" inputmode="decimal" value="20" />
+        <div class="toggle-group" style="flex:2">
+          <button data-tipbase="subtotal" class="on">On subtotal (pre-tax)</button>
+          <button data-tipbase="taxed">On taxed total</button>
+        </div>
+      </div>
+      <p class="hint">Tip % applied to your chosen base, then split in proportion to each person's share.</p>
+    </div>
+
+    <div style="margin-top:16px">
+      <label>Credit card / service fee</label>
+      <div class="row">
+        <div class="toggle-group" style="flex:2">
+          <button data-feemode="percent" class="on">Percent %</button>
+          <button data-feemode="flat">Flat $</button>
+        </div>
+        <input type="number" id="feeValue" step="0.01" inputmode="decimal" value="0" />
+      </div>
+      <p class="hint">Applied to the grand total (items + tax + tip), then split proportionally.</p>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="card">
+    <h2>💰 Per-person breakdown</h2>
+    <div id="summary"></div>
+    <div class="empty" id="summaryEmpty">Assign items to people to see the split.</div>
+    <div id="grandTotals" class="hidden" style="margin-top:12px">
+      <div class="grand"><span>Subtotal</span><span id="gSub"></span></div>
+      <div class="grand"><span>Tax</span><span id="gTax"></span></div>
+      <div class="grand"><span>Tip</span><span id="gTip"></span></div>
+      <div class="grand"><span>Fees</span><span id="gFee"></span></div>
+      <div class="grand big"><span>Grand total</span><span id="gTotal"></span></div>
+    </div>
+  </section>
+
+  <div style="display:flex;gap:10px;margin-bottom:20px">
+    <button class="ghost" id="resetBtn">Start over</button>
+    <button id="shareBtn">Copy summary</button>
+  </div>
+  <p class="muted" style="text-align:center;font-size:11px;margin-bottom:30px">
+    Everything stays on your device. Tax rates are editable estimates — confirm official rates for your location.
+  </p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+/* Location -> tax rate lookup.
+ *
+ * How accurate is this?
+ *  - CITIES / special STATE entries: hand-verified restaurant rates, incl. food-vs-alcohol
+ *    differences (e.g. Evanston's 6% liquor tax, DC's 10% meals tax). Marked "exact".
+ *  - Everywhere else: the state's *typical* combined restaurant sales tax (state + average
+ *    local). Marked "typical" because the exact rate depends on your street address.
+ *
+ * Rates change. Everything the lookup fills in stays editable in the app.
+ * Sources: Tax Foundation state & local sales tax data; City of Evanston home-rule liquor
+ * tax; DC Office of the CFO; Illinois Dept. of Revenue.
+ */
+
+// Per state: sales = state base rate, avg = typical combined restaurant rate (fallback).
+// Optional food/alcohol = statewide restaurant override (used verbatim when present).
+const STATES = {
+  AL: { name: 'Alabama', avg: 9.29 },
+  AK: { name: 'Alaska', avg: 1.82 },
+  AZ: { name: 'Arizona', avg: 8.38 },
+  AR: { name: 'Arkansas', avg: 9.45 },
+  CA: { name: 'California', avg: 8.85 },
+  CO: { name: 'Colorado', avg: 7.81 },
+  CT: { name: 'Connecticut', avg: 6.35 },
+  DE: { name: 'Delaware', avg: 0 },
+  FL: { name: 'Florida', avg: 7.00 },
+  GA: { name: 'Georgia', avg: 7.40 },
+  HI: { name: 'Hawaii', avg: 4.50 },
+  ID: { name: 'Idaho', avg: 6.03 },
+  IL: { name: 'Illinois', avg: 8.85 },
+  IN: { name: 'Indiana', avg: 7.00 },
+  IA: { name: 'Iowa', avg: 6.94 },
+  KS: { name: 'Kansas', avg: 8.75 },
+  KY: { name: 'Kentucky', avg: 6.00 },
+  LA: { name: 'Louisiana', avg: 10.13 },
+  ME: { name: 'Maine', avg: 5.50 },
+  MD: { name: 'Maryland', avg: 6.00 },
+  MA: { name: 'Massachusetts', avg: 6.25 },
+  MI: { name: 'Michigan', avg: 6.00 },
+  MN: { name: 'Minnesota', avg: 8.04 },
+  MS: { name: 'Mississippi', avg: 7.06 },
+  MO: { name: 'Missouri', avg: 8.39 },
+  MT: { name: 'Montana', avg: 0 },
+  NE: { name: 'Nebraska', avg: 6.97 },
+  NV: { name: 'Nevada', avg: 8.24 },
+  NH: { name: 'New Hampshire', avg: 0 },
+  NJ: { name: 'New Jersey', avg: 6.60 },
+  NM: { name: 'New Mexico', avg: 7.62 },
+  NY: { name: 'New York', avg: 8.53 },
+  NC: { name: 'North Carolina', avg: 7.00 },
+  ND: { name: 'North Dakota', avg: 7.04 },
+  OH: { name: 'Ohio', avg: 7.24 },
+  OK: { name: 'Oklahoma', avg: 8.99 },
+  OR: { name: 'Oregon', avg: 0 },
+  PA: { name: 'Pennsylvania', avg: 6.34 },
+  RI: { name: 'Rhode Island', avg: 7.00 },
+  SC: { name: 'South Carolina', avg: 7.50 },
+  SD: { name: 'South Dakota', avg: 6.11 },
+  TN: { name: 'Tennessee', avg: 9.55 },
+  TX: { name: 'Texas', avg: 8.20 },
+  UT: { name: 'Utah', avg: 7.25 },
+  VT: { name: 'Vermont', avg: 6.36 },
+  VA: { name: 'Virginia', avg: 5.77 },
+  WA: { name: 'Washington', avg: 9.38 },
+  WV: { name: 'West Virginia', avg: 6.57 },
+  WI: { name: 'Wisconsin', avg: 5.70 },
+  WY: { name: 'Wyoming', avg: 5.44 },
+  // DC restaurant meals and on-premise alcohol are both taxed at 10% (not the 6% base).
+  DC: { name: 'District of Columbia', avg: 6.00, food: 10, alcohol: 10 },
+};
+
+// Hand-verified cities. sales applies to food & alcohol unless food/alcohol given.
+const CITIES = [
+  // The headline example: Evanston taxes alcohol 6% higher than food.
+  { name: 'Evanston', state: 'IL', food: 10.25, alcohol: 16.25, zips: ['60201','60202','60203','60204','60208','60209'],
+    note: 'includes Evanston’s 6% liquor tax on alcohol' },
+  { name: 'Chicago', state: 'IL', sales: 10.25 },
+  { name: 'New York', aliases: ['nyc','new york city','manhattan'], state: 'NY', sales: 8.875 },
+  { name: 'Los Angeles', aliases: ['la'], state: 'CA', sales: 9.50 },
+  { name: 'San Francisco', aliases: ['sf'], state: 'CA', sales: 8.625 },
+  { name: 'San Diego', state: 'CA', sales: 7.75 },
+  { name: 'San Jose', state: 'CA', sales: 9.375 },
+  { name: 'Sacramento', state: 'CA', sales: 8.75 },
+  { name: 'Seattle', state: 'WA', sales: 10.35 },
+  { name: 'Denver', state: 'CO', sales: 8.81 },
+  { name: 'Boston', state: 'MA', sales: 7.00, note: 'MA 6.25% + 0.75% local meals tax' },
+  { name: 'Austin', state: 'TX', sales: 8.25 },
+  { name: 'Houston', state: 'TX', sales: 8.25 },
+  { name: 'Dallas', state: 'TX', sales: 8.25 },
+  { name: 'San Antonio', state: 'TX', sales: 8.25 },
+  { name: 'Atlanta', state: 'GA', sales: 8.90 },
+  { name: 'Miami', state: 'FL', sales: 7.00 },
+  { name: 'Orlando', state: 'FL', sales: 6.50 },
+  { name: 'Phoenix', state: 'AZ', sales: 8.60 },
+  { name: 'Las Vegas', state: 'NV', sales: 8.375 },
+  { name: 'Portland', state: 'OR', sales: 0 },
+  { name: 'Nashville', state: 'TN', sales: 9.25 },
+  { name: 'Memphis', state: 'TN', sales: 9.75 },
+  { name: 'New Orleans', state: 'LA', sales: 9.45 },
+  { name: 'Minneapolis', state: 'MN', sales: 8.025, note: 'downtown restaurants may add a 3% tax' },
+  { name: 'Philadelphia', state: 'PA', sales: 8.00 },
+  { name: 'Pittsburgh', state: 'PA', sales: 7.00 },
+  { name: 'Baltimore', state: 'MD', sales: 6.00 },
+  { name: 'Detroit', state: 'MI', sales: 6.00 },
+  { name: 'Milwaukee', state: 'WI', sales: 5.50 },
+  { name: 'Salt Lake City', state: 'UT', sales: 7.75 },
+  { name: 'St. Louis', aliases: ['saint louis'], state: 'MO', sales: 9.68 },
+  { name: 'Kansas City', state: 'MO', sales: 8.60 },
+  { name: 'Charlotte', state: 'NC', sales: 7.25 },
+  { name: 'Columbus', state: 'OH', sales: 7.50 },
+  { name: 'Indianapolis', state: 'IN', sales: 7.00 },
+  { name: 'Washington', aliases: ['washington dc','dc'], state: 'DC', food: 10, alcohol: 10,
+    zips: ['20001','20002','20003','20004','20005','20006','20007','20008','20009','20010'] },
+];
+
+// First 3 digits of a ZIP -> state. Ranges cover the mainland USPS allocation.
+function zip3ToState(z) {
+  const r = (a, b) => z >= a && z <= b;
+  if (r(6, 6)) return 'NY';       // Holtsville etc.
+  if (r(10, 27)) return 'MA';
+  if (r(28, 29)) return 'RI';
+  if (r(30, 38)) return 'NH';
+  if (r(39, 49)) return 'ME';
+  if (r(50, 54)) return 'VT';
+  if (r(55, 59)) return 'MA';     // Andover area
+  if (r(60, 69)) return 'CT';
+  if (r(70, 89)) return 'NJ';
+  if (r(100, 149)) return 'NY';
+  if (r(150, 196)) return 'PA';
+  if (r(197, 199)) return 'DE';
+  if (r(200, 205)) return 'DC';
+  if (r(206, 219)) return 'MD';
+  if (r(220, 246)) return 'VA';
+  if (r(247, 268)) return 'WV';
+  if (r(270, 289)) return 'NC';
+  if (r(290, 299)) return 'SC';
+  if (r(300, 319) || r(398, 399)) return 'GA';
+  if (r(320, 349)) return 'FL';
+  if (r(350, 369)) return 'AL';
+  if (r(370, 385)) return 'TN';
+  if (r(386, 397)) return 'MS';
+  if (r(400, 427)) return 'KY';
+  if (r(430, 459)) return 'OH';
+  if (r(460, 479)) return 'IN';
+  if (r(480, 499)) return 'MI';
+  if (r(500, 528)) return 'IA';
+  if (r(530, 549)) return 'WI';
+  if (r(550, 567)) return 'MN';
+  if (r(570, 577)) return 'SD';
+  if (r(580, 588)) return 'ND';
+  if (r(590, 599)) return 'MT';
+  if (r(600, 629)) return 'IL';
+  if (r(630, 658)) return 'MO';
+  if (r(660, 679)) return 'KS';
+  if (r(680, 693)) return 'NE';
+  if (r(700, 714)) return 'LA';
+  if (r(716, 729)) return 'AR';
+  if (r(730, 749) || z === 733 || z === 885) return 'OK';
+  if (r(750, 799)) return 'TX';
+  if (r(800, 816)) return 'CO';
+  if (r(820, 831)) return 'WY';
+  if (r(832, 838)) return 'ID';
+  if (r(840, 847)) return 'UT';
+  if (r(850, 865)) return 'AZ';
+  if (r(870, 884)) return 'NM';
+  if (r(889, 898)) return 'NV';
+  if (r(900, 961)) return 'CA';
+  if (r(967, 968)) return 'HI';
+  if (r(970, 979)) return 'OR';
+  if (r(980, 994)) return 'WA';
+  if (r(995, 999)) return 'AK';
+  return null;
+}
+
+function stateResult(abbr, viaLabel) {
+  const s = STATES[abbr];
+  if (!s) return null;
+  const rate = s.avg;
+  const food = s.food != null ? s.food : rate;
+  const alcohol = s.alcohol != null ? s.alcohol : rate;
+  const exact = s.food != null; // statewide restaurant override (e.g. DC) is exact
+  return {
+    food, alcohol, other: rate,
+    label: viaLabel ? `${viaLabel} → ${s.name}` : s.name,
+    confidence: exact ? 'exact' : 'typical',
+    note: exact ? 'statewide restaurant rate' : 'typical statewide estimate — your city may differ',
+  };
+}
+
+function cityResult(c) {
+  const food = c.food != null ? c.food : c.sales;
+  const alcohol = c.alcohol != null ? c.alcohol : c.sales;
+  const other = c.sales != null ? c.sales : (c.food != null ? c.food : 0);
+  return {
+    food, alcohol, other,
+    label: `${c.name}, ${c.state}`,
+    confidence: 'exact',
+    note: c.note || 'verified local rate',
+  };
+}
+
+const norm = (s) => (s || '').toString().trim().toLowerCase().replace(/[.]/g, '').replace(/\s+/g, ' ');
+
+/* Main entry: accepts "Evanston, IL", "evanston", "60201", "chicago", "IL", "illinois". */
+function lookupTax(query) {
+  const q = norm(query);
+  if (!q) return null;
+
+  // ZIP code
+  const zipMatch = q.match(/\b(\d{5})\b/);
+  if (zipMatch) {
+    const zip = zipMatch[1];
+    const cityByZip = CITIES.find(c => c.zips && c.zips.includes(zip));
+    if (cityByZip) return cityResult(cityByZip);
+    const st = zip3ToState(parseInt(zip.slice(0, 3), 10));
+    if (st) return stateResult(st, zip);
+    return null;
+  }
+
+  // "City, ST" or "City ST"
+  let cityPart = q, statePart = null;
+  const comma = q.split(',');
+  if (comma.length >= 2) {
+    cityPart = norm(comma[0]);
+    statePart = norm(comma[1]);
+  } else {
+    // No comma: if the query ends in a state abbr/name, peel it off as the state.
+    const words = q.split(' ');
+    if (words.length >= 2) {
+      const lastAbbr = resolveStateAbbr(words[words.length - 1]);
+      const lastTwo = resolveStateAbbr(words.slice(-2).join(' ')); // e.g. "new york"
+      if (lastTwo) { statePart = words.slice(-2).join(' '); cityPart = norm(words.slice(0, -2).join(' ')) || statePart; }
+      else if (lastAbbr) { statePart = words[words.length - 1]; cityPart = norm(words.slice(0, -1).join(' ')) || statePart; }
+    }
+  }
+
+  // City by name / alias (optionally constrained by state)
+  const cityMatch = CITIES.find(c => {
+    const names = [norm(c.name), ...(c.aliases || []).map(norm)];
+    if (!names.includes(cityPart)) return false;
+    if (statePart) {
+      const abbr = resolveStateAbbr(statePart);
+      if (abbr && abbr !== c.state) return false;
+    }
+    return true;
+  });
+  if (cityMatch) return cityResult(cityMatch);
+
+  // Whole-query alias hit (e.g. "washington dc", "nyc")
+  const aliasMatch = CITIES.find(c => (c.aliases || []).map(norm).includes(q));
+  if (aliasMatch) return cityResult(aliasMatch);
+
+  // State by name or abbreviation
+  const abbr = resolveStateAbbr(statePart || q);
+  if (abbr) return stateResult(abbr, null);
+
+  return null;
+}
+
+function resolveStateAbbr(text) {
+  const t = norm(text);
+  if (!t) return null;
+  if (STATES[t.toUpperCase()]) return t.toUpperCase();
+  for (const [ab, s] of Object.entries(STATES)) {
+    if (norm(s.name) === t) return ab;
+  }
+  return null;
+}
+
+// Names for the autocomplete datalist.
+const CITY_SUGGESTIONS = CITIES.map(c => `${c.name}, ${c.state}`);
+
+</script>
+<script>
+/* Check Splitter — all logic, no build step, runs in the browser. */
+
+// ---------- State ----------
+const state = {
+  items: [],        // {id, name, price, category}
+  people: [],       // {id, name}
+  assignments: {},  // itemId -> [personId, ...]
+  tax: { food: 10.25, alcohol: 16.25, other: 10.25 },
+  location: '',
+  tip: { percent: 20, base: 'subtotal' }, // base: 'subtotal' | 'taxed'
+  fee: { mode: 'percent', value: 0 },     // mode: 'percent' | 'flat'
+};
+
+const CATS = ['food', 'alcohol', 'other'];
+const CAT_COLOR = { food: 'var(--food)', alcohol: 'var(--alcohol)', other: 'var(--other)' };
+
+let idSeq = 1;
+const uid = () => 'id' + (idSeq++);
+
+// ---------- Persistence ----------
+const STORAGE_KEY = 'checkSplitter.v1';
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, idSeq })); } catch (e) {}
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    Object.assign(state, {
+      items: d.items || [], people: d.people || [], assignments: d.assignments || {},
+      tax: d.tax || state.tax, location: d.location || '',
+      tip: d.tip || state.tip, fee: d.fee || state.fee,
+    });
+    idSeq = d.idSeq || 1;
+  } catch (e) {}
+}
+
+// ---------- Category guessing ----------
+const ALCOHOL_WORDS = ['beer','ipa','lager','ale','pilsner','stout','wine','vino','red','white','rose','rosé',
+  'cocktail','margarita','martini','mojito','vodka','whiskey','whisky','bourbon','tequila','rum','gin','sake',
+  'cider','champagne','prosecco','sangria','negroni','manhattan','spritz','shot','draft','pint','pinot','cab',
+  'merlot','chardonnay','malbec','seltzer','mule','daiquiri','old fashioned','bloody mary','mimosa','brandy','cognac'];
+function guessCategory(name) {
+  const n = (name || '').toLowerCase();
+  if (ALCOHOL_WORDS.some(w => n.includes(w))) return 'alcohol';
+  return 'food';
+}
+
+// ---------- Receipt parsing ----------
+const SKIP_WORDS = ['subtotal','sub total','total','tax','tip','gratuity','balance','change','cash','visa','master',
+  'amex','discover','card','payment','due','amount','tend','tendered','server','table','guest','order','check #',
+  'thank','www','http','phone','tel','#','qty','ttl','auth','ref','trans'];
+
+function parseReceipt(text) {
+  const lines = text.split('\n');
+  const found = [];
+  const priceRe = /(.+?)[\s.]*\$?\s*(\d{1,4}[.,]\d{2})\s*$/;
+  for (let raw of lines) {
+    const line = raw.replace(/\t/g, ' ').trim();
+    if (line.length < 3) continue;
+    const low = line.toLowerCase();
+    if (SKIP_WORDS.some(w => low.includes(w))) continue;
+    const m = line.match(priceRe);
+    if (!m) continue;
+    let name = m[1].replace(/\s{2,}/g, ' ').replace(/[.·•*_]+$/g, '').trim();
+    // strip leading quantity like "2 " or "2x "
+    name = name.replace(/^(\d+)\s*[xX]?\s+/, '');
+    const price = parseFloat(m[2].replace(',', '.'));
+    if (!name || isNaN(price) || price <= 0 || price > 999) continue;
+    if (!/[a-zA-Z]/.test(name)) continue; // needs a real word
+    found.push({ id: uid(), name, price, category: guessCategory(name) });
+  }
+  return found;
+}
+
+// ---------- OCR ----------
+const fileInput = document.getElementById('fileInput');
+const progress = document.getElementById('progress');
+const progressBar = document.getElementById('progressBar');
+const ocrStatus = document.getElementById('ocrStatus');
+const preview = document.getElementById('preview');
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const url = URL.createObjectURL(file);
+  preview.src = url;
+  preview.style.display = 'block';
+
+  if (typeof Tesseract === 'undefined') {
+    ocrStatus.textContent = '⚠️ Text reader failed to load (need internet). Add items by hand below.';
+    return;
+  }
+
+  progress.style.display = 'block';
+  progressBar.style.width = '0%';
+  ocrStatus.textContent = 'Reading receipt…';
+
+  try {
+    const { data } = await Tesseract.recognize(file, 'eng', {
+      logger: (m) => {
+        if (m.status === 'recognizing text') {
+          progressBar.style.width = Math.round(m.progress * 100) + '%';
+        } else {
+          ocrStatus.textContent = m.status.charAt(0).toUpperCase() + m.status.slice(1) + '…';
+        }
+      },
+    });
+    const parsed = parseReceipt(data.text || '');
+    if (parsed.length) {
+      state.items = state.items.concat(parsed);
+      ocrStatus.textContent = `✅ Found ${parsed.length} item${parsed.length > 1 ? 's' : ''}. Review them in Step 2.`;
+    } else {
+      ocrStatus.textContent = '🤔 Couldn\'t pick out line items. Add them by hand in Step 2.';
+    }
+    renderAll();
+    save();
+  } catch (err) {
+    ocrStatus.textContent = '⚠️ Reading failed. Add items by hand below.';
+  } finally {
+    progress.style.display = 'none';
+  }
+});
+
+// ---------- Rendering: Items ----------
+const itemList = document.getElementById('itemList');
+const itemsEmpty = document.getElementById('itemsEmpty');
+
+function renderItems() {
+  itemList.innerHTML = '';
+  itemsEmpty.style.display = state.items.length ? 'none' : 'block';
+  for (const it of state.items) {
+    const row = document.createElement('div');
+    row.className = 'item';
+
+    const grow = document.createElement('div');
+    grow.className = 'grow';
+
+    const nameIn = document.createElement('input');
+    nameIn.className = 'name';
+    nameIn.value = it.name;
+    nameIn.placeholder = 'Item name';
+    nameIn.addEventListener('input', () => { it.name = nameIn.value; save(); });
+
+    const pills = document.createElement('div');
+    pills.className = 'cat-pills';
+    for (const c of CATS) {
+      const p = document.createElement('button');
+      p.className = 'cat-pill' + (it.category === c ? ' active' : '');
+      p.dataset.cat = c;
+      p.textContent = c[0].toUpperCase() + c.slice(1);
+      p.addEventListener('click', () => { it.category = c; renderItems(); renderAssign(); renderSummary(); save(); });
+      pills.appendChild(p);
+    }
+    grow.appendChild(nameIn);
+    grow.appendChild(pills);
+
+    const priceIn = document.createElement('input');
+    priceIn.className = 'price';
+    priceIn.type = 'number';
+    priceIn.step = '0.01';
+    priceIn.inputMode = 'decimal';
+    priceIn.value = it.price;
+    priceIn.addEventListener('input', () => { it.price = parseFloat(priceIn.value) || 0; renderSummary(); save(); });
+
+    const del = document.createElement('button');
+    del.className = 'icon-btn';
+    del.textContent = '✕';
+    del.title = 'Remove item';
+    del.addEventListener('click', () => {
+      state.items = state.items.filter(x => x.id !== it.id);
+      delete state.assignments[it.id];
+      renderAll(); save();
+    });
+
+    row.appendChild(grow);
+    row.appendChild(priceIn);
+    row.appendChild(del);
+    itemList.appendChild(row);
+  }
+}
+
+document.getElementById('addItemBtn').addEventListener('click', () => {
+  state.items.push({ id: uid(), name: '', price: 0, category: 'food' });
+  renderItems(); renderAssign(); save();
+});
+
+// ---------- Rendering: People ----------
+const peopleChips = document.getElementById('peopleChips');
+const personInput = document.getElementById('personInput');
+
+function addPerson() {
+  const name = personInput.value.trim();
+  if (!name) return;
+  state.people.push({ id: uid(), name });
+  personInput.value = '';
+  renderPeople(); renderAssign(); save();
+}
+document.getElementById('addPersonBtn').addEventListener('click', addPerson);
+personInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addPerson(); });
+
+function renderPeople() {
+  peopleChips.innerHTML = '';
+  for (const p of state.people) {
+    const chip = document.createElement('span');
+    chip.className = 'person-chip';
+    chip.textContent = p.name;
+    const x = document.createElement('span');
+    x.className = 'x';
+    x.textContent = '×';
+    x.addEventListener('click', () => {
+      state.people = state.people.filter(q => q.id !== p.id);
+      for (const k in state.assignments) {
+        state.assignments[k] = state.assignments[k].filter(id => id !== p.id);
+      }
+      renderPeople(); renderAssign(); renderSummary(); save();
+    });
+    chip.appendChild(x);
+    peopleChips.appendChild(chip);
+  }
+}
+
+// ---------- Rendering: Assignment ----------
+const assignList = document.getElementById('assignList');
+const assignEmpty = document.getElementById('assignEmpty');
+
+function renderAssign() {
+  assignList.innerHTML = '';
+  const ready = state.items.length && state.people.length;
+  assignEmpty.style.display = ready ? 'none' : 'block';
+  if (!ready) return;
+
+  for (const it of state.items) {
+    const wrap = document.createElement('div');
+    wrap.className = 'assign-item';
+
+    const head = document.createElement('div');
+    head.className = 'assign-head';
+    const assignees = state.assignments[it.id] || [];
+    const shared = assignees.length > 1
+      ? ` <span class="split-note">· split ${assignees.length} ways</span>` : '';
+    head.innerHTML = `<span><span class="cat-dot" style="background:${CAT_COLOR[it.category]}"></span>${escapeHtml(it.name || 'Untitled')}${shared}</span><span>${it.price.toFixed(2)}</span>`;
+
+    const who = document.createElement('div');
+    who.className = 'who';
+    for (const p of state.people) {
+      const b = document.createElement('button');
+      const on = assignees.includes(p.id);
+      b.className = on ? 'on' : '';
+      b.textContent = p.name;
+      b.addEventListener('click', () => {
+        const arr = state.assignments[it.id] || [];
+        state.assignments[it.id] = on ? arr.filter(id => id !== p.id) : arr.concat(p.id);
+        renderAssign(); renderSummary(); save();
+      });
+      who.appendChild(b);
+    }
+
+    wrap.appendChild(head);
+    wrap.appendChild(who);
+    assignList.appendChild(wrap);
+  }
+}
+
+// ---------- Tax / tip / fee controls ----------
+const locationInput = document.getElementById('locationInput');
+const lookupBtn = document.getElementById('lookupBtn');
+const locResult = document.getElementById('locResult');
+const citySuggest = document.getElementById('citySuggest');
+const taxFood = document.getElementById('taxFood');
+const taxAlcohol = document.getElementById('taxAlcohol');
+const taxOther = document.getElementById('taxOther');
+const tipPercent = document.getElementById('tipPercent');
+const feeValue = document.getElementById('feeValue');
+
+// Autocomplete list of known cities
+if (typeof CITY_SUGGESTIONS !== 'undefined') {
+  citySuggest.innerHTML = CITY_SUGGESTIONS.map(s => `<option value="${s}"></option>`).join('');
+}
+
+function syncTaxInputs() {
+  taxFood.value = state.tax.food;
+  taxAlcohol.value = state.tax.alcohol;
+  taxOther.value = state.tax.other;
+}
+
+function showLocResult(res, query) {
+  locResult.classList.add('show');
+  if (!res) {
+    locResult.innerHTML = `<span class="conf miss">no match</span> Couldn't find “${escapeHtml(query)}”. Try a ZIP code, “City, ST”, or a state name — or just type the rates in below.`;
+    return;
+  }
+  const diff = res.alcohol !== res.food
+    ? ` <span class="split-note">· alcohol taxed higher here</span>` : '';
+  locResult.innerHTML =
+    `<span class="lbl">${escapeHtml(res.label)}</span>` +
+    `<span class="conf ${res.confidence}">${res.confidence}</span>${diff}` +
+    `<div class="sub">Food ${res.food}% · Alcohol ${res.alcohol}% · Other ${res.other}% — ${escapeHtml(res.note)}</div>`;
+}
+
+function doLookup() {
+  const q = locationInput.value.trim();
+  state.location = q;
+  if (!q) { locResult.classList.remove('show'); save(); return; }
+  const res = (typeof lookupTax !== 'undefined') ? lookupTax(q) : null;
+  if (res) {
+    state.tax = { food: res.food, alcohol: res.alcohol, other: res.other };
+    syncTaxInputs();
+    renderSummary();
+  }
+  showLocResult(res, q);
+  save();
+}
+
+lookupBtn.addEventListener('click', doLookup);
+locationInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doLookup(); } });
+locationInput.addEventListener('change', doLookup); // fires when picking a datalist suggestion
+
+function bindTax(input, key) {
+  input.addEventListener('input', () => {
+    state.tax[key] = parseFloat(input.value) || 0;
+    locResult.classList.remove('show'); // manual override clears the lookup note
+    renderSummary(); save();
+  });
+}
+bindTax(taxFood, 'food');
+bindTax(taxAlcohol, 'alcohol');
+bindTax(taxOther, 'other');
+
+tipPercent.addEventListener('input', () => {
+  state.tip.percent = parseFloat(tipPercent.value) || 0;
+  renderSummary(); save();
+});
+
+document.querySelectorAll('[data-tipbase]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.tip.base = btn.dataset.tipbase;
+    document.querySelectorAll('[data-tipbase]').forEach(b => b.classList.toggle('on', b === btn));
+    renderSummary(); save();
+  });
+});
+
+document.querySelectorAll('[data-feemode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.fee.mode = btn.dataset.feemode;
+    document.querySelectorAll('[data-feemode]').forEach(b => b.classList.toggle('on', b === btn));
+    renderSummary(); save();
+  });
+});
+feeValue.addEventListener('input', () => {
+  state.fee.value = parseFloat(feeValue.value) || 0;
+  renderSummary(); save();
+});
+
+function syncTipFeeInputs() {
+  tipPercent.value = state.tip.percent;
+  feeValue.value = state.fee.value;
+  document.querySelectorAll('[data-tipbase]').forEach(b => b.classList.toggle('on', b.dataset.tipbase === state.tip.base));
+  document.querySelectorAll('[data-feemode]').forEach(b => b.classList.toggle('on', b.dataset.feemode === state.fee.mode));
+}
+
+// ---------- Core calculation ----------
+function compute() {
+  // Per-person accumulation
+  const per = {};
+  for (const p of state.people) per[p.id] = { name: p.name, sub: 0, tax: 0, items: [] };
+
+  let totalSub = 0, totalTax = 0;
+
+  for (const it of state.items) {
+    const assignees = (state.assignments[it.id] || []).filter(id => per[id]);
+    if (!assignees.length) continue;
+    const share = it.price / assignees.length;
+    const rate = (state.tax[it.category] || 0) / 100;
+    const shareTax = share * rate;
+    totalSub += it.price;
+    totalTax += it.price * rate;
+    for (const id of assignees) {
+      per[id].sub += share;
+      per[id].tax += shareTax;
+      per[id].items.push({ name: it.name || 'Untitled', share, category: it.category, shared: assignees.length > 1 });
+    }
+  }
+
+  // Tip — computed on chosen base, allocated by each person's base proportion
+  const tipRate = (state.tip.percent || 0) / 100;
+  const baseFor = (rec) => state.tip.base === 'taxed' ? (rec.sub + rec.tax) : rec.sub;
+  const totalTipBase = state.people.reduce((s, p) => s + baseFor(per[p.id]), 0);
+  const totalTip = totalTipBase * tipRate;
+  for (const p of state.people) {
+    per[p.id].tip = totalTipBase > 0 ? (baseFor(per[p.id]) / totalTipBase) * totalTip : 0;
+  }
+
+  // Fee — on grand total (sub+tax+tip), allocated proportionally to that pre-fee total
+  const preFeeTotalAll = totalSub + totalTax + totalTip;
+  let totalFee = 0;
+  if (state.fee.mode === 'percent') totalFee = preFeeTotalAll * ((state.fee.value || 0) / 100);
+  else totalFee = state.fee.value || 0;
+
+  for (const p of state.people) {
+    const preFee = per[p.id].sub + per[p.id].tax + per[p.id].tip;
+    per[p.id].fee = preFeeTotalAll > 0 ? (preFee / preFeeTotalAll) * totalFee : 0;
+    per[p.id].total = preFee + per[p.id].fee;
+  }
+
+  return { per, totalSub, totalTax, totalTip, totalFee,
+           grand: totalSub + totalTax + totalTip + totalFee };
+}
+
+// ---------- Rendering: Summary ----------
+const summary = document.getElementById('summary');
+const summaryEmpty = document.getElementById('summaryEmpty');
+const grandTotals = document.getElementById('grandTotals');
+
+function money(n) { return '
+</body>
+</html>
+ + (n || 0).toFixed(2); }
+
+function renderSummary() {
+  const anyAssigned = Object.values(state.assignments).some(a => a && a.length);
+  if (!state.people.length || !anyAssigned) {
+    summary.innerHTML = '';
+    summaryEmpty.style.display = 'block';
+    grandTotals.classList.add('hidden');
+    return;
+  }
+  summaryEmpty.style.display = 'none';
+  grandTotals.classList.remove('hidden');
+
+  const r = compute();
+  summary.innerHTML = '';
+  for (const p of state.people) {
+    const rec = r.per[p.id];
+    if (!rec || (rec.sub === 0 && rec.items.length === 0)) continue;
+    const box = document.createElement('div');
+    box.className = 'sum-person';
+    const itemsTxt = rec.items.map(i => `${escapeHtml(i.name)}${i.shared ? ' (½+)' : ''} ${money(i.share)}`).join(' · ');
+    box.innerHTML = `
+      <div class="top"><span class="name">${escapeHtml(rec.name)}</span><span class="total">${money(rec.total)}</span></div>
+      <div class="sum-line"><span>Items</span><span>${money(rec.sub)}</span></div>
+      <div class="sum-line"><span>Tax</span><span>${money(rec.tax)}</span></div>
+      <div class="sum-line"><span>Tip (${state.tip.percent}%)</span><span>${money(rec.tip)}</span></div>
+      <div class="sum-line"><span>Fee</span><span>${money(rec.fee)}</span></div>
+      <div class="sum-items">${itemsTxt || 'No items assigned'}</div>`;
+    summary.appendChild(box);
+  }
+
+  document.getElementById('gSub').textContent = money(r.totalSub);
+  document.getElementById('gTax').textContent = money(r.totalTax);
+  document.getElementById('gTip').textContent = money(r.totalTip);
+  document.getElementById('gFee').textContent = money(r.totalFee);
+  document.getElementById('gTotal').textContent = money(r.grand);
+}
+
+// ---------- Copy summary ----------
+document.getElementById('shareBtn').addEventListener('click', async () => {
+  const r = compute();
+  let txt = '🧾 Check Split\n\n';
+  for (const p of state.people) {
+    const rec = r.per[p.id];
+    if (!rec || rec.total === undefined) continue;
+    txt += `${rec.name}: ${money(rec.total)}  (items ${money(rec.sub)}, tax ${money(rec.tax)}, tip ${money(rec.tip)}, fee ${money(rec.fee)})\n`;
+  }
+  txt += `\nSubtotal ${money(r.totalSub)} · Tax ${money(r.totalTax)} · Tip ${money(r.totalTip)} · Fees ${money(r.totalFee)}\nGrand total ${money(r.grand)}`;
+  try {
+    await navigator.clipboard.writeText(txt);
+    const btn = document.getElementById('shareBtn');
+    const old = btn.textContent; btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = old; }, 1500);
+  } catch (e) {
+    alert(txt);
+  }
+});
+
+// ---------- Reset ----------
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('Clear everything and start a new check?')) return;
+  state.items = []; state.people = []; state.assignments = {};
+  localStorage.removeItem(STORAGE_KEY);
+  ocrStatus.textContent = ''; preview.style.display = 'none'; fileInput.value = '';
+  state.location = ''; locationInput.value = ''; locResult.classList.remove('show');
+  renderAll();
+});
+
+// ---------- Utils ----------
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function renderAll() {
+  renderItems();
+  renderPeople();
+  renderAssign();
+  renderSummary();
+}
+
+// ---------- Init ----------
+load();
+syncTaxInputs();
+syncTipFeeInputs();
+if (state.location) {
+  locationInput.value = state.location;
+  const res = (typeof lookupTax !== 'undefined') ? lookupTax(state.location) : null;
+  if (res) showLocResult(res, state.location); // show the note; keep any saved/edited rates
+}
+renderAll();
+
+</script>
+</body>
+</html>
