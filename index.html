@@ -226,16 +226,28 @@
     </div>
     <p class="hint">Type a location above and we auto-fill the rates. Exact for cities with known rules (e.g. Evanston's higher alcohol tax); a typical statewide estimate elsewhere. Always editable — verify before you rely on it.</p>
 
+    <div style="margin-top:14px">
+      <label>Exact tax from receipt (optional)</label>
+      <input type="number" id="taxExact" step="0.01" inputmode="decimal" placeholder="e.g. 10.35 — leave blank to estimate" />
+      <p class="hint">Receipt prints a tax total? Enter it here and the app matches it to the penny, still splitting it by who ordered what. Leave blank to estimate from the rates above.</p>
+    </div>
+
     <div style="margin-top:16px">
       <label>Tip</label>
       <div class="row">
-        <input type="number" id="tipPercent" step="1" inputmode="decimal" value="20" />
-        <div class="toggle-group" style="flex:2">
+        <div class="toggle-group" style="flex:1.3">
+          <button data-tipmode="percent" class="on">Percent %</button>
+          <button data-tipmode="flat">Exact $</button>
+        </div>
+        <input type="number" id="tipValue" step="0.01" inputmode="decimal" value="20" />
+      </div>
+      <div class="row" id="tipBaseRow" style="margin-top:8px">
+        <div class="toggle-group">
           <button data-tipbase="subtotal" class="on">On subtotal (pre-tax)</button>
           <button data-tipbase="taxed">On taxed total</button>
         </div>
       </div>
-      <p class="hint">Tip % applied to your chosen base, then split in proportion to each person's share.</p>
+      <p class="hint">Pick a % (of your chosen base) or type the exact tip dollars from your receipt. Either way it's split in proportion to each person's share.</p>
     </div>
 
     <div style="margin-top:16px">

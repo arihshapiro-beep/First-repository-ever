@@ -6,8 +6,9 @@ const state = {
   people: [],       // {id, name}
   assignments: {},  // itemId -> [personId, ...]
   tax: { food: 10.25, alcohol: 16.25, other: 10.25 },
+  taxOverride: null,                      // exact tax $ from receipt; null = estimate from rates
   location: '',
-  tip: { percent: 20, base: 'subtotal' }, // base: 'subtotal' | 'taxed'
+  tip: { mode: 'percent', percent: 20, base: 'subtotal', flat: 0 }, // mode: 'percent' | 'flat'
   fee: { mode: 'percent', value: 0 },     // mode: 'percent' | 'flat'
 };
 
@@ -30,7 +31,9 @@ function load() {
     Object.assign(state, {
       items: d.items || [], people: d.people || [], assignments: d.assignments || {},
       tax: d.tax || state.tax, location: d.location || '',
-      tip: d.tip || state.tip, fee: d.fee || state.fee,
+      taxOverride: (d.taxOverride != null ? d.taxOverride : null),
+      tip: Object.assign({ mode: 'percent', percent: 20, base: 'subtotal', flat: 0 }, d.tip || {}),
+      fee: d.fee || state.fee,
     });
     idSeq = d.idSeq || 1;
   } catch (e) {}
@@ -359,7 +362,9 @@ const citySuggest = document.getElementById('citySuggest');
 const taxFood = document.getElementById('taxFood');
 const taxAlcohol = document.getElementById('taxAlcohol');
 const taxOther = document.getElementById('taxOther');
-const tipPercent = document.getElementById('tipPercent');
+const taxExact = document.getElementById('taxExact');
+const tipValue = document.getElementById('tipValue');
+const tipBaseRow = document.getElementById('tipBaseRow');
 const feeValue = document.getElementById('feeValue');
 
 // Autocomplete list of known cities
@@ -416,9 +421,27 @@ bindTax(taxFood, 'food');
 bindTax(taxAlcohol, 'alcohol');
 bindTax(taxOther, 'other');
 
-tipPercent.addEventListener('input', () => {
-  state.tip.percent = parseFloat(tipPercent.value) || 0;
+// Exact tax from receipt (blank = estimate from rates)
+taxExact.addEventListener('input', () => {
+  const v = taxExact.value.trim();
+  state.taxOverride = v === '' ? null : (parseFloat(v) || 0);
   renderSummary(); save();
+});
+
+// Tip value — meaning depends on mode (percent vs exact $)
+tipValue.addEventListener('input', () => {
+  const v = parseFloat(tipValue.value) || 0;
+  if (state.tip.mode === 'flat') state.tip.flat = v; else state.tip.percent = v;
+  renderSummary(); save();
+});
+
+document.querySelectorAll('[data-tipmode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.tip.mode = btn.dataset.tipmode;
+    document.querySelectorAll('[data-tipmode]').forEach(b => b.classList.toggle('on', b === btn));
+    syncTipFeeInputs();
+    renderSummary(); save();
+  });
 });
 
 document.querySelectorAll('[data-tipbase]').forEach(btn => {
@@ -442,10 +465,14 @@ feeValue.addEventListener('input', () => {
 });
 
 function syncTipFeeInputs() {
-  tipPercent.value = state.tip.percent;
+  tipValue.value = state.tip.mode === 'flat' ? state.tip.flat : state.tip.percent;
   feeValue.value = state.fee.value;
+  taxExact.value = state.taxOverride != null ? state.taxOverride : '';
+  document.querySelectorAll('[data-tipmode]').forEach(b => b.classList.toggle('on', b.dataset.tipmode === state.tip.mode));
   document.querySelectorAll('[data-tipbase]').forEach(b => b.classList.toggle('on', b.dataset.tipbase === state.tip.base));
   document.querySelectorAll('[data-feemode]').forEach(b => b.classList.toggle('on', b.dataset.feemode === state.fee.mode));
+  // The base toggle only matters for a percentage tip
+  if (tipBaseRow) tipBaseRow.style.display = state.tip.mode === 'flat' ? 'none' : '';
 }
 
 // ---------- Core calculation ----------
@@ -471,11 +498,25 @@ function compute() {
     }
   }
 
-  // Tip — computed on chosen base, allocated by each person's base proportion
-  const tipRate = (state.tip.percent || 0) / 100;
+  // Exact-tax override: rescale the estimated per-person tax to hit the receipt total exactly,
+  // keeping each person's share weighted by what they ordered (alcohol taxed higher, etc.).
+  if (state.taxOverride != null && state.taxOverride >= 0) {
+    if (totalTax > 0) {
+      const f = state.taxOverride / totalTax;
+      for (const p of state.people) per[p.id].tax *= f;
+    } else {
+      const subAll = state.people.reduce((s, p) => s + per[p.id].sub, 0);
+      for (const p of state.people) per[p.id].tax = subAll > 0 ? (per[p.id].sub / subAll) * state.taxOverride : 0;
+    }
+    totalTax = state.taxOverride;
+  }
+
+  // Tip — a % of the chosen base, or an exact $ amount; allocated by each person's base proportion
   const baseFor = (rec) => state.tip.base === 'taxed' ? (rec.sub + rec.tax) : rec.sub;
   const totalTipBase = state.people.reduce((s, p) => s + baseFor(per[p.id]), 0);
-  const totalTip = totalTipBase * tipRate;
+  const totalTip = state.tip.mode === 'flat'
+    ? (state.tip.flat || 0)
+    : totalTipBase * ((state.tip.percent || 0) / 100);
   for (const p of state.people) {
     per[p.id].tip = totalTipBase > 0 ? (baseFor(per[p.id]) / totalTipBase) * totalTip : 0;
   }
@@ -526,7 +567,7 @@ function renderSummary() {
       <div class="top"><span class="name">${escapeHtml(rec.name)}</span><span class="total">${money(rec.total)}</span></div>
       <div class="sum-line"><span>Items</span><span>${money(rec.sub)}</span></div>
       <div class="sum-line"><span>Tax</span><span>${money(rec.tax)}</span></div>
-      <div class="sum-line"><span>Tip (${state.tip.percent}%)</span><span>${money(rec.tip)}</span></div>
+      <div class="sum-line"><span>Tip${state.tip.mode === 'flat' ? '' : ' (' + state.tip.percent + '%)'}</span><span>${money(rec.tip)}</span></div>
       <div class="sum-line"><span>Fee</span><span>${money(rec.fee)}</span></div>
       <div class="sum-items">${itemsTxt || 'No items assigned'}</div>`;
     summary.appendChild(box);
@@ -566,6 +607,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   localStorage.removeItem(STORAGE_KEY);
   ocrStatus.textContent = ''; preview.style.display = 'none'; fileInput.value = '';
   state.location = ''; locationInput.value = ''; locResult.classList.remove('show');
+  state.taxOverride = null; taxExact.value = '';
   renderAll();
 });
 
