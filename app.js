@@ -600,15 +600,41 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
   }
 });
 
-// ---------- Reset ----------
-document.getElementById('resetBtn').addEventListener('click', () => {
-  if (!confirm('Clear everything and start a new check?')) return;
-  state.items = []; state.people = []; state.assignments = {};
+// ---------- Clear all data / start fresh ----------
+function clearAll() {
+  // Wipe the check
+  state.items = [];
+  state.people = [];
+  state.assignments = {};
+  // Reset tax / tip / fee back to defaults
+  state.tax = { food: 10.25, alcohol: 16.25, other: 10.25 };
+  state.taxOverride = null;
+  state.location = '';
+  state.tip = { mode: 'percent', percent: 20, base: 'subtotal', flat: 0 };
+  state.fee = { mode: 'percent', value: 0 };
+  // Forget the saved copy
   localStorage.removeItem(STORAGE_KEY);
-  ocrStatus.textContent = ''; preview.style.display = 'none'; fileInput.value = '';
-  state.location = ''; locationInput.value = ''; locResult.classList.remove('show');
-  state.taxOverride = null; taxExact.value = '';
+  // Reset all the on-screen controls
+  ocrStatus.textContent = '';
+  preview.style.display = 'none';
+  preview.src = '';
+  fileInput.value = '';
+  if (rawText) rawText.value = '';
+  if (rawWrap) { rawWrap.style.display = 'none'; rawWrap.open = false; }
+  locationInput.value = '';
+  locResult.classList.remove('show');
+  taxExact.value = '';
+  syncTaxInputs();
+  syncTipFeeInputs();
   renderAll();
+}
+
+document.querySelectorAll('.clear-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!confirm('Clear everything and start a fresh receipt? This erases the current items, people, and totals.')) return;
+    clearAll();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 });
 
 // ---------- Utils ----------

@@ -40,6 +40,8 @@
     background: linear-gradient(180deg, var(--bg) 70%, rgba(11,18,32,0));
   }
   header h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .head-row .clear-btn { flex: 0 0 auto; }
   header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   main { padding: 0 16px; }
   .card {
@@ -151,7 +153,10 @@
 </head>
 <body>
 <header>
-  <h1>🧾 Check Splitter</h1>
+  <div class="head-row">
+    <h1>🧾 Check Splitter</h1>
+    <button class="ghost small clear-btn" title="Clear everything and start a new receipt">New receipt</button>
+  </div>
   <p>Snap a receipt, split by who ordered what — with location-aware tax, tip &amp; fees.</p>
 </header>
 
@@ -279,7 +284,7 @@
   </section>
 
   <div style="display:flex;gap:10px;margin-bottom:20px">
-    <button class="ghost" id="resetBtn">Start over</button>
+    <button class="ghost clear-btn">🗑 Clear all data</button>
     <button id="shareBtn">Copy summary</button>
   </div>
   <p class="muted" style="text-align:center;font-size:11px;margin-bottom:30px">
@@ -1167,15 +1172,41 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
   }
 });
 
-// ---------- Reset ----------
-document.getElementById('resetBtn').addEventListener('click', () => {
-  if (!confirm('Clear everything and start a new check?')) return;
-  state.items = []; state.people = []; state.assignments = {};
+// ---------- Clear all data / start fresh ----------
+function clearAll() {
+  // Wipe the check
+  state.items = [];
+  state.people = [];
+  state.assignments = {};
+  // Reset tax / tip / fee back to defaults
+  state.tax = { food: 10.25, alcohol: 16.25, other: 10.25 };
+  state.taxOverride = null;
+  state.location = '';
+  state.tip = { mode: 'percent', percent: 20, base: 'subtotal', flat: 0 };
+  state.fee = { mode: 'percent', value: 0 };
+  // Forget the saved copy
   localStorage.removeItem(STORAGE_KEY);
-  ocrStatus.textContent = ''; preview.style.display = 'none'; fileInput.value = '';
-  state.location = ''; locationInput.value = ''; locResult.classList.remove('show');
-  state.taxOverride = null; taxExact.value = '';
+  // Reset all the on-screen controls
+  ocrStatus.textContent = '';
+  preview.style.display = 'none';
+  preview.src = '';
+  fileInput.value = '';
+  if (rawText) rawText.value = '';
+  if (rawWrap) { rawWrap.style.display = 'none'; rawWrap.open = false; }
+  locationInput.value = '';
+  locResult.classList.remove('show');
+  taxExact.value = '';
+  syncTaxInputs();
+  syncTipFeeInputs();
   renderAll();
+}
+
+document.querySelectorAll('.clear-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!confirm('Clear everything and start a fresh receipt? This erases the current items, people, and totals.')) return;
+    clearAll();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 });
 
 // ---------- Utils ----------

@@ -39,6 +39,8 @@
     background: linear-gradient(180deg, var(--bg) 70%, rgba(11,18,32,0));
   }
   header h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .head-row .clear-btn { flex: 0 0 auto; }
   header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   main { padding: 0 16px; }
   .card {
@@ -150,7 +152,10 @@
 </head>
 <body>
 <header>
-  <h1>🧾 Check Splitter</h1>
+  <div class="head-row">
+    <h1>🧾 Check Splitter</h1>
+    <button class="ghost small clear-btn" title="Clear everything and start a new receipt">New receipt</button>
+  </div>
   <p>Snap a receipt, split by who ordered what — with location-aware tax, tip &amp; fees.</p>
 </header>
 
@@ -278,7 +283,7 @@
   </section>
 
   <div style="display:flex;gap:10px;margin-bottom:20px">
-    <button class="ghost" id="resetBtn">Start over</button>
+    <button class="ghost clear-btn">🗑 Clear all data</button>
     <button id="shareBtn">Copy summary</button>
   </div>
   <p class="muted" style="text-align:center;font-size:11px;margin-bottom:30px">
