@@ -34,6 +34,7 @@
   var targets = Object.assign({}, CC.DEFAULT_TARGETS, load(K_TARGETS, {}));
   var history = load(K_HISTORY, {});
   var lastResult = null; // most recent estimate awaiting "Add to today"
+  var statMetric = localStorage.getItem('cc_statmetric') || 'calories'; // which metric the trend charts show
 
   function todayKey() {
     var d = new Date();
@@ -291,20 +292,120 @@
       b.addEventListener('click', function () { removeItem(b.getAttribute('data-id')); });
     });
 
-    renderHistory();
+    renderStats();
   }
 
-  function renderHistory() {
-    var keys = Object.keys(history).filter(function (k) { return k !== todayKey(); }).sort().reverse().slice(0, 7);
-    if (!keys.length) { $('history').innerHTML = ''; return; }
-    var html = '<h2>Previous days</h2><ul class="hist-list">';
-    keys.forEach(function (k) {
-      var t = CC.sumNutrition(history[k]);
-      html += '<li><span>' + prettyDate(k) + '</span><span class="muted">' + Math.round(t.calories) +
-        ' cal · ' + Math.round(t.sodium_mg) + 'mg sodium · ' + CC.fmtGrams(t.sugar_g) + 'g sugar</span></li>';
+  // ---- trends (pedometer-style day/week tracking) ----
+  function metricDef() {
+    for (var i = 0; i < CC.NUTRIENTS.length; i++) {
+      if (CC.NUTRIENTS[i].key === statMetric && CC.NUTRIENTS[i].primary) return CC.NUTRIENTS[i];
+    }
+    return CC.NUTRIENTS[0];
+  }
+
+  // A small neutral "▲ 12%" / "▼ 12%" chip. Direction only — no good/bad coloring.
+  function deltaChip(cur, prev) {
+    if (prev == null || prev === 0) return '';
+    var pct = Math.round(((cur - prev) / prev) * 100);
+    if (pct === 0) return '<span class="delta same">≈ same</span>';
+    return '<span class="delta">' + (pct > 0 ? '▲' : '▼') + ' ' + Math.abs(pct) + '%</span>';
+  }
+
+  // Render a CSS bar chart. `bars` = [{label, value, highlight}]; a dashed line marks the target.
+  function plot(bars, target, unit) {
+    var scale = target || 0;
+    bars.forEach(function (b) { scale = Math.max(scale, b.value); });
+    scale = (scale || 1) * 1.15; // headroom so the tallest bar and its label fit
+    var tPct = target > 0 ? Math.min(100, Math.round((target / scale) * 100)) : 0;
+    var barsHtml = '', labsHtml = '';
+    bars.forEach(function (b) {
+      var h = b.value > 0 ? Math.max(2, Math.round((b.value / scale) * 100)) : 0;
+      var lvl = b.value > 0 ? CC.dayLevel(b.value, target) : 'empty';
+      barsHtml += '<div class="bar-col">' +
+        '<div class="bar-val">' + (b.value > 0 ? CC.fmtCompact(b.value, unit) : '') + '</div>' +
+        '<div class="bar ' + lvl + (b.highlight ? ' hl' : '') + '" style="height:' + h + '%"></div></div>';
+      labsHtml += '<div class="lab' + (b.highlight ? ' hl' : '') + '">' + esc(b.label) + '</div>';
     });
-    html += '</ul>';
-    $('history').innerHTML = html;
+    return '<div class="chart"><div class="plot">' +
+      (target > 0 ? '<div class="target-line" style="bottom:' + tPct + '%"><span>' + CC.fmtCompact(target, unit) + ' target</span></div>' : '') +
+      '<div class="bars">' + barsHtml + '</div></div><div class="labs">' + labsHtml + '</div></div>';
+  }
+
+  function renderStats() {
+    var el = $('stats');
+    var md = metricDef();
+    var metric = md.key, unit = md.unit, target = targets[metric];
+
+    var tabs = CC.NUTRIENTS.filter(function (n) { return n.primary; }).map(function (n) {
+      return '<button class="tab' + (n.key === metric ? ' active' : '') + '" data-metric="' + n.key + '">' + n.label + '</button>';
+    }).join('');
+    var html = '<div class="stats-head"><h2>Trends</h2></div><div class="tabs">' + tabs + '</div>';
+
+    if (!Object.keys(history).length) {
+      html += '<div class="empty">Log a few foods and your day, week, and week-over-week trends show up here — like a step tracker for what you eat.</div>';
+      el.innerHTML = html;
+      wireTabs();
+      return;
+    }
+
+    var today = new Date();
+    var todayK = CC.dateKey(today);
+    var todayVal = CC.dayMetric(history, todayK, metric).value;
+    var yVal = CC.dayMetric(history, CC.dateKey(CC.addDays(today, -1)), metric).value;
+
+    // headline: today's number + delta vs yesterday
+    html += '<div class="card headline"><div class="hl-val">' + CC.fmtCompact(todayVal, unit) +
+      '<span class="hl-unit">' + unit + '</span></div><div class="hl-sub">' + md.label.toLowerCase() + ' today' +
+      (yVal ? ' · ' + deltaChip(todayVal, yVal) + ' <span class="muted">vs yesterday</span>' : '') + '</div></div>';
+
+    // this week: 7-day bar chart + summary
+    var monday = CC.startOfWeek(today);
+    var wkKeys = CC.weekDayKeys(monday);
+    var dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var wkBars = wkKeys.map(function (k, i) {
+      return { label: dayNames[i], value: CC.dayMetric(history, k, metric).value, highlight: k === todayK };
+    });
+    var tw = CC.weekSummary(history, wkKeys, metric, target);
+
+    html += '<div class="card panel"><div class="panel-head"><h3>This week</h3></div>' + plot(wkBars, target, unit);
+    if (tw.loggedDays) {
+      html += '<div class="panel-sum">Avg <b>' + CC.fmtCompact(tw.avg, unit) + unit + '</b>/day · logged ' +
+        tw.loggedDays + ' of 7 days · <b>' + tw.within + '</b> within target</div>';
+    } else {
+      html += '<div class="panel-sum muted">Nothing logged this week yet.</div>';
+    }
+    var lw = CC.weekSummary(history, CC.weekDayKeys(CC.addDays(monday, -7)), metric, target);
+    if (lw.loggedDays && tw.loggedDays) {
+      html += '<div class="panel-sum">This week averages <b>' + CC.fmtCompact(tw.avg, unit) + unit + '</b>/day ' +
+        deltaChip(tw.avg, lw.avg) + ' <span class="muted">vs last week (' + CC.fmtCompact(lw.avg, unit) + unit + '/day).</span></div>';
+    }
+    html += '</div>';
+
+    // by week: last 8 weeks of daily-average
+    var weeks = [], priorData = false;
+    for (var i = 7; i >= 0; i--) {
+      var m = CC.addDays(monday, -7 * i);
+      var s = CC.weekSummary(history, CC.weekDayKeys(m), metric, target);
+      if (i > 0 && s.loggedDays) priorData = true;
+      weeks.push({ label: (m.getMonth() + 1) + '/' + m.getDate(), value: s.avg, highlight: i === 0 });
+    }
+    if (priorData) {
+      html += '<div class="card panel"><div class="panel-head"><h3>By week</h3><span class="muted">daily average · week of</span></div>' +
+        plot(weeks, target, unit) + '</div>';
+    }
+
+    el.innerHTML = html;
+    wireTabs();
+  }
+
+  function wireTabs() {
+    Array.prototype.forEach.call($('stats').querySelectorAll('.tab'), function (t) {
+      t.addEventListener('click', function () {
+        statMetric = t.getAttribute('data-metric');
+        localStorage.setItem('cc_statmetric', statMetric);
+        renderStats();
+      });
+    });
   }
 
   // ---- settings ----

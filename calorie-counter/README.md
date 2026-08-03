@@ -21,7 +21,13 @@ Built as a single-page web app — no accounts, no server. Everything runs in yo
    *sodium ≈ 44% of a day's limit*, *carbs ≈ 3 slices of bread*, *≈ 140 min of walking to burn*.
 4. **Add to today** — tap to log it. Your day's running totals update, each with a colored progress bar
    (green → amber → red) against your daily targets.
-5. **Track the day / week** — remove items, clear the day, and see the last several days' totals.
+5. **Track it like a pedometer** — a **Trends** view remembers every day and rolls it up by week:
+   - a **today** headline with an up/down arrow vs. yesterday,
+   - a **this‑week** bar chart (Mon–Sun) with your daily‑average, a dashed target line, and how many days landed within target,
+   - **this week vs. last week** (daily average, with the % change), and
+   - a **by‑week** chart of your daily average over the last 8 weeks.
+
+   Switch the charts between Calories, Sugar, Carbs, and Sodium with one tap. Remove items or clear the day anytime.
 
 ## How the "type anything" part works
 
@@ -75,8 +81,8 @@ Open `index.html` in a browser (keep `foods.js` and `app.js` in the same folder)
 ## Files
 
 - `index.html` — layout and styles
-- `foods.js` — the built-in food database plus the estimate/parse/compare helpers
-- `app.js` — the AI lookup, the daily log, totals, comparisons, and settings
+- `foods.js` — the built-in food database plus the estimate/parse/compare and day/week aggregation helpers
+- `app.js` — the AI lookup, the daily log, totals, comparisons, the day/week Trends view, and settings
 - `calorie-counter-standalone.html` — all of the above bundled into one file you can open directly
 
 ## Notes & limits

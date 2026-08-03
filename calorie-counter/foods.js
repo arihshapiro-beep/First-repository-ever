@@ -241,6 +241,80 @@ function levelForRatio(ratio) {
   return 'high';
 }
 
+// ---- date / aggregation helpers (for the day / week trends) ----
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+// Local YYYY-MM-DD for a Date (no UTC shift).
+function dateKey(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+
+// Parse a YYYY-MM-DD key back into a local Date at midnight.
+function keyToDate(key) { var p = key.split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); }
+
+// A new Date n days from d (local, midnight-anchored).
+function addDays(d, n) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; }
+
+// Monday (local midnight) of the week containing d.
+function startOfWeek(d) {
+  var x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  var off = (x.getDay() + 6) % 7; // Mon=0 … Sun=6
+  x.setDate(x.getDate() - off);
+  return x;
+}
+
+// The 7 day-keys (Mon..Sun) for the week starting at `monday`.
+function weekDayKeys(monday) {
+  var out = [];
+  for (var i = 0; i < 7; i++) out.push(dateKey(addDays(monday, i)));
+  return out;
+}
+
+// The selected-metric value for one day, plus whether anything was logged.
+function dayMetric(history, key, metric) {
+  var items = history[key];
+  if (!items || !items.length) return { value: 0, logged: false };
+  var t = sumNutrition(items);
+  return { value: t[metric] || 0, logged: true };
+}
+
+// Percent change from prev → cur; null when there's no prior value to compare.
+function pctDelta(cur, prev) { if (!prev) return null; return ((cur - prev) / prev) * 100; }
+
+// Color band for a whole-day value vs its daily target.
+function dayLevel(value, target) {
+  if (value <= 0) return 'empty';
+  var r = target > 0 ? value / target : 0;
+  if (r <= 1) return 'good';
+  if (r <= 1.3) return 'mid';
+  return 'high';
+}
+
+// Compact number for chart labels: 1,850 -> "1.9k"; small grams stay plain.
+function fmtCompact(v, unit) {
+  v = Math.round(v);
+  if (unit === 'g') return String(v);
+  if (v >= 1000) {
+    var k = v / 1000;
+    return (k >= 10 ? Math.round(k) : Math.round(k * 10) / 10) + 'k';
+  }
+  return String(v);
+}
+
+// Average of a numeric array over only the entries that count (loggedFlags true).
+// Returns { avg, loggedDays, total }.
+function weekSummary(history, dayKeys, metric, target) {
+  var total = 0, loggedDays = 0, within = 0;
+  for (var i = 0; i < dayKeys.length; i++) {
+    var dm = dayMetric(history, dayKeys[i], metric);
+    if (dm.logged) {
+      loggedDays++;
+      total += dm.value;
+      if (dm.value <= target) within++;
+    }
+  }
+  return { total: total, loggedDays: loggedDays, avg: loggedDays ? total / loggedDays : 0, within: within };
+}
+
 var CC = {
   DEFAULT_TARGETS: DEFAULT_TARGETS,
   NUTRIENTS: NUTRIENTS,
@@ -253,6 +327,16 @@ var CC = {
   sumNutrition: sumNutrition,
   levelForRatio: levelForRatio,
   dbRowToNutrition: dbRowToNutrition,
+  dateKey: dateKey,
+  keyToDate: keyToDate,
+  addDays: addDays,
+  startOfWeek: startOfWeek,
+  weekDayKeys: weekDayKeys,
+  dayMetric: dayMetric,
+  pctDelta: pctDelta,
+  dayLevel: dayLevel,
+  fmtCompact: fmtCompact,
+  weekSummary: weekSummary,
 };
 
 if (typeof window !== 'undefined') { window.CC = CC; }
