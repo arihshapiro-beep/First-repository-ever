@@ -73,9 +73,28 @@ phone, tap it, and it runs in the browser. "Add to Home Screen" and it feels lik
 (AI lookups need internet; the built-in common-food estimates work fully offline.)
 
 ### Free public URL: GitHub Pages
-GitHub Pages is free for public repositories. In the repo: **Settings → Pages → Deploy from a branch**,
-pick your branch and `/ (root)`, Save. Then open `https://<you>.github.io/<repo>/calorie-counter/` on your phone.
-(Your API key still lives only in your own browser — it is never committed or shared.)
+This repo is public, so GitHub Pages is free. In the repo on github.com:
+**Settings → Pages → Build and deployment → Source: Deploy from a branch**, then set
+**Branch** to the branch that contains this `calorie-counter/` folder and **Folder** to `/ (root)`, and **Save**.
+Wait ~1–2 minutes; the Pages settings page will show "Your site is live at …".
+
+The app is then at:
+
+```
+https://arihshapiro-beep.github.io/First-repository-ever/calorie-counter/
+```
+
+(That address is case-sensitive — keep `First-repository-ever` exactly.) Your API key still lives only in
+your own browser; it is never committed or shared.
+
+### Add it to your phone's home screen
+Open the URL above on your phone, then:
+
+- **iPhone (Safari):** tap the **Share** button → **Add to Home Screen** → **Add**.
+- **Android (Chrome):** tap the **⋮** menu → **Add to Home screen** / **Install app**.
+
+It installs with its own icon and opens full-screen, like a normal app (thanks to `manifest.json` and the
+app icons in this folder). Everything you log stays on that device.
 
 ### Local
 Open `index.html` in a browser (keep `foods.js` and `app.js` in the same folder).
@@ -85,7 +104,8 @@ Open `index.html` in a browser (keep `foods.js` and `app.js` in the same folder)
 - `index.html` — layout and styles
 - `foods.js` — the built-in food database plus the estimate/parse/compare and day/week aggregation helpers
 - `app.js` — the AI lookup, the daily log, totals, comparisons, the day/week Trends view, and settings
-- `calorie-counter-standalone.html` — all of the above bundled into one file you can open directly
+- `manifest.json` + `icon-192.png` / `icon-512.png` / `apple-touch-icon.png` — make it installable to a phone home screen with its own icon
+- `calorie-counter-standalone.html` — all of the above (HTML/CSS/JS) bundled into one file you can open directly
 
 ## Notes & limits
 
