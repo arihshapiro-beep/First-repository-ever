@@ -57,6 +57,14 @@ In Settings you can pick the model:
 - **Sonnet 5** — more accurate, a bit slower/pricier.
 - **Opus 5** — most accurate.
 
+### Keeping the cost near zero
+An AI lookup costs roughly a tenth of a cent on Haiku, and you're only charged when the app actually
+asks the AI to figure out a food. Settings has a **"Check built-in foods first"** switch (on by default):
+when it's on, the app answers from its free built-in list for foods it recognizes and only pays for an
+AI lookup when you type something it doesn't know. Turn it off if you'd rather the AI estimate every
+food. You can also set a hard monthly spend limit in the Anthropic console (**Billing → Limits**), or
+remove the key entirely to run fully free on the built-in foods.
+
 ## Comparing to your day
 
 The "something to compare it to" is your **daily targets**. They default to the U.S. FDA Daily Values for

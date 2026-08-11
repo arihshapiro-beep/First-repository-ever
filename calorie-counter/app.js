@@ -13,6 +13,7 @@
   var K_MODEL = 'cc_model';
   var K_TARGETS = 'cc_targets';
   var K_HISTORY = 'cc_history';
+  var K_PREFER = 'cc_prefer_db';
 
   var MODELS = [
     { id: 'claude-haiku-4-5', label: 'Haiku 4.5 — fast & inexpensive (recommended)' },
@@ -35,6 +36,7 @@
   var history = load(K_HISTORY, {});
   var lastResult = null; // most recent estimate awaiting "Add to today"
   var statMetric = localStorage.getItem('cc_statmetric') || 'calories'; // which metric the trend charts show
+  var preferDB = load(K_PREFER, true); // check the free built-in list before paying for an AI lookup
 
   function todayKey() {
     var d = new Date();
@@ -122,6 +124,11 @@
     };
 
     if (apiKey) {
+      // Money-saver: use the free built-in list first; only pay for AI on foods it doesn't know.
+      if (preferDB) {
+        var pre = CC.matchFood(query);
+        if (pre) { done(pre, 'Free built-in estimate — no AI lookup used. (Turn off “Check built-in foods first” in Settings to always use AI.)'); return; }
+      }
       estimateWithAI(query).then(function (n) { done(n); }).catch(function (err) {
         // Fall back to the built-in database if the network/API fails.
         var m = CC.matchFood(query);
@@ -447,6 +454,9 @@
       'It’s sent only to Anthropic, never to us. Get one at <b>console.anthropic.com</b> → API Keys; ' +
       'each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
       '<label class="field"><span>Model</span><select id="model-input">' + modelOpts + '</select></label>' +
+      '<label class="switch-row"><span class="switch-label">Check built-in foods first' +
+      '<small>Saves money — only pays for an AI lookup when a food isn’t in the built-in list.</small></span>' +
+      '<span class="switch"><input type="checkbox" id="prefer-db"' + (preferDB ? ' checked' : '') + '><span class="slider"></span></span></label>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
       '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
@@ -472,6 +482,8 @@
     localStorage.setItem(K_KEY, apiKey);
     model = $('model-input').value;
     localStorage.setItem(K_MODEL, model);
+    preferDB = $('prefer-db').checked;
+    save(K_PREFER, preferDB);
     Array.prototype.forEach.call(document.querySelectorAll('[data-target]'), function (inp) {
       var k = inp.getAttribute('data-target');
       var v = parseFloat(inp.value);
