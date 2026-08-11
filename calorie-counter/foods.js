@@ -149,8 +149,24 @@ function matchFood(query) {
     }
   }
   // Require at least a 3-character keyword hit to avoid nonsense matches.
-  if (best && bestScore >= 3) return dbRowToNutrition(best);
-  return null;
+  if (!best || bestScore < 3) return null;
+  // Coverage guard: the matched food's own keywords should account for most of the
+  // meaningful words typed. If the query carries extra words the built-in doesn't
+  // cover — a quantity ("two"), a preparation ("fried"), an extra ingredient — then
+  // this single-serving entry is unreliable, so return null and let the AI handle it
+  // (it gets quantity and prep right, and the result is then saved for free reuse).
+  var qToks = queryTokens(query);
+  if (qToks.length) {
+    var kset = {};
+    for (var a = 0; a < best.k.length; a++) {
+      var kt = queryTokens(best.k[a]);
+      for (var b = 0; b < kt.length; b++) kset[kt[b]] = 1;
+    }
+    var covered = 0;
+    for (var c = 0; c < qToks.length; c++) if (kset[qToks[c]]) covered++;
+    if (covered / qToks.length < 0.6) return null;
+  }
+  return dbRowToNutrition(best);
 }
 
 /*

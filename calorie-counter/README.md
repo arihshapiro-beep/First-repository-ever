@@ -126,6 +126,10 @@ Open `index.html` in a browser (keep `foods.js` and `app.js` in the same folder)
 
 - **Everything is an estimate.** Portions and recipes vary; treat the numbers as a helpful ballpark, not
   a precise measurement. Not medical or dietary advice.
+- **Quantities and preparations go to the AI.** The built-in foods are single servings, so typing a
+  quantity or prep it can't account for — "two fried eggs", "2 cups of rice", "half a bagel" — is sent to
+  the AI for an accurate estimate instead of reusing a single-serving number, then saved to your bank for
+  free reuse. Plain foods ("banana", "big mac") still answer free from the built-in list.
 - Your log and settings are saved in the browser's local storage, so a refresh won't lose them.
   "Clear" wipes the current day.
 - The **streak is automatic** — nothing to switch on. Log at least one food each day to keep it going;
