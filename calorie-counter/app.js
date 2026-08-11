@@ -441,9 +441,11 @@
 
     $('settings-body').innerHTML =
       '<label class="field"><span>Claude API key</span>' +
-      '<input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off"></label>' +
-      '<p class="hint">Stored only in this browser. Get one at <b>console.anthropic.com</b> → API Keys. ' +
-      'Each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
+      '<span class="key-wrap"><input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+      '<button type="button" id="key-toggle" class="key-eye">Show</button></span></label>' +
+      '<p class="hint">Saved only in this browser, on this device — so enter it once on each device (phone, laptop). ' +
+      'It’s sent only to Anthropic, never to us. Get one at <b>console.anthropic.com</b> → API Keys; ' +
+      'each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
       '<label class="field"><span>Model</span><select id="model-input">' + modelOpts + '</select></label>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
@@ -456,6 +458,12 @@
       save(K_TARGETS, targets);
       buildSettings();
       renderLog();
+    });
+    $('key-toggle').addEventListener('click', function () {
+      var inp = $('key-input');
+      var hidden = inp.type === 'password';
+      inp.type = hidden ? 'text' : 'password';
+      $('key-toggle').textContent = hidden ? 'Hide' : 'Show';
     });
   }
 
