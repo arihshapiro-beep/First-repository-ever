@@ -225,6 +225,13 @@
     width: 100%; font-size: 16px; padding: 12px; border-radius: 12px;
     border: 1px solid var(--line); background: var(--card); color: var(--ink); font-family: inherit;
   }
+  .key-wrap { position: relative; display: block; }
+  .key-wrap input { padding-right: 66px; }
+  .key-eye {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    border: 0; background: #eef0ee; color: var(--ink); font-size: 12px; font-weight: 600;
+    padding: 7px 11px; border-radius: 8px; cursor: pointer;
+  }
   .hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
   .targets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .target-row { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
@@ -1094,9 +1101,11 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
 
     $('settings-body').innerHTML =
       '<label class="field"><span>Claude API key</span>' +
-      '<input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off"></label>' +
-      '<p class="hint">Stored only in this browser. Get one at <b>console.anthropic.com</b> → API Keys. ' +
-      'Each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
+      '<span class="key-wrap"><input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+      '<button type="button" id="key-toggle" class="key-eye">Show</button></span></label>' +
+      '<p class="hint">Saved only in this browser, on this device — so enter it once on each device (phone, laptop). ' +
+      'It’s sent only to Anthropic, never to us. Get one at <b>console.anthropic.com</b> → API Keys; ' +
+      'each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
       '<label class="field"><span>Model</span><select id="model-input">' + modelOpts + '</select></label>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
@@ -1109,6 +1118,12 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
       save(K_TARGETS, targets);
       buildSettings();
       renderLog();
+    });
+    $('key-toggle').addEventListener('click', function () {
+      var inp = $('key-input');
+      var hidden = inp.type === 'password';
+      inp.type = hidden ? 'text' : 'password';
+      $('key-toggle').textContent = hidden ? 'Hide' : 'Show';
     });
   }
 
