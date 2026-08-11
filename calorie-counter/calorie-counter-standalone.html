@@ -233,6 +233,7 @@
     padding: 7px 11px; border-radius: 8px; cursor: pointer;
   }
   .hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+  .linkbtn { border: 0; background: none; color: var(--brand-ink); font: inherit; font-size: 12px; font-weight: 600; text-decoration: underline; cursor: pointer; padding: 0; }
   .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 18px 0 6px; }
   .switch-label { font-size: 13px; font-weight: 600; }
   .switch-label small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 3px; }
@@ -635,10 +636,66 @@ function longestStreak(history, ok) {
   return best;
 }
 
+// ---- learned foods: match a query against the user's own past AI lookups ----
+
+var STOPWORDS = { a:1, an:1, the:1, of:1, and:1, or:1, with:1, my:1, your:1, some:1,
+  for:1, to:1, in:1, on:1, at:1, from:1, plus:1 };
+
+// Significant tokens of a food description. Numbers are KEPT (so "2 eggs" and
+// "6 eggs" don't match and reuse each other's totals); filler words are dropped.
+function queryTokens(str) {
+  var parts = String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/);
+  var out = [], seen = {};
+  for (var i = 0; i < parts.length; i++) {
+    var t = parts[i];
+    if (!t || STOPWORDS[t]) continue;
+    if (t.length < 2 && !/^[0-9]+$/.test(t)) continue;
+    if (!seen[t]) { seen[t] = 1; out.push(t); }
+  }
+  return out;
+}
+
+// Jaccard overlap of two token lists (0..1).
+function jaccard(a, b) {
+  if (!a.length || !b.length) return 0;
+  var setB = {}, inter = 0;
+  for (var i = 0; i < b.length; i++) setB[b[i]] = 1;
+  for (var j = 0; j < a.length; j++) if (setB[a[j]]) inter++;
+  var uni = a.length + b.length - inter;
+  return uni ? inter / uni : 0;
+}
+
+// Best match for `query` among the user's learned foods. Conservative: only
+// returns a match at high token overlap so a different food/quantity re-asks AI.
+// Returns { n: <nutrition copy>, score } or null.
+function matchLearned(query, learned) {
+  if (!learned || !learned.length) return null;
+  var qt = queryTokens(query);
+  if (!qt.length) return null;
+  var best = null, bestScore = 0;
+  for (var i = 0; i < learned.length; i++) {
+    var e = learned[i];
+    var s = jaccard(qt, queryTokens(e.q || e.name || ''));
+    if (s > bestScore) { bestScore = s; best = e; }
+  }
+  if (best && bestScore >= 0.6) {
+    return { score: bestScore, n: {
+      name: best.name, assumptions: best.assumptions,
+      calories: best.calories, sugar_g: best.sugar_g, carbs_g: best.carbs_g, sodium_mg: best.sodium_mg,
+      protein_g: best.protein_g, fat_g: best.fat_g, sat_fat_g: best.sat_fat_g, fiber_g: best.fiber_g,
+      confidence: best.confidence, source: 'learned'
+    } };
+  }
+  return null;
+}
+
 var CC = {
   DEFAULT_TARGETS: DEFAULT_TARGETS,
   NUTRIENTS: NUTRIENTS,
   FOOD_DB: FOOD_DB,
+  queryTokens: queryTokens,
+  jaccard: jaccard,
+  matchLearned: matchLearned,
   matchFood: matchFood,
   parseNutritionJSON: parseNutritionJSON,
   relatableComparisons: relatableComparisons,
@@ -683,6 +740,7 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
   var K_TARGETS = 'cc_targets';
   var K_HISTORY = 'cc_history';
   var K_PREFER = 'cc_prefer_db';
+  var K_LEARNED = 'cc_learned';
 
   var MODELS = [
     { id: 'claude-haiku-4-5', label: 'Haiku 4.5 — fast & inexpensive (recommended)' },
@@ -706,6 +764,7 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
   var lastResult = null; // most recent estimate awaiting "Add to today"
   var statMetric = localStorage.getItem('cc_statmetric') || 'calories'; // which metric the trend charts show
   var preferDB = load(K_PREFER, true); // check the free built-in list before paying for an AI lookup
+  var learned = load(K_LEARNED, []);   // foods learned from past AI lookups, reused for free
 
   function todayKey() {
     var d = new Date();
@@ -774,6 +833,36 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
     });
   }
 
+  function normQ(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+
+  // Save an AI result into the personal food bank so this food is free next time.
+  function learnFood(query, n) {
+    var qn = normQ(query);
+    for (var i = 0; i < learned.length; i++) {
+      if (normQ(learned[i].q) === qn) { learned.splice(i, 1); break; } // replace an older copy
+    }
+    learned.push({
+      q: query, name: n.name, assumptions: n.assumptions,
+      calories: n.calories, sugar_g: n.sugar_g, carbs_g: n.carbs_g, sodium_mg: n.sodium_mg,
+      protein_g: n.protein_g, fat_g: n.fat_g, sat_fat_g: n.sat_fat_g, fiber_g: n.fiber_g,
+      confidence: n.confidence, ts: Date.now()
+    });
+    if (learned.length > 500) learned.shift(); // cap storage; drop oldest
+    save(K_LEARNED, learned);
+  }
+
+  // Best free answer for a query: the built-in list or a saved food, no API call.
+  // An exact match to something you saved wins; otherwise a curated built-in food;
+  // otherwise a looser saved match. Returns { n, note } or null.
+  function freeLookup(query) {
+    var curated = CC.matchFood(query);
+    var lm = CC.matchLearned(query, learned);
+    if (lm && lm.score >= 0.999) return { n: lm.n, note: 'From your saved foods — no AI lookup used.' };
+    if (curated) return { n: curated, note: 'Free built-in estimate — no AI lookup used.' };
+    if (lm) return { n: lm.n, note: 'From your saved foods — no AI lookup used.' };
+    return null;
+  }
+
   function runEstimate() {
     var query = $('food-input').value.trim();
     if (!query) { $('food-input').focus(); return; }
@@ -793,23 +882,27 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
     };
 
     if (apiKey) {
-      // Money-saver: use the free built-in list first; only pay for AI on foods it doesn't know.
+      // Money-saver: answer for free from the built-in list or your saved foods first;
+      // only pay for an AI lookup when it's genuinely something new.
       if (preferDB) {
-        var pre = CC.matchFood(query);
-        if (pre) { done(pre, 'Free built-in estimate — no AI lookup used. (Turn off “Check built-in foods first” in Settings to always use AI.)'); return; }
+        var f = freeLookup(query);
+        if (f) { done(f.n, f.note); return; }
       }
-      estimateWithAI(query).then(function (n) { done(n); }).catch(function (err) {
-        // Fall back to the built-in database if the network/API fails.
-        var m = CC.matchFood(query);
-        if (m) done(m, 'Used the built-in estimate (couldn’t reach the AI: ' + err.message + ').');
-        else fail(err.message + ' No built-in match either — you can add credit or try rephrasing.');
+      estimateWithAI(query).then(function (n) {
+        learnFood(query, n); // remember it so next time is free
+        done(n, 'Saved to your foods — looking this up again won’t cost anything.');
+      }).catch(function (err) {
+        // Network/API failed — fall back to any free match.
+        var f2 = freeLookup(query);
+        if (f2) done(f2.n, 'Couldn’t reach the AI (' + err.message + '); used a saved/built-in estimate.');
+        else fail(err.message + ' No saved or built-in match either — you can add credit or try rephrasing.');
       });
     } else {
-      // No key: try the offline database.
-      var m2 = CC.matchFood(query);
-      if (m2) { done(m2, 'Built-in estimate. Add a Claude API key in Settings to look up anything you type.'); }
+      // No key: use the free built-in list + anything you saved earlier.
+      var f3 = freeLookup(query);
+      if (f3) { done(f3.n, f3.note + ' Add a Claude API key in Settings to look up new foods.'); }
       else {
-        fail('No built-in match for “' + query + '”. Add a Claude API key in Settings and the app can estimate anything — a restaurant meal, a homemade dish, a handful of candy.');
+        fail('No saved or built-in match for “' + query + '”. Add a Claude API key in Settings and the app can estimate anything — a restaurant meal, a homemade dish, a handful of candy.');
         setBusy(false);
       }
     }
@@ -1126,6 +1219,10 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
       '<label class="switch-row"><span class="switch-label">Check built-in foods first' +
       '<small>Saves money — only pays for an AI lookup when a food isn’t in the built-in list.</small></span>' +
       '<span class="switch"><input type="checkbox" id="prefer-db"' + (preferDB ? ' checked' : '') + '><span class="slider"></span></span></label>' +
+      '<div class="field"><span>Your saved foods</span>' +
+      '<p class="hint">' + learned.length + ' food' + (learned.length === 1 ? '' : 's') +
+      ' you looked up with AI ' + (learned.length === 1 ? 'is' : 'are') + ' saved here and reused for free. ' +
+      (learned.length ? '<button type="button" id="clear-learned" class="linkbtn">Clear saved foods</button>' : '') + '</p></div>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
       '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
@@ -1143,6 +1240,14 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
       var hidden = inp.type === 'password';
       inp.type = hidden ? 'text' : 'password';
       $('key-toggle').textContent = hidden ? 'Hide' : 'Show';
+    });
+    var clearLearned = $('clear-learned');
+    if (clearLearned) clearLearned.addEventListener('click', function () {
+      if (confirm('Clear your ' + learned.length + ' saved AI food' + (learned.length === 1 ? '' : 's') + '? Built-in foods stay.')) {
+        learned = [];
+        save(K_LEARNED, learned);
+        buildSettings();
+      }
     });
   }
 

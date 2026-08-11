@@ -14,6 +14,7 @@
   var K_TARGETS = 'cc_targets';
   var K_HISTORY = 'cc_history';
   var K_PREFER = 'cc_prefer_db';
+  var K_LEARNED = 'cc_learned';
 
   var MODELS = [
     { id: 'claude-haiku-4-5', label: 'Haiku 4.5 — fast & inexpensive (recommended)' },
@@ -37,6 +38,7 @@
   var lastResult = null; // most recent estimate awaiting "Add to today"
   var statMetric = localStorage.getItem('cc_statmetric') || 'calories'; // which metric the trend charts show
   var preferDB = load(K_PREFER, true); // check the free built-in list before paying for an AI lookup
+  var learned = load(K_LEARNED, []);   // foods learned from past AI lookups, reused for free
 
   function todayKey() {
     var d = new Date();
@@ -105,6 +107,36 @@
     });
   }
 
+  function normQ(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+
+  // Save an AI result into the personal food bank so this food is free next time.
+  function learnFood(query, n) {
+    var qn = normQ(query);
+    for (var i = 0; i < learned.length; i++) {
+      if (normQ(learned[i].q) === qn) { learned.splice(i, 1); break; } // replace an older copy
+    }
+    learned.push({
+      q: query, name: n.name, assumptions: n.assumptions,
+      calories: n.calories, sugar_g: n.sugar_g, carbs_g: n.carbs_g, sodium_mg: n.sodium_mg,
+      protein_g: n.protein_g, fat_g: n.fat_g, sat_fat_g: n.sat_fat_g, fiber_g: n.fiber_g,
+      confidence: n.confidence, ts: Date.now()
+    });
+    if (learned.length > 500) learned.shift(); // cap storage; drop oldest
+    save(K_LEARNED, learned);
+  }
+
+  // Best free answer for a query: the built-in list or a saved food, no API call.
+  // An exact match to something you saved wins; otherwise a curated built-in food;
+  // otherwise a looser saved match. Returns { n, note } or null.
+  function freeLookup(query) {
+    var curated = CC.matchFood(query);
+    var lm = CC.matchLearned(query, learned);
+    if (lm && lm.score >= 0.999) return { n: lm.n, note: 'From your saved foods — no AI lookup used.' };
+    if (curated) return { n: curated, note: 'Free built-in estimate — no AI lookup used.' };
+    if (lm) return { n: lm.n, note: 'From your saved foods — no AI lookup used.' };
+    return null;
+  }
+
   function runEstimate() {
     var query = $('food-input').value.trim();
     if (!query) { $('food-input').focus(); return; }
@@ -124,23 +156,27 @@
     };
 
     if (apiKey) {
-      // Money-saver: use the free built-in list first; only pay for AI on foods it doesn't know.
+      // Money-saver: answer for free from the built-in list or your saved foods first;
+      // only pay for an AI lookup when it's genuinely something new.
       if (preferDB) {
-        var pre = CC.matchFood(query);
-        if (pre) { done(pre, 'Free built-in estimate — no AI lookup used. (Turn off “Check built-in foods first” in Settings to always use AI.)'); return; }
+        var f = freeLookup(query);
+        if (f) { done(f.n, f.note); return; }
       }
-      estimateWithAI(query).then(function (n) { done(n); }).catch(function (err) {
-        // Fall back to the built-in database if the network/API fails.
-        var m = CC.matchFood(query);
-        if (m) done(m, 'Used the built-in estimate (couldn’t reach the AI: ' + err.message + ').');
-        else fail(err.message + ' No built-in match either — you can add credit or try rephrasing.');
+      estimateWithAI(query).then(function (n) {
+        learnFood(query, n); // remember it so next time is free
+        done(n, 'Saved to your foods — looking this up again won’t cost anything.');
+      }).catch(function (err) {
+        // Network/API failed — fall back to any free match.
+        var f2 = freeLookup(query);
+        if (f2) done(f2.n, 'Couldn’t reach the AI (' + err.message + '); used a saved/built-in estimate.');
+        else fail(err.message + ' No saved or built-in match either — you can add credit or try rephrasing.');
       });
     } else {
-      // No key: try the offline database.
-      var m2 = CC.matchFood(query);
-      if (m2) { done(m2, 'Built-in estimate. Add a Claude API key in Settings to look up anything you type.'); }
+      // No key: use the free built-in list + anything you saved earlier.
+      var f3 = freeLookup(query);
+      if (f3) { done(f3.n, f3.note + ' Add a Claude API key in Settings to look up new foods.'); }
       else {
-        fail('No built-in match for “' + query + '”. Add a Claude API key in Settings and the app can estimate anything — a restaurant meal, a homemade dish, a handful of candy.');
+        fail('No saved or built-in match for “' + query + '”. Add a Claude API key in Settings and the app can estimate anything — a restaurant meal, a homemade dish, a handful of candy.');
         setBusy(false);
       }
     }
@@ -457,6 +493,10 @@
       '<label class="switch-row"><span class="switch-label">Check built-in foods first' +
       '<small>Saves money — only pays for an AI lookup when a food isn’t in the built-in list.</small></span>' +
       '<span class="switch"><input type="checkbox" id="prefer-db"' + (preferDB ? ' checked' : '') + '><span class="slider"></span></span></label>' +
+      '<div class="field"><span>Your saved foods</span>' +
+      '<p class="hint">' + learned.length + ' food' + (learned.length === 1 ? '' : 's') +
+      ' you looked up with AI ' + (learned.length === 1 ? 'is' : 'are') + ' saved here and reused for free. ' +
+      (learned.length ? '<button type="button" id="clear-learned" class="linkbtn">Clear saved foods</button>' : '') + '</p></div>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
       '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
@@ -474,6 +514,14 @@
       var hidden = inp.type === 'password';
       inp.type = hidden ? 'text' : 'password';
       $('key-toggle').textContent = hidden ? 'Hide' : 'Show';
+    });
+    var clearLearned = $('clear-learned');
+    if (clearLearned) clearLearned.addEventListener('click', function () {
+      if (confirm('Clear your ' + learned.length + ' saved AI food' + (learned.length === 1 ? '' : 's') + '? Built-in foods stay.')) {
+        learned = [];
+        save(K_LEARNED, learned);
+        buildSettings();
+      }
     });
   }
 
