@@ -482,6 +482,13 @@
         '<input type="number" min="0" step="1" data-target="' + nut.key + '" value="' + targets[nut.key] + '"></label>';
     }).join('');
 
+    var builtinCount = CC.FOOD_DB.length;
+    var savedList = learned.length ? '<ul class="saved-list">' + learned.slice().reverse().map(function (e) {
+      return '<li><span class="saved-name">' + esc(e.name || e.q) + '</span>' +
+        '<span class="saved-cal">' + Math.round(e.calories || 0) + ' cal</span>' +
+        '<button type="button" class="saved-x" data-q="' + esc(normQ(e.q)) + '" aria-label="Remove">✕</button></li>';
+    }).join('') + '</ul>' : '';
+
     $('settings-body').innerHTML =
       '<label class="field"><span>Claude API key</span>' +
       '<span class="key-wrap"><input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">' +
@@ -493,10 +500,10 @@
       '<label class="switch-row"><span class="switch-label">Check built-in foods first' +
       '<small>Saves money — only pays for an AI lookup when a food isn’t in the built-in list.</small></span>' +
       '<span class="switch"><input type="checkbox" id="prefer-db"' + (preferDB ? ' checked' : '') + '><span class="slider"></span></span></label>' +
-      '<div class="field"><span>Your saved foods</span>' +
-      '<p class="hint">' + learned.length + ' food' + (learned.length === 1 ? '' : 's') +
-      ' you looked up with AI ' + (learned.length === 1 ? 'is' : 'are') + ' saved here and reused for free. ' +
-      (learned.length ? '<button type="button" id="clear-learned" class="linkbtn">Clear saved foods</button>' : '') + '</p></div>' +
+      '<div class="field"><span>Your food list</span>' +
+      '<p class="hint"><b>' + builtinCount + '</b> built-in foods, plus <b>' + learned.length + '</b> you’ve added with AI — all reused for free. ' +
+      (learned.length ? '<button type="button" id="clear-learned" class="linkbtn">Clear added foods</button>' : 'Look up a food that isn’t built in and it’ll appear here.') + '</p>' +
+      savedList + '</div>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
       '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
@@ -517,11 +524,19 @@
     });
     var clearLearned = $('clear-learned');
     if (clearLearned) clearLearned.addEventListener('click', function () {
-      if (confirm('Clear your ' + learned.length + ' saved AI food' + (learned.length === 1 ? '' : 's') + '? Built-in foods stay.')) {
+      if (confirm('Clear your ' + learned.length + ' added food' + (learned.length === 1 ? '' : 's') + '? Built-in foods stay.')) {
         learned = [];
         save(K_LEARNED, learned);
         buildSettings();
       }
+    });
+    Array.prototype.forEach.call($('settings-body').querySelectorAll('.saved-x'), function (b) {
+      b.addEventListener('click', function () {
+        var qn = b.getAttribute('data-q');
+        learned = learned.filter(function (e) { return normQ(e.q) !== qn; });
+        save(K_LEARNED, learned);
+        buildSettings();
+      });
     });
   }
 
