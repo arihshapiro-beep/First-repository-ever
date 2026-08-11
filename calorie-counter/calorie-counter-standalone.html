@@ -234,6 +234,13 @@
   }
   .hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
   .linkbtn { border: 0; background: none; color: var(--brand-ink); font: inherit; font-size: 12px; font-weight: 600; text-decoration: underline; cursor: pointer; padding: 0; }
+  .saved-list { list-style: none; margin: 10px 0 0; padding: 0; max-height: 220px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .saved-list li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  .saved-list li:last-child { border-bottom: 0; }
+  .saved-name { flex: 1; font-size: 14px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .saved-cal { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .saved-x { border: 0; background: #f2f4f2; color: var(--muted); width: 26px; height: 26px; border-radius: 7px; font-size: 12px; cursor: pointer; flex-shrink: 0; }
+  .saved-x:hover { background: var(--high-bg); color: var(--high); }
   .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 18px 0 6px; }
   .switch-label { font-size: 13px; font-weight: 600; }
   .switch-label small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 3px; }
@@ -1208,6 +1215,13 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
         '<input type="number" min="0" step="1" data-target="' + nut.key + '" value="' + targets[nut.key] + '"></label>';
     }).join('');
 
+    var builtinCount = CC.FOOD_DB.length;
+    var savedList = learned.length ? '<ul class="saved-list">' + learned.slice().reverse().map(function (e) {
+      return '<li><span class="saved-name">' + esc(e.name || e.q) + '</span>' +
+        '<span class="saved-cal">' + Math.round(e.calories || 0) + ' cal</span>' +
+        '<button type="button" class="saved-x" data-q="' + esc(normQ(e.q)) + '" aria-label="Remove">✕</button></li>';
+    }).join('') + '</ul>' : '';
+
     $('settings-body').innerHTML =
       '<label class="field"><span>Claude API key</span>' +
       '<span class="key-wrap"><input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">' +
@@ -1219,10 +1233,10 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
       '<label class="switch-row"><span class="switch-label">Check built-in foods first' +
       '<small>Saves money — only pays for an AI lookup when a food isn’t in the built-in list.</small></span>' +
       '<span class="switch"><input type="checkbox" id="prefer-db"' + (preferDB ? ' checked' : '') + '><span class="slider"></span></span></label>' +
-      '<div class="field"><span>Your saved foods</span>' +
-      '<p class="hint">' + learned.length + ' food' + (learned.length === 1 ? '' : 's') +
-      ' you looked up with AI ' + (learned.length === 1 ? 'is' : 'are') + ' saved here and reused for free. ' +
-      (learned.length ? '<button type="button" id="clear-learned" class="linkbtn">Clear saved foods</button>' : '') + '</p></div>' +
+      '<div class="field"><span>Your food list</span>' +
+      '<p class="hint"><b>' + builtinCount + '</b> built-in foods, plus <b>' + learned.length + '</b> you’ve added with AI — all reused for free. ' +
+      (learned.length ? '<button type="button" id="clear-learned" class="linkbtn">Clear added foods</button>' : 'Look up a food that isn’t built in and it’ll appear here.') + '</p>' +
+      savedList + '</div>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
       '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
@@ -1243,11 +1257,19 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
     });
     var clearLearned = $('clear-learned');
     if (clearLearned) clearLearned.addEventListener('click', function () {
-      if (confirm('Clear your ' + learned.length + ' saved AI food' + (learned.length === 1 ? '' : 's') + '? Built-in foods stay.')) {
+      if (confirm('Clear your ' + learned.length + ' added food' + (learned.length === 1 ? '' : 's') + '? Built-in foods stay.')) {
         learned = [];
         save(K_LEARNED, learned);
         buildSettings();
       }
+    });
+    Array.prototype.forEach.call($('settings-body').querySelectorAll('.saved-x'), function (b) {
+      b.addEventListener('click', function () {
+        var qn = b.getAttribute('data-q');
+        learned = learned.filter(function (e) { return normQ(e.q) !== qn; });
+        save(K_LEARNED, learned);
+        buildSettings();
+      });
     });
   }
 
