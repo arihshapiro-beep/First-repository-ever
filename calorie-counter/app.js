@@ -353,6 +353,26 @@
     var todayVal = CC.dayMetric(history, todayK, metric).value;
     var yVal = CC.dayMetric(history, CC.dateKey(CC.addDays(today, -1)), metric).value;
 
+    // streak: consecutive days logged (the headline), plus a within-target run
+    // for the selected metric. Both update automatically from logged history.
+    var isLogged = function (k) { return CC.isLoggedDay(history, k); };
+    var logStreak = CC.streakCount(history, today, isLogged);
+    var logBest = CC.longestStreak(history, isLogged);
+    var mStreak = CC.streakCount(history, today, function (k) {
+      return CC.isLoggedDay(history, k) && CC.dayMetric(history, k, metric).value <= target;
+    });
+    if (logStreak > 0) {
+      html += '<div class="card streak"><div class="flame on">🔥</div><div class="streak-main">' +
+        '<div class="streak-num">' + logStreak + ' <span>day streak</span></div>' +
+        '<div class="streak-sub">Longest ' + logBest + ' day' + (logBest === 1 ? '' : 's') +
+        (mStreak > 0 ? ' · <b>' + mStreak + '</b> day' + (mStreak === 1 ? '' : 's') + ' in a row within your ' + md.label.toLowerCase() + ' target' : '') +
+        '</div></div></div>';
+    } else {
+      html += '<div class="card streak paused"><div class="flame">🔥</div><div class="streak-main">' +
+        '<div class="streak-num">No streak yet</div><div class="streak-sub">Log a food today to start one' +
+        (logBest > 0 ? ' · your best was ' + logBest + ' day' + (logBest === 1 ? '' : 's') : '') + '.</div></div></div>';
+    }
+
     // headline: today's number + delta vs yesterday
     html += '<div class="card headline"><div class="hl-val">' + CC.fmtCompact(todayVal, unit) +
       '<span class="hl-unit">' + unit + '</span></div><div class="hl-sub">' + md.label.toLowerCase() + ' today' +

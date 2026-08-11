@@ -192,6 +192,16 @@
   .lab { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
   .lab.hl { color: var(--ink); font-weight: 700; }
 
+  .streak { display: flex; align-items: center; gap: 14px; padding: 16px; }
+  .streak .flame { font-size: 34px; line-height: 1; filter: grayscale(1) opacity(.5); }
+  .streak .flame.on { filter: none; }
+  .streak-main { min-width: 0; }
+  .streak-num { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+  .streak-num span { font-size: 14px; font-weight: 700; color: var(--muted); }
+  .streak-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .streak-sub b { color: var(--ink); }
+  .streak.paused .streak-num { font-size: 18px; color: var(--muted); }
+
   /* settings panel */
   #settings[hidden] { display: none; }
   #settings {
@@ -579,6 +589,32 @@ function weekSummary(history, dayKeys, metric, target) {
   return { total: total, loggedDays: loggedDays, avg: loggedDays ? total / loggedDays : 0, within: within };
 }
 
+// Did the user log anything on this day?
+function isLoggedDay(history, key) { return !!(history[key] && history[key].length); }
+
+// Current streak: consecutive days for which ok(key) is true, ending today —
+// or ending yesterday when today isn't logged yet (a grace period so the streak
+// isn't shown as broken before the day is over). `ok` must imply the day is logged.
+function streakCount(history, today, ok) {
+  var start = isLoggedDay(history, dateKey(today)) ? today : addDays(today, -1);
+  var n = 0, d = start;
+  while (ok(dateKey(d))) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+// Longest run of consecutive calendar days for which ok(key) is true (all time).
+function longestStreak(history, ok) {
+  var keys = Object.keys(history).filter(function (k) { return ok(k); }).sort();
+  var best = 0, run = 0, prev = null;
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    if (prev && dateKey(addDays(keyToDate(prev), 1)) === k) run++; else run = 1;
+    if (run > best) best = run;
+    prev = k;
+  }
+  return best;
+}
+
 var CC = {
   DEFAULT_TARGETS: DEFAULT_TARGETS,
   NUTRIENTS: NUTRIENTS,
@@ -601,6 +637,9 @@ var CC = {
   dayLevel: dayLevel,
   fmtCompact: fmtCompact,
   weekSummary: weekSummary,
+  isLoggedDay: isLoggedDay,
+  streakCount: streakCount,
+  longestStreak: longestStreak,
 };
 
 if (typeof window !== 'undefined') { window.CC = CC; }
@@ -962,6 +1001,26 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
     var todayK = CC.dateKey(today);
     var todayVal = CC.dayMetric(history, todayK, metric).value;
     var yVal = CC.dayMetric(history, CC.dateKey(CC.addDays(today, -1)), metric).value;
+
+    // streak: consecutive days logged (the headline), plus a within-target run
+    // for the selected metric. Both update automatically from logged history.
+    var isLogged = function (k) { return CC.isLoggedDay(history, k); };
+    var logStreak = CC.streakCount(history, today, isLogged);
+    var logBest = CC.longestStreak(history, isLogged);
+    var mStreak = CC.streakCount(history, today, function (k) {
+      return CC.isLoggedDay(history, k) && CC.dayMetric(history, k, metric).value <= target;
+    });
+    if (logStreak > 0) {
+      html += '<div class="card streak"><div class="flame on">🔥</div><div class="streak-main">' +
+        '<div class="streak-num">' + logStreak + ' <span>day streak</span></div>' +
+        '<div class="streak-sub">Longest ' + logBest + ' day' + (logBest === 1 ? '' : 's') +
+        (mStreak > 0 ? ' · <b>' + mStreak + '</b> day' + (mStreak === 1 ? '' : 's') + ' in a row within your ' + md.label.toLowerCase() + ' target' : '') +
+        '</div></div></div>';
+    } else {
+      html += '<div class="card streak paused"><div class="flame">🔥</div><div class="streak-main">' +
+        '<div class="streak-num">No streak yet</div><div class="streak-sub">Log a food today to start one' +
+        (logBest > 0 ? ' · your best was ' + logBest + ' day' + (logBest === 1 ? '' : 's') : '') + '.</div></div></div>';
+    }
 
     // headline: today's number + delta vs yesterday
     html += '<div class="card headline"><div class="hl-val">' + CC.fmtCompact(todayVal, unit) +

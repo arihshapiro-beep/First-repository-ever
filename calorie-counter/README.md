@@ -22,6 +22,8 @@ Built as a single-page web app — no accounts, no server. Everything runs in yo
 4. **Add to today** — tap to log it. Your day's running totals update, each with a colored progress bar
    (green → amber → red) against your daily targets.
 5. **Track it like a pedometer** — a **Trends** view remembers every day and rolls it up by week:
+   - a **🔥 streak** of consecutive days you've logged (with your longest-ever streak, plus a
+     "days in a row within your target" streak for the selected metric),
    - a **today** headline with an up/down arrow vs. yesterday,
    - a **this‑week** bar chart (Mon–Sun) with your daily‑average, a dashed target line, and how many days landed within target,
    - **this week vs. last week** (daily average, with the % change), and
@@ -91,5 +93,7 @@ Open `index.html` in a browser (keep `foods.js` and `app.js` in the same folder)
   a precise measurement. Not medical or dietary advice.
 - Your log and settings are saved in the browser's local storage, so a refresh won't lose them.
   "Clear" wipes the current day.
+- The **streak is automatic** — nothing to switch on. Log at least one food each day to keep it going;
+  you have until midnight, so today doesn't count as broken until the day is over. A missed day resets it.
 - The "sugar" target uses the FDA added-sugars limit (50 g); the AI usually reports total sugars, so a
   fruit-heavy day can read high on the sugar bar — that's expected.

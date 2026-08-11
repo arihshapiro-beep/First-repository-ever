@@ -315,6 +315,32 @@ function weekSummary(history, dayKeys, metric, target) {
   return { total: total, loggedDays: loggedDays, avg: loggedDays ? total / loggedDays : 0, within: within };
 }
 
+// Did the user log anything on this day?
+function isLoggedDay(history, key) { return !!(history[key] && history[key].length); }
+
+// Current streak: consecutive days for which ok(key) is true, ending today —
+// or ending yesterday when today isn't logged yet (a grace period so the streak
+// isn't shown as broken before the day is over). `ok` must imply the day is logged.
+function streakCount(history, today, ok) {
+  var start = isLoggedDay(history, dateKey(today)) ? today : addDays(today, -1);
+  var n = 0, d = start;
+  while (ok(dateKey(d))) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+// Longest run of consecutive calendar days for which ok(key) is true (all time).
+function longestStreak(history, ok) {
+  var keys = Object.keys(history).filter(function (k) { return ok(k); }).sort();
+  var best = 0, run = 0, prev = null;
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    if (prev && dateKey(addDays(keyToDate(prev), 1)) === k) run++; else run = 1;
+    if (run > best) best = run;
+    prev = k;
+  }
+  return best;
+}
+
 var CC = {
   DEFAULT_TARGETS: DEFAULT_TARGETS,
   NUTRIENTS: NUTRIENTS,
@@ -337,6 +363,9 @@ var CC = {
   dayLevel: dayLevel,
   fmtCompact: fmtCompact,
   weekSummary: weekSummary,
+  isLoggedDay: isLoggedDay,
+  streakCount: streakCount,
+  longestStreak: longestStreak,
 };
 
 if (typeof window !== 'undefined') { window.CC = CC; }
