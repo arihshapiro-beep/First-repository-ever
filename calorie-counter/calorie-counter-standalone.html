@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16a34a">
+<title>Calorie Counter</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Calories">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+  :root {
+    --bg: #f6f7f5;
+    --card: #ffffff;
+    --ink: #1a2b22;
+    --muted: #6b7a72;
+    --line: #e4e8e4;
+    --brand: #16a34a;
+    --brand-ink: #0f7a37;
+    --good: #16a34a;
+    --mid: #d99500;
+    --high: #e0483a;
+    --good-bg: #e8f6ec;
+    --mid-bg: #fbf1dc;
+    --high-bg: #fbe7e4;
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(20,40,30,.06), 0 8px 24px rgba(20,40,30,.06);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    padding: env(safe-area-inset-top) 0 40px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+  header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 18px 0 8px;
+  }
+  header h1 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
+  header .logo { font-size: 24px; }
+  header .spacer { flex: 1; }
+  .pill {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: #eef0ee; color: var(--muted); border: 1px solid var(--line);
+  }
+  .pill.good { background: var(--good-bg); color: var(--brand-ink); border-color: #bfe6c9; }
+  .icon-btn {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    width: 40px; height: 40px; border-radius: 12px; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:active { transform: scale(.96); }
+
+  .lede { color: var(--muted); font-size: 14px; margin: 2px 0 16px; }
+
+  .input-row { display: flex; gap: 8px; }
+  #food-input {
+    flex: 1; font-size: 16px; padding: 14px 14px; border-radius: 14px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    box-shadow: var(--shadow); resize: none; min-height: 52px; font-family: inherit;
+  }
+  #food-input:focus { outline: 2px solid var(--brand); outline-offset: 1px; border-color: var(--brand); }
+  button.primary {
+    background: var(--brand); color: #fff; border: 0; border-radius: 14px;
+    font-size: 16px; font-weight: 600; padding: 0 18px; cursor: pointer; box-shadow: var(--shadow);
+  }
+  button.primary:active { transform: translateY(1px); }
+  button.primary:disabled { opacity: .6; cursor: default; }
+  #estimate-btn { min-width: 118px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+  .chip {
+    font-size: 13px; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+    background: var(--card); border: 1px solid var(--line); color: var(--ink);
+  }
+  .chip:hover { border-color: var(--brand); }
+  .chip.static { cursor: default; background: #f2f5f2; }
+  .chips.compare .chip { background: var(--good-bg); border-color: #cfe9d6; color: var(--brand-ink); font-weight: 600; }
+
+  .status { font-size: 13px; color: var(--brand-ink); margin: 8px 0; display: none; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 16px; margin: 16px 0;
+  }
+  .result-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .result-name { font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+  .result-assume { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .badge {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+    padding: 4px 8px; border-radius: 8px; white-space: nowrap;
+  }
+  .badge.good { background: var(--good-bg); color: var(--brand-ink); }
+  .badge.mid { background: var(--mid-bg); color: #8a6100; }
+  .badge.high { background: var(--high-bg); color: #a5271c; }
+  .result.error .result-name { color: var(--high); }
+
+  .metrics-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;
+  }
+  .metric-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+  .metric-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .metric-val { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+  .metric-unit { font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 1px; }
+  .metric-pct { font-size: 11px; color: var(--muted); }
+  .track { height: 7px; border-radius: 999px; background: #eef0ee; overflow: hidden; margin-top: 5px; }
+  .fill { height: 100%; border-radius: 999px; background: var(--good); }
+  .metric.good .fill { background: var(--good); }
+  .metric.mid .fill { background: var(--mid); }
+  .metric.high .fill { background: var(--high); }
+  .metric.good .metric-val { color: var(--brand-ink); }
+  .metric.high .metric-val { color: var(--high); }
+
+  .secondary {
+    display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid var(--line); font-size: 13px; color: var(--muted);
+  }
+  .secondary b { color: var(--ink); }
+
+  button.add { width: 100%; margin-top: 16px; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  .log-head { display: flex; align-items: center; justify-content: space-between; margin: 28px 0 8px; }
+  h2 { font-size: 16px; margin: 0; }
+  .muted { color: var(--muted); font-weight: 400; }
+  button.ghost {
+    background: transparent; border: 1px solid var(--line); color: var(--muted);
+    border-radius: 10px; padding: 6px 12px; font-size: 13px; cursor: pointer;
+  }
+  button.ghost:hover { border-color: var(--high); color: var(--high); }
+
+  .metrics-grid.totals { grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 14px; }
+  .empty {
+    background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius);
+    padding: 20px; text-align: center; color: var(--muted); font-size: 14px;
+  }
+
+  .log-list, .hist-list { list-style: none; margin: 0; padding: 0; }
+  .log-list li {
+    display: flex; align-items: center; gap: 12px; padding: 12px 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .log-list li:last-child { border-bottom: 0; }
+  .log-main { flex: 1; min-width: 0; }
+  .log-name { display: block; font-weight: 600; font-size: 15px; }
+  .log-sub { display: block; font-size: 12px; color: var(--muted); }
+  .remove {
+    border: 0; background: #f2f4f2; color: var(--muted); width: 30px; height: 30px;
+    border-radius: 8px; cursor: pointer; font-size: 13px; flex-shrink: 0;
+  }
+  .remove:hover { background: var(--high-bg); color: var(--high); }
+
+  .hist-list li {
+    display: flex; justify-content: space-between; gap: 12px; padding: 9px 4px;
+    border-bottom: 1px solid var(--line); font-size: 14px;
+  }
+  .hist-list li:last-child { border-bottom: 0; }
+
+  /* trends */
+  .stats-head { margin: 30px 0 10px; }
+  .tabs { display: flex; gap: 4px; background: #eef0ee; padding: 4px; border-radius: 12px; margin-bottom: 14px; }
+  .tab { flex: 1; border: 0; background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; padding: 9px 4px; border-radius: 9px; cursor: pointer; }
+  .tab.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+  .headline { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; padding: 16px; }
+  .hl-val { font-size: 34px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .hl-unit { font-size: 16px; font-weight: 700; color: var(--muted); margin-left: 2px; }
+  .hl-sub { font-size: 13px; color: var(--muted); }
+  .delta { display: inline-block; font-size: 12px; font-weight: 700; color: var(--ink); background: #eef0ee; border-radius: 7px; padding: 2px 7px; }
+  .delta.same { color: var(--muted); }
+  .panel-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+  .panel-head h3 { font-size: 15px; margin: 0; }
+  .panel-head .muted { font-size: 12px; }
+  .panel-sum { font-size: 13px; color: var(--ink); margin-top: 12px; }
+  .panel-sum.muted { color: var(--muted); }
+  .chart { margin-top: 2px; }
+  .plot { position: relative; height: 140px; }
+  .target-line { position: absolute; left: 0; right: 0; border-top: 1.5px dashed var(--mid); pointer-events: none; }
+  .target-line span { position: absolute; right: 0; top: -8px; font-size: 10px; color: var(--mid); background: var(--card); padding: 0 4px; font-weight: 600; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 100%; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .bar-val { font-size: 10px; color: var(--muted); margin-bottom: 3px; white-space: nowrap; }
+  .bar { width: 72%; max-width: 34px; min-height: 2px; border-radius: 6px 6px 0 0; background: var(--good); transition: height .25s ease; }
+  .bar.good { background: var(--good); }
+  .bar.mid { background: var(--mid); }
+  .bar.high { background: var(--high); }
+  .bar.empty { background: #e2e6e2; }
+  .bar.hl { box-shadow: inset 0 0 0 2px rgba(26,43,34,.28); }
+  .labs { display: flex; gap: 6px; margin-top: 6px; }
+  .lab { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .lab.hl { color: var(--ink); font-weight: 700; }
+
+  .streak { display: flex; align-items: center; gap: 14px; padding: 16px; }
+  .streak .flame { font-size: 34px; line-height: 1; filter: grayscale(1) opacity(.5); }
+  .streak .flame.on { filter: none; }
+  .streak-main { min-width: 0; }
+  .streak-num { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+  .streak-num span { font-size: 14px; font-weight: 700; color: var(--muted); }
+  .streak-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .streak-sub b { color: var(--ink); }
+  .streak.paused .streak-num { font-size: 18px; color: var(--muted); }
+
+  /* settings panel */
+  #settings[hidden] { display: none; }
+  #settings {
+    position: fixed; inset: 0; background: rgba(15,25,20,.4); z-index: 40;
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .sheet {
+    background: var(--bg); width: 100%; max-width: 640px; max-height: 88vh; overflow-y: auto;
+    border-radius: 20px 20px 0 0; padding: 8px 16px 28px;
+    box-shadow: 0 -8px 40px rgba(0,0,0,.2);
+  }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 6px; position: sticky; top: 0; background: var(--bg); }
+  .sheet-head h2 { font-size: 18px; }
+  .field { display: block; margin: 14px 0 6px; }
+  .field > span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; font-size: 16px; padding: 12px; border-radius: 12px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink); font-family: inherit;
+  }
+  .hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+  .targets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .target-row { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+  .target-row input { padding: 9px 10px; font-size: 15px; }
+  .settings-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .settings-actions .primary { flex: 1; padding: 12px; }
+
+  @media (min-width: 560px) {
+    .metrics-grid { grid-template-columns: repeat(4, 1fr); }
+    .metrics-grid.totals { grid-template-columns: repeat(4, 1fr); }
+    #settings { align-items: center; }
+    .sheet { border-radius: 20px; }
+  }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 34px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">🥗</span>
+    <h1>Calorie Counter</h1>
+    <span class="spacer"></span>
+    <span id="key-pill" class="pill">no key</span>
+    <button id="settings-toggle" class="icon-btn" aria-label="Settings">⚙️</button>
+  </header>
+  <p class="lede">Type any food in plain words — a restaurant meal, a homemade dish, a handful of candy — and get calories, <b>sugar</b>, <b>carbs</b>, and <b>sodium</b>, compared to your day. Estimates.</p>
+
+  <div class="input-row">
+    <textarea id="food-input" rows="1" placeholder="e.g. a Jersey Mike's Italian sub, original size"></textarea>
+    <button id="estimate-btn" class="primary">Estimate</button>
+  </div>
+  <div id="examples" class="chips"></div>
+  <div id="status" class="status"></div>
+
+  <div id="result"></div>
+
+  <section id="log"></section>
+  <section id="stats"></section>
+
+  <footer>Estimates for general guidance — not medical or dietary advice.</footer>
+</div>
+
+<div id="settings" hidden>
+  <div class="sheet">
+    <div class="sheet-head"><h2>Settings</h2><button id="settings-close" class="icon-btn" aria-label="Close">✕</button></div>
+    <div id="settings-body"></div>
+  </div>
+</div>
+
+<script>
+/*
+ * foods.js — built-in food database + pure helper functions for the Calorie Counter.
+ *
+ * Everything here is framework-free and side-effect-free so it can run both in the
+ * browser (attached to window.CC) and under Node for quick tests (module.exports).
+ *
+ * All nutrition numbers are ESTIMATES for a typical serving. Sodium is in
+ * milligrams; everything else (sugar, carbs, protein, fat, sat fat, fiber) is in
+ * grams; calories are kcal.
+ */
+
+// Recommended daily amounts. Based on the U.S. FDA Daily Values for a 2,000-calorie
+// reference diet. `sugar` uses the added-sugars limit (50 g). These are the default
+// "something to compare it to" — the user can override them in Settings.
+var DEFAULT_TARGETS = {
+  calories: 2000,
+  sugar_g: 50,     // FDA added-sugars limit
+  carbs_g: 275,    // total carbohydrate DV
+  sodium_mg: 2300, // sodium DV
+  protein_g: 50,
+  fat_g: 78,
+  sat_fat_g: 20,
+  fiber_g: 28,
+};
+
+// The nutrient fields we track, in display order, with labels and units.
+var NUTRIENTS = [
+  { key: 'calories', label: 'Calories', unit: '', primary: true },
+  { key: 'sugar_g', label: 'Sugar', unit: 'g', primary: true },
+  { key: 'carbs_g', label: 'Carbs', unit: 'g', primary: true },
+  { key: 'sodium_mg', label: 'Sodium', unit: 'mg', primary: true },
+  { key: 'protein_g', label: 'Protein', unit: 'g', primary: false },
+  { key: 'fat_g', label: 'Fat', unit: 'g', primary: false },
+  { key: 'sat_fat_g', label: 'Sat fat', unit: 'g', primary: false },
+  { key: 'fiber_g', label: 'Fiber', unit: 'g', primary: false },
+];
+
+// Built-in database. `k` is the list of trigger keywords/phrases (matched on word
+// boundaries). Numbers are: calories, sugar_g, carbs_g, sodium_mg, protein_g,
+// fat_g, sat_fat_g, fiber_g. `note` describes the assumed portion.
+var FOOD_DB = [
+  // --- the three examples from the original request ---
+  { name: "Jersey Mike's Italian sub (regular)", k: ['jersey mike', 'jersey mikes', 'italian sub', 'mikes italian'],
+    cal: 770, sugar: 8, carbs: 72, sodium: 2060, protein: 38, fat: 38, satfat: 13, fiber: 3,
+    note: 'Regular (7") Original Italian on white bread.' },
+  { name: 'Homemade grilled cheese', k: ['grilled cheese'],
+    cal: 400, sugar: 5, carbs: 33, sodium: 840, protein: 14, fat: 24, satfat: 12, fiber: 2,
+    note: '2 slices bread, 2 slices American cheese, butter-grilled.' },
+  { name: 'Sour gummy worms (large handful)', k: ['gummy worm', 'gummy worms', 'sour gummy', 'sour worms'],
+    cal: 150, sugar: 24, carbs: 34, sodium: 20, protein: 1, fat: 0, satfat: 0, fiber: 0,
+    note: 'About 1.5 oz (a large handful, ~9 worms).' },
+
+  // --- common single foods ---
+  { name: 'Banana (medium)', k: ['banana'], cal: 105, sugar: 14, carbs: 27, sodium: 1, protein: 1, fat: 0, satfat: 0, fiber: 3, note: '1 medium banana.' },
+  { name: 'Apple (medium)', k: ['apple'], cal: 95, sugar: 19, carbs: 25, sodium: 2, protein: 0, fat: 0, satfat: 0, fiber: 4, note: '1 medium apple.' },
+  { name: 'Egg (large)', k: ['egg', 'eggs'], cal: 72, sugar: 0, carbs: 0, sodium: 71, protein: 6, fat: 5, satfat: 2, fiber: 0, note: '1 large egg.' },
+  { name: 'Avocado (half)', k: ['avocado'], cal: 160, sugar: 1, carbs: 9, sodium: 7, protein: 2, fat: 15, satfat: 2, fiber: 7, note: 'Half a medium avocado.' },
+  { name: 'Almonds (1 oz)', k: ['almond', 'almonds'], cal: 165, sugar: 1, carbs: 6, sodium: 0, protein: 6, fat: 14, satfat: 1, fiber: 4, note: 'About 23 almonds (1 oz).' },
+  { name: 'Peanut butter (2 tbsp)', k: ['peanut butter'], cal: 190, sugar: 3, carbs: 8, sodium: 140, protein: 8, fat: 16, satfat: 3, fiber: 2, note: '2 tablespoons.' },
+  { name: 'Cheddar cheese (1 oz)', k: ['cheddar'], cal: 115, sugar: 1, carbs: 1, sodium: 180, protein: 7, fat: 9, satfat: 6, fiber: 0, note: '1 oz slice/cube.' },
+  { name: 'Slice of white bread', k: ['white bread', 'slice of bread', 'toast'], cal: 75, sugar: 2, carbs: 14, sodium: 140, protein: 3, fat: 1, satfat: 0, fiber: 1, note: '1 slice.' },
+  { name: 'Plain bagel', k: ['bagel'], cal: 245, sugar: 6, carbs: 48, sodium: 430, protein: 10, fat: 2, satfat: 0, fiber: 2, note: '1 plain bagel.' },
+  { name: 'Oatmeal (1 cup cooked)', k: ['oatmeal', 'oats', 'porridge'], cal: 150, sugar: 1, carbs: 27, sodium: 9, protein: 5, fat: 3, satfat: 1, fiber: 4, note: '1 cup cooked, no toppings.' },
+  { name: 'Greek yogurt (1 cup, plain)', k: ['greek yogurt', 'yogurt', 'yoghurt'], cal: 130, sugar: 9, carbs: 9, sodium: 85, protein: 22, fat: 1, satfat: 0, fiber: 0, note: '1 cup nonfat plain.' },
+  { name: 'White rice (1 cup cooked)', k: ['white rice', 'rice'], cal: 205, sugar: 0, carbs: 45, sodium: 2, protein: 4, fat: 0, satfat: 0, fiber: 1, note: '1 cup cooked.' },
+  { name: 'Grilled chicken breast (4 oz)', k: ['chicken breast', 'grilled chicken'], cal: 187, sugar: 0, carbs: 0, sodium: 84, protein: 35, fat: 4, satfat: 1, fiber: 0, note: '4 oz skinless, grilled.' },
+  { name: 'Spaghetti with marinara', k: ['spaghetti', 'pasta with marinara', 'pasta marinara'], cal: 330, sugar: 9, carbs: 60, sodium: 580, protein: 12, fat: 5, satfat: 1, fiber: 5, note: '~1.5 cups pasta + marinara.' },
+
+  // --- meals / restaurant items ---
+  { name: 'Cheese pizza (1 slice)', k: ['pizza'], cal: 285, sugar: 4, carbs: 36, sodium: 640, protein: 12, fat: 10, satfat: 5, fiber: 2, note: '1 slice, medium cheese pizza.' },
+  { name: 'Big Mac', k: ['big mac'], cal: 563, sugar: 9, carbs: 45, sodium: 1010, protein: 26, fat: 33, satfat: 11, fiber: 3, note: '1 McDonald’s Big Mac.' },
+  { name: 'Cheeseburger (fast food)', k: ['cheeseburger', 'burger'], cal: 300, sugar: 7, carbs: 32, sodium: 680, protein: 15, fat: 12, satfat: 6, fiber: 2, note: 'Single fast-food cheeseburger.' },
+  { name: 'French fries (medium)', k: ['french fries', 'fries'], cal: 320, sugar: 0, carbs: 43, sodium: 260, protein: 5, fat: 15, satfat: 2, fiber: 4, note: 'Medium fast-food fries.' },
+  { name: 'Chicken burrito', k: ['burrito'], cal: 970, sugar: 8, carbs: 108, sodium: 2000, protein: 47, fat: 35, satfat: 12, fiber: 13, note: 'Large chicken burrito with rice, beans, cheese, salsa.' },
+  { name: 'Turkey deli sandwich', k: ['turkey sandwich', 'deli sandwich', 'turkey sub'], cal: 320, sugar: 6, carbs: 40, sodium: 1200, protein: 22, fat: 8, satfat: 2, fiber: 3, note: 'Turkey, cheese, veg on sub roll.' },
+  { name: 'Caesar salad with chicken', k: ['caesar salad', 'caesar'], cal: 470, sugar: 5, carbs: 12, sodium: 1080, protein: 33, fat: 33, satfat: 8, fiber: 4, note: 'With grilled chicken, dressing, croutons.' },
+  { name: 'Side salad with ranch', k: ['side salad', 'garden salad'], cal: 200, sugar: 4, carbs: 10, sodium: 350, protein: 3, fat: 17, satfat: 3, fiber: 2, note: 'Small salad + 2 tbsp ranch.' },
+
+  // --- drinks ---
+  { name: 'Can of Coke (12 oz)', k: ['coke', 'coca cola', 'coca-cola', 'soda', 'cola'], cal: 140, sugar: 39, carbs: 39, sodium: 45, protein: 0, fat: 0, satfat: 0, fiber: 0, note: '12 oz can, regular.' },
+  { name: 'Orange juice (8 oz)', k: ['orange juice', 'oj'], cal: 110, sugar: 21, carbs: 26, sodium: 2, protein: 2, fat: 0, satfat: 0, fiber: 0, note: '8 oz glass.' },
+  { name: 'Grande latte (2% milk)', k: ['latte'], cal: 190, sugar: 18, carbs: 19, sodium: 170, protein: 13, fat: 7, satfat: 4, fiber: 0, note: 'Grande (16 oz) with 2% milk.' },
+  { name: 'Black coffee', k: ['black coffee', 'coffee'], cal: 2, sugar: 0, carbs: 0, sodium: 5, protein: 0, fat: 0, satfat: 0, fiber: 0, note: 'Plain brewed coffee, no additions.' },
+  { name: 'Beer (12 oz)', k: ['beer'], cal: 150, sugar: 0, carbs: 13, sodium: 14, protein: 2, fat: 0, satfat: 0, fiber: 0, note: '12 oz regular beer.' },
+  { name: 'Red wine (5 oz)', k: ['red wine', 'wine', 'glass of wine'], cal: 125, sugar: 1, carbs: 4, sodium: 6, protein: 0, fat: 0, satfat: 0, fiber: 0, note: '5 oz glass.' },
+
+  // --- snacks / sweets ---
+  { name: 'Glazed donut', k: ['donut', 'doughnut'], cal: 260, sugar: 12, carbs: 31, sodium: 330, protein: 3, fat: 14, satfat: 6, fiber: 1, note: '1 glazed donut.' },
+  { name: 'Chocolate chip cookie (large)', k: ['chocolate chip cookie', 'cookie'], cal: 220, sugar: 16, carbs: 30, sodium: 130, protein: 2, fat: 11, satfat: 5, fiber: 1, note: '1 large bakery cookie.' },
+  { name: 'Protein bar', k: ['protein bar'], cal: 200, sugar: 3, carbs: 22, sodium: 200, protein: 20, fat: 7, satfat: 2, fiber: 3, note: 'Typical 1-bar serving.' },
+  { name: 'Potato chips (1 oz)', k: ['potato chips', 'chips'], cal: 150, sugar: 0, carbs: 15, sodium: 170, protein: 2, fat: 10, satfat: 1, fiber: 1, note: 'Small 1 oz bag (~15 chips).' },
+];
+
+// Convert a raw DB row into the standard nutrition object used everywhere else.
+function dbRowToNutrition(row) {
+  return {
+    name: row.name,
+    assumptions: row.note,
+    calories: row.cal,
+    sugar_g: row.sugar,
+    carbs_g: row.carbs,
+    sodium_mg: row.sodium,
+    protein_g: row.protein,
+    fat_g: row.fat,
+    sat_fat_g: row.satfat,
+    fiber_g: row.fiber,
+    confidence: 'medium',
+    source: 'database',
+  };
+}
+
+// Escape a string for safe use inside a RegExp.
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// True if `word` appears in `text` on word boundaries (so "egg" doesn't match
+// "eggplant"). Multi-word phrases are matched as-is.
+function hasWord(text, word) {
+  try {
+    return new RegExp('\\b' + escapeRegExp(word) + '\\b', 'i').test(text);
+  } catch (e) {
+    return text.indexOf(word) !== -1;
+  }
+}
+
+/*
+ * Find the best matching built-in food for a free-text query.
+ * Scores each row by the summed length of the keywords it matches (longer,
+ * more specific phrases win). Returns a nutrition object or null.
+ */
+function matchFood(query) {
+  if (!query) return null;
+  var text = ' ' + String(query).toLowerCase().trim() + ' ';
+  var best = null;
+  var bestScore = 0;
+  for (var i = 0; i < FOOD_DB.length; i++) {
+    var row = FOOD_DB[i];
+    var score = 0;
+    for (var j = 0; j < row.k.length; j++) {
+      if (hasWord(text, row.k[j])) {
+        // Longer keyword = stronger, more specific signal.
+        score = Math.max(score, row.k[j].length);
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = row;
+    }
+  }
+  // Require at least a 3-character keyword hit to avoid nonsense matches.
+  if (best && bestScore >= 3) return dbRowToNutrition(best);
+  return null;
+}
+
+/*
+ * Parse the JSON a language model returns for a nutrition estimate. Tolerant of
+ * code fences and surrounding prose: grabs the outermost { ... } and coerces the
+ * numeric fields. Returns a normalized nutrition object, or throws on failure.
+ */
+function parseNutritionJSON(raw) {
+  if (raw == null) throw new Error('Empty response');
+  var text = String(raw).trim();
+  // Strip ```json ... ``` fences if present.
+  text = text.replace(/^```(?:json)?/i, '').replace(/```$/,'').trim();
+  var start = text.indexOf('{');
+  var end = text.lastIndexOf('}');
+  if (start === -1 || end === -1 || end < start) {
+    throw new Error('No JSON object found in response');
+  }
+  var obj = JSON.parse(text.slice(start, end + 1));
+  function num(v) {
+    var n = typeof v === 'string' ? parseFloat(v.replace(/[^0-9.\-]/g, '')) : Number(v);
+    return isFinite(n) ? n : 0;
+  }
+  var conf = String(obj.confidence || 'medium').toLowerCase();
+  if (conf !== 'high' && conf !== 'low') conf = 'medium';
+  return {
+    name: (obj.name != null ? String(obj.name) : '').trim() || 'Food',
+    assumptions: (obj.assumptions != null ? String(obj.assumptions) : '').trim(),
+    calories: Math.max(0, Math.round(num(obj.calories))),
+    sugar_g: Math.max(0, num(obj.sugar_g)),
+    carbs_g: Math.max(0, num(obj.carbs_g)),
+    sodium_mg: Math.max(0, Math.round(num(obj.sodium_mg))),
+    protein_g: Math.max(0, num(obj.protein_g)),
+    fat_g: Math.max(0, num(obj.fat_g)),
+    sat_fat_g: Math.max(0, num(obj.sat_fat_g)),
+    fiber_g: Math.max(0, num(obj.fiber_g)),
+    confidence: conf,
+    source: 'ai',
+  };
+}
+
+// Round grams for display: whole numbers at 10+, one decimal below 10.
+function fmtGrams(n) {
+  if (n >= 10 || n === Math.round(n)) return String(Math.round(n));
+  return (Math.round(n * 10) / 10).toString();
+}
+
+/*
+ * Build a few friendly "compare it to" lines for a nutrition object.
+ * Uses common equivalences: 4 g sugar = 1 tsp, ~2,325 mg sodium = 1 tsp salt,
+ * ~15 g carbs = 1 slice of bread, ~4 kcal burned per minute of brisk walking.
+ */
+function relatableComparisons(n) {
+  var out = [];
+  if (n.sugar_g > 0) out.push('Sugar ≈ ' + fmtGrams(n.sugar_g / 4) + ' tsp of sugar');
+  if (n.sodium_mg > 0) out.push('Sodium ≈ ' + Math.round((n.sodium_mg / 2300) * 100) + '% of a day’s limit');
+  if (n.carbs_g > 0) out.push('Carbs ≈ ' + fmtGrams(n.carbs_g / 15) + ' slices of bread');
+  if (n.calories > 0) out.push('≈ ' + Math.round(n.calories / 4) + ' min of brisk walking to burn');
+  return out;
+}
+
+// Empty running-total object.
+function emptyTotals() {
+  return { calories: 0, sugar_g: 0, carbs_g: 0, sodium_mg: 0, protein_g: 0, fat_g: 0, sat_fat_g: 0, fiber_g: 0 };
+}
+
+// Sum a list of nutrition objects into a totals object.
+function sumNutrition(items) {
+  var t = emptyTotals();
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    t.calories += it.calories || 0;
+    t.sugar_g += it.sugar_g || 0;
+    t.carbs_g += it.carbs_g || 0;
+    t.sodium_mg += it.sodium_mg || 0;
+    t.protein_g += it.protein_g || 0;
+    t.fat_g += it.fat_g || 0;
+    t.sat_fat_g += it.sat_fat_g || 0;
+    t.fiber_g += it.fiber_g || 0;
+  }
+  return t;
+}
+
+// Pick a status color for a value relative to its daily target.
+// < 25% green, < 50% amber, otherwise red.
+function levelForRatio(ratio) {
+  if (ratio < 0.25) return 'good';
+  if (ratio < 0.5) return 'mid';
+  return 'high';
+}
+
+// ---- date / aggregation helpers (for the day / week trends) ----
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+// Local YYYY-MM-DD for a Date (no UTC shift).
+function dateKey(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+
+// Parse a YYYY-MM-DD key back into a local Date at midnight.
+function keyToDate(key) { var p = key.split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); }
+
+// A new Date n days from d (local, midnight-anchored).
+function addDays(d, n) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; }
+
+// Monday (local midnight) of the week containing d.
+function startOfWeek(d) {
+  var x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  var off = (x.getDay() + 6) % 7; // Mon=0 … Sun=6
+  x.setDate(x.getDate() - off);
+  return x;
+}
+
+// The 7 day-keys (Mon..Sun) for the week starting at `monday`.
+function weekDayKeys(monday) {
+  var out = [];
+  for (var i = 0; i < 7; i++) out.push(dateKey(addDays(monday, i)));
+  return out;
+}
+
+// The selected-metric value for one day, plus whether anything was logged.
+function dayMetric(history, key, metric) {
+  var items = history[key];
+  if (!items || !items.length) return { value: 0, logged: false };
+  var t = sumNutrition(items);
+  return { value: t[metric] || 0, logged: true };
+}
+
+// Percent change from prev → cur; null when there's no prior value to compare.
+function pctDelta(cur, prev) { if (!prev) return null; return ((cur - prev) / prev) * 100; }
+
+// Color band for a whole-day value vs its daily target.
+function dayLevel(value, target) {
+  if (value <= 0) return 'empty';
+  var r = target > 0 ? value / target : 0;
+  if (r <= 1) return 'good';
+  if (r <= 1.3) return 'mid';
+  return 'high';
+}
+
+// Compact number for chart labels: 1,850 -> "1.9k"; small grams stay plain.
+function fmtCompact(v, unit) {
+  v = Math.round(v);
+  if (unit === 'g') return String(v);
+  if (v >= 1000) {
+    var k = v / 1000;
+    return (k >= 10 ? Math.round(k) : Math.round(k * 10) / 10) + 'k';
+  }
+  return String(v);
+}
+
+// Average of a numeric array over only the entries that count (loggedFlags true).
+// Returns { avg, loggedDays, total }.
+function weekSummary(history, dayKeys, metric, target) {
+  var total = 0, loggedDays = 0, within = 0;
+  for (var i = 0; i < dayKeys.length; i++) {
+    var dm = dayMetric(history, dayKeys[i], metric);
+    if (dm.logged) {
+      loggedDays++;
+      total += dm.value;
+      if (dm.value <= target) within++;
+    }
+  }
+  return { total: total, loggedDays: loggedDays, avg: loggedDays ? total / loggedDays : 0, within: within };
+}
+
+// Did the user log anything on this day?
+function isLoggedDay(history, key) { return !!(history[key] && history[key].length); }
+
+// Current streak: consecutive days for which ok(key) is true, ending today —
+// or ending yesterday when today isn't logged yet (a grace period so the streak
+// isn't shown as broken before the day is over). `ok` must imply the day is logged.
+function streakCount(history, today, ok) {
+  var start = isLoggedDay(history, dateKey(today)) ? today : addDays(today, -1);
+  var n = 0, d = start;
+  while (ok(dateKey(d))) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+// Longest run of consecutive calendar days for which ok(key) is true (all time).
+function longestStreak(history, ok) {
+  var keys = Object.keys(history).filter(function (k) { return ok(k); }).sort();
+  var best = 0, run = 0, prev = null;
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    if (prev && dateKey(addDays(keyToDate(prev), 1)) === k) run++; else run = 1;
+    if (run > best) best = run;
+    prev = k;
+  }
+  return best;
+}
+
+var CC = {
+  DEFAULT_TARGETS: DEFAULT_TARGETS,
+  NUTRIENTS: NUTRIENTS,
+  FOOD_DB: FOOD_DB,
+  matchFood: matchFood,
+  parseNutritionJSON: parseNutritionJSON,
+  relatableComparisons: relatableComparisons,
+  fmtGrams: fmtGrams,
+  emptyTotals: emptyTotals,
+  sumNutrition: sumNutrition,
+  levelForRatio: levelForRatio,
+  dbRowToNutrition: dbRowToNutrition,
+  dateKey: dateKey,
+  keyToDate: keyToDate,
+  addDays: addDays,
+  startOfWeek: startOfWeek,
+  weekDayKeys: weekDayKeys,
+  dayMetric: dayMetric,
+  pctDelta: pctDelta,
+  dayLevel: dayLevel,
+  fmtCompact: fmtCompact,
+  weekSummary: weekSummary,
+  isLoggedDay: isLoggedDay,
+  streakCount: streakCount,
+  longestStreak: longestStreak,
+};
+
+if (typeof window !== 'undefined') { window.CC = CC; }
+if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
+
+</script>
+<script>
+/*
+ * app.js — UI, AI estimation, daily log, and persistence for the Calorie Counter.
+ * Depends on foods.js (window.CC). No frameworks, no build step, no server.
+ */
+(function () {
+  'use strict';
+
+  var CC = window.CC;
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---- storage keys ----
+  var K_KEY = 'cc_api_key';
+  var K_MODEL = 'cc_model';
+  var K_TARGETS = 'cc_targets';
+  var K_HISTORY = 'cc_history';
+
+  var MODELS = [
+    { id: 'claude-haiku-4-5', label: 'Haiku 4.5 — fast & inexpensive (recommended)' },
+    { id: 'claude-sonnet-5', label: 'Sonnet 5 — more accurate' },
+    { id: 'claude-opus-5', label: 'Opus 5 — most accurate' },
+  ];
+
+  // ---- persisted state ----
+  function load(key, fallback) {
+    try { var v = localStorage.getItem(key); return v == null ? fallback : JSON.parse(v); }
+    catch (e) { return fallback; }
+  }
+  function save(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+  }
+
+  var apiKey = localStorage.getItem(K_KEY) || '';
+  var model = localStorage.getItem(K_MODEL) || 'claude-haiku-4-5';
+  var targets = Object.assign({}, CC.DEFAULT_TARGETS, load(K_TARGETS, {}));
+  var history = load(K_HISTORY, {});
+  var lastResult = null; // most recent estimate awaiting "Add to today"
+  var statMetric = localStorage.getItem('cc_statmetric') || 'calories'; // which metric the trend charts show
+
+  function todayKey() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+  function prettyDate(key) {
+    var parts = key.split('-');
+    var d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  function todaysItems() { return history[todayKey()] || []; }
+
+  // ---- estimation ----
+  var SYSTEM_PROMPT =
+    'You are a nutrition estimation engine. Given a free-text description of food or ' +
+    'drink, estimate its nutrition using your knowledge of common foods, restaurant and ' +
+    'chain menu items, and packaged brands. Make reasonable assumptions about portion ' +
+    'size when it is not specified, and briefly state them. If several items are ' +
+    'described, sum them into one total.\n\n' +
+    'Respond with ONLY a single minified JSON object and nothing else — no prose, no code ' +
+    'fences. Use exactly these keys:\n' +
+    '{"name":string,"assumptions":string,"calories":number,"sugar_g":number,' +
+    '"carbs_g":number,"sodium_mg":number,"protein_g":number,"fat_g":number,' +
+    '"sat_fat_g":number,"fiber_g":number,"confidence":"high"|"medium"|"low"}\n\n' +
+    'All numbers are for the TOTAL amount described. calories are kcal, sodium is in ' +
+    'milligrams, everything else in grams. Round calories and sodium to whole numbers. ' +
+    'These are estimates — do not refuse a reasonable food description. If the text is ' +
+    'not food or drink, set every number to 0, confidence to "low", and explain in ' +
+    '"assumptions".';
+
+  function estimateWithAI(query) {
+    var body = {
+      model: model,
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: query }],
+    };
+    // These models think by default; a nutrition lookup does not need it, and
+    // leaving it on adds latency and cost. Haiku does not think by default.
+    if (model.indexOf('haiku') === -1) body.thinking = { type: 'disabled' };
+
+    return fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify(body),
+    }).then(function (res) {
+      return res.json().then(function (data) { return { ok: res.ok, status: res.status, data: data }; });
+    }).then(function (r) {
+      if (!r.ok) {
+        var msg = (r.data && r.data.error && r.data.error.message) || ('HTTP ' + r.status);
+        if (r.status === 401) msg = 'Your API key looks invalid or expired — check Settings.';
+        else if (r.status === 400 && /credit|billing/i.test(msg)) msg = 'Your Anthropic account needs credit to run lookups.';
+        else if (r.status === 429) msg = 'Rate limited — wait a few seconds and try again.';
+        else if (r.status === 529) msg = 'The API is briefly overloaded — try again in a moment.';
+        throw new Error(msg);
+      }
+      var block = (r.data.content || []).filter(function (b) { return b.type === 'text'; })[0];
+      return CC.parseNutritionJSON(block ? block.text : '');
+    });
+  }
+
+  function runEstimate() {
+    var query = $('food-input').value.trim();
+    if (!query) { $('food-input').focus(); return; }
+
+    lastResult = null;
+    setBusy(true);
+    showStatus('');
+
+    var done = function (nutrition, note) {
+      lastResult = nutrition;
+      renderResult(nutrition, note);
+      setBusy(false);
+    };
+    var fail = function (message) {
+      renderError(message);
+      setBusy(false);
+    };
+
+    if (apiKey) {
+      estimateWithAI(query).then(function (n) { done(n); }).catch(function (err) {
+        // Fall back to the built-in database if the network/API fails.
+        var m = CC.matchFood(query);
+        if (m) done(m, 'Used the built-in estimate (couldn’t reach the AI: ' + err.message + ').');
+        else fail(err.message + ' No built-in match either — you can add credit or try rephrasing.');
+      });
+    } else {
+      // No key: try the offline database.
+      var m2 = CC.matchFood(query);
+      if (m2) { done(m2, 'Built-in estimate. Add a Claude API key in Settings to look up anything you type.'); }
+      else {
+        fail('No built-in match for “' + query + '”. Add a Claude API key in Settings and the app can estimate anything — a restaurant meal, a homemade dish, a handful of candy.');
+        setBusy(false);
+      }
+    }
+  }
+
+  // ---- rendering ----
+  function setBusy(busy) {
+    var btn = $('estimate-btn');
+    btn.disabled = busy;
+    btn.textContent = busy ? 'Estimating…' : 'Estimate';
+  }
+  function showStatus(msg) {
+    var el = $('status');
+    el.textContent = msg || '';
+    el.style.display = msg ? 'block' : 'none';
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function bar(value, target, unit) {
+    var ratio = target > 0 ? value / target : 0;
+    var pct = Math.min(100, Math.round(ratio * 100));
+    var lvl = CC.levelForRatio(ratio);
+    var shown = unit === 'mg' || unit === '' ? Math.round(value) : CC.fmtGrams(value);
+    return '' +
+      '<div class="metric ' + lvl + '">' +
+        '<div class="metric-top"><span class="metric-val">' + shown + '<span class="metric-unit">' + unit + '</span></span>' +
+        '<span class="metric-pct">' + Math.round(ratio * 100) + '% of day</span></div>' +
+        '<div class="track"><div class="fill" style="width:' + pct + '%"></div></div>' +
+      '</div>';
+  }
+
+  function renderResult(n, note) {
+    var confClass = n.confidence === 'high' ? 'good' : (n.confidence === 'low' ? 'high' : 'mid');
+    var primaries = CC.NUTRIENTS.filter(function (x) { return x.primary; });
+    var secondaries = CC.NUTRIENTS.filter(function (x) { return !x.primary; });
+
+    var html = '<div class="card result">';
+    html += '<div class="result-head">' +
+      '<div><div class="result-name">' + esc(n.name) + '</div>' +
+      (n.assumptions ? '<div class="result-assume">' + esc(n.assumptions) + '</div>' : '') + '</div>' +
+      '<span class="badge ' + confClass + '">' + esc(n.confidence) + ' confidence</span>' +
+      '</div>';
+
+    html += '<div class="metrics-grid">';
+    primaries.forEach(function (nut) {
+      html += '<div class="metric-cell"><div class="metric-label">' + nut.label + '</div>' + bar(n[nut.key], targets[nut.key], nut.unit) + '</div>';
+    });
+    html += '</div>';
+
+    // secondary nutrients as a compact row
+    html += '<div class="secondary">';
+    secondaries.forEach(function (nut) {
+      html += '<span><b>' + CC.fmtGrams(n[nut.key]) + nut.unit + '</b> ' + nut.label.toLowerCase() + '</span>';
+    });
+    html += '</div>';
+
+    // relatable "compare it to" chips
+    var comps = CC.relatableComparisons(n);
+    if (comps.length) {
+      html += '<div class="chips compare">';
+      comps.forEach(function (c) { html += '<span class="chip static">' + esc(c) + '</span>'; });
+      html += '</div>';
+    }
+
+    html += '<button id="add-btn" class="primary add">＋ Add to today</button>';
+    if (note) html += '<div class="note">' + esc(note) + '</div>';
+    html += '</div>';
+
+    $('result').innerHTML = html;
+    var addBtn = $('add-btn');
+    if (addBtn) addBtn.addEventListener('click', addLastToToday);
+  }
+
+  function renderError(message) {
+    $('result').innerHTML = '<div class="card result error"><div class="result-name">Hmm.</div>' +
+      '<div class="result-assume">' + esc(message) + '</div></div>';
+  }
+
+  function addLastToToday() {
+    if (!lastResult) return;
+    var key = todayKey();
+    if (!history[key]) history[key] = [];
+    var item = Object.assign({}, lastResult, { id: key + '-' + history[key].length + '-' + Math.round(performance.now()) });
+    history[key].push(item);
+    save(K_HISTORY, history);
+    lastResult = null;
+    $('result').innerHTML = '';
+    $('food-input').value = '';
+    $('food-input').focus();
+    renderLog();
+  }
+
+  function removeItem(id) {
+    var key = todayKey();
+    history[key] = (history[key] || []).filter(function (it) { return it.id !== id; });
+    if (history[key].length === 0) delete history[key];
+    save(K_HISTORY, history);
+    renderLog();
+  }
+
+  function clearToday() {
+    if (!todaysItems().length) return;
+    if (!confirm('Clear everything logged today?')) return;
+    delete history[todayKey()];
+    save(K_HISTORY, history);
+    renderLog();
+  }
+
+  function renderLog() {
+    var items = todaysItems();
+    var totals = CC.sumNutrition(items);
+    var primaries = CC.NUTRIENTS.filter(function (x) { return x.primary; });
+
+    var html = '<div class="log-head"><h2>Today <span class="muted">· ' + prettyDate(todayKey()) + '</span></h2>';
+    if (items.length) html += '<button id="clear-btn" class="ghost">Clear</button>';
+    html += '</div>';
+
+    // daily totals vs targets
+    html += '<div class="metrics-grid totals">';
+    primaries.forEach(function (nut) {
+      var val = totals[nut.key];
+      var tgt = targets[nut.key];
+      var ratio = tgt > 0 ? val / tgt : 0;
+      var pct = Math.min(100, Math.round(ratio * 100));
+      var lvl = CC.levelForRatio(ratio);
+      var shown = nut.unit === 'g' ? CC.fmtGrams(val) : Math.round(val);
+      html += '<div class="metric-cell"><div class="metric-label">' + nut.label + '</div>' +
+        '<div class="metric ' + lvl + '"><div class="metric-top">' +
+        '<span class="metric-val">' + shown + '<span class="metric-unit">' + nut.unit + '</span></span>' +
+        '<span class="metric-pct">of ' + (nut.unit === 'g' ? CC.fmtGrams(tgt) : tgt) + nut.unit + '</span></div>' +
+        '<div class="track"><div class="fill" style="width:' + pct + '%"></div></div></div></div>';
+    });
+    html += '</div>';
+
+    if (!items.length) {
+      html += '<div class="empty">Nothing logged yet. Estimate a food above and tap <b>Add to today</b>.</div>';
+    } else {
+      html += '<ul class="log-list">';
+      items.forEach(function (it) {
+        html += '<li><div class="log-main"><span class="log-name">' + esc(it.name) + '</span>' +
+          '<span class="log-sub">' + Math.round(it.calories) + ' cal · ' + CC.fmtGrams(it.sugar_g) + 'g sugar · ' +
+          CC.fmtGrams(it.carbs_g) + 'g carbs · ' + Math.round(it.sodium_mg) + 'mg sodium</span></div>' +
+          '<button class="remove" data-id="' + esc(it.id) + '" aria-label="Remove">✕</button></li>';
+      });
+      html += '</ul>';
+    }
+
+    $('log').innerHTML = html;
+    var clearBtn = $('clear-btn');
+    if (clearBtn) clearBtn.addEventListener('click', clearToday);
+    Array.prototype.forEach.call($('log').querySelectorAll('.remove'), function (b) {
+      b.addEventListener('click', function () { removeItem(b.getAttribute('data-id')); });
+    });
+
+    renderStats();
+  }
+
+  // ---- trends (pedometer-style day/week tracking) ----
+  function metricDef() {
+    for (var i = 0; i < CC.NUTRIENTS.length; i++) {
+      if (CC.NUTRIENTS[i].key === statMetric && CC.NUTRIENTS[i].primary) return CC.NUTRIENTS[i];
+    }
+    return CC.NUTRIENTS[0];
+  }
+
+  // A small neutral "▲ 12%" / "▼ 12%" chip. Direction only — no good/bad coloring.
+  function deltaChip(cur, prev) {
+    if (prev == null || prev === 0) return '';
+    var pct = Math.round(((cur - prev) / prev) * 100);
+    if (pct === 0) return '<span class="delta same">≈ same</span>';
+    return '<span class="delta">' + (pct > 0 ? '▲' : '▼') + ' ' + Math.abs(pct) + '%</span>';
+  }
+
+  // Render a CSS bar chart. `bars` = [{label, value, highlight}]; a dashed line marks the target.
+  function plot(bars, target, unit) {
+    var scale = target || 0;
+    bars.forEach(function (b) { scale = Math.max(scale, b.value); });
+    scale = (scale || 1) * 1.15; // headroom so the tallest bar and its label fit
+    var tPct = target > 0 ? Math.min(100, Math.round((target / scale) * 100)) : 0;
+    var barsHtml = '', labsHtml = '';
+    bars.forEach(function (b) {
+      var h = b.value > 0 ? Math.max(2, Math.round((b.value / scale) * 100)) : 0;
+      var lvl = b.value > 0 ? CC.dayLevel(b.value, target) : 'empty';
+      barsHtml += '<div class="bar-col">' +
+        '<div class="bar-val">' + (b.value > 0 ? CC.fmtCompact(b.value, unit) : '') + '</div>' +
+        '<div class="bar ' + lvl + (b.highlight ? ' hl' : '') + '" style="height:' + h + '%"></div></div>';
+      labsHtml += '<div class="lab' + (b.highlight ? ' hl' : '') + '">' + esc(b.label) + '</div>';
+    });
+    return '<div class="chart"><div class="plot">' +
+      (target > 0 ? '<div class="target-line" style="bottom:' + tPct + '%"><span>' + CC.fmtCompact(target, unit) + ' target</span></div>' : '') +
+      '<div class="bars">' + barsHtml + '</div></div><div class="labs">' + labsHtml + '</div></div>';
+  }
+
+  function renderStats() {
+    var el = $('stats');
+    var md = metricDef();
+    var metric = md.key, unit = md.unit, target = targets[metric];
+
+    var tabs = CC.NUTRIENTS.filter(function (n) { return n.primary; }).map(function (n) {
+      return '<button class="tab' + (n.key === metric ? ' active' : '') + '" data-metric="' + n.key + '">' + n.label + '</button>';
+    }).join('');
+    var html = '<div class="stats-head"><h2>Trends</h2></div><div class="tabs">' + tabs + '</div>';
+
+    if (!Object.keys(history).length) {
+      html += '<div class="empty">Log a few foods and your day, week, and week-over-week trends show up here — like a step tracker for what you eat.</div>';
+      el.innerHTML = html;
+      wireTabs();
+      return;
+    }
+
+    var today = new Date();
+    var todayK = CC.dateKey(today);
+    var todayVal = CC.dayMetric(history, todayK, metric).value;
+    var yVal = CC.dayMetric(history, CC.dateKey(CC.addDays(today, -1)), metric).value;
+
+    // streak: consecutive days logged (the headline), plus a within-target run
+    // for the selected metric. Both update automatically from logged history.
+    var isLogged = function (k) { return CC.isLoggedDay(history, k); };
+    var logStreak = CC.streakCount(history, today, isLogged);
+    var logBest = CC.longestStreak(history, isLogged);
+    var mStreak = CC.streakCount(history, today, function (k) {
+      return CC.isLoggedDay(history, k) && CC.dayMetric(history, k, metric).value <= target;
+    });
+    if (logStreak > 0) {
+      html += '<div class="card streak"><div class="flame on">🔥</div><div class="streak-main">' +
+        '<div class="streak-num">' + logStreak + ' <span>day streak</span></div>' +
+        '<div class="streak-sub">Longest ' + logBest + ' day' + (logBest === 1 ? '' : 's') +
+        (mStreak > 0 ? ' · <b>' + mStreak + '</b> day' + (mStreak === 1 ? '' : 's') + ' in a row within your ' + md.label.toLowerCase() + ' target' : '') +
+        '</div></div></div>';
+    } else {
+      html += '<div class="card streak paused"><div class="flame">🔥</div><div class="streak-main">' +
+        '<div class="streak-num">No streak yet</div><div class="streak-sub">Log a food today to start one' +
+        (logBest > 0 ? ' · your best was ' + logBest + ' day' + (logBest === 1 ? '' : 's') : '') + '.</div></div></div>';
+    }
+
+    // headline: today's number + delta vs yesterday
+    html += '<div class="card headline"><div class="hl-val">' + CC.fmtCompact(todayVal, unit) +
+      '<span class="hl-unit">' + unit + '</span></div><div class="hl-sub">' + md.label.toLowerCase() + ' today' +
+      (yVal ? ' · ' + deltaChip(todayVal, yVal) + ' <span class="muted">vs yesterday</span>' : '') + '</div></div>';
+
+    // this week: 7-day bar chart + summary
+    var monday = CC.startOfWeek(today);
+    var wkKeys = CC.weekDayKeys(monday);
+    var dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var wkBars = wkKeys.map(function (k, i) {
+      return { label: dayNames[i], value: CC.dayMetric(history, k, metric).value, highlight: k === todayK };
+    });
+    var tw = CC.weekSummary(history, wkKeys, metric, target);
+
+    html += '<div class="card panel"><div class="panel-head"><h3>This week</h3></div>' + plot(wkBars, target, unit);
+    if (tw.loggedDays) {
+      html += '<div class="panel-sum">Avg <b>' + CC.fmtCompact(tw.avg, unit) + unit + '</b>/day · logged ' +
+        tw.loggedDays + ' of 7 days · <b>' + tw.within + '</b> within target</div>';
+    } else {
+      html += '<div class="panel-sum muted">Nothing logged this week yet.</div>';
+    }
+    var lw = CC.weekSummary(history, CC.weekDayKeys(CC.addDays(monday, -7)), metric, target);
+    if (lw.loggedDays && tw.loggedDays) {
+      html += '<div class="panel-sum">This week averages <b>' + CC.fmtCompact(tw.avg, unit) + unit + '</b>/day ' +
+        deltaChip(tw.avg, lw.avg) + ' <span class="muted">vs last week (' + CC.fmtCompact(lw.avg, unit) + unit + '/day).</span></div>';
+    }
+    html += '</div>';
+
+    // by week: last 8 weeks of daily-average
+    var weeks = [], priorData = false;
+    for (var i = 7; i >= 0; i--) {
+      var m = CC.addDays(monday, -7 * i);
+      var s = CC.weekSummary(history, CC.weekDayKeys(m), metric, target);
+      if (i > 0 && s.loggedDays) priorData = true;
+      weeks.push({ label: (m.getMonth() + 1) + '/' + m.getDate(), value: s.avg, highlight: i === 0 });
+    }
+    if (priorData) {
+      html += '<div class="card panel"><div class="panel-head"><h3>By week</h3><span class="muted">daily average · week of</span></div>' +
+        plot(weeks, target, unit) + '</div>';
+    }
+
+    el.innerHTML = html;
+    wireTabs();
+  }
+
+  function wireTabs() {
+    Array.prototype.forEach.call($('stats').querySelectorAll('.tab'), function (t) {
+      t.addEventListener('click', function () {
+        statMetric = t.getAttribute('data-metric');
+        localStorage.setItem('cc_statmetric', statMetric);
+        renderStats();
+      });
+    });
+  }
+
+  // ---- settings ----
+  function buildSettings() {
+    var modelOpts = MODELS.map(function (m) {
+      return '<option value="' + m.id + '"' + (m.id === model ? ' selected' : '') + '>' + esc(m.label) + '</option>';
+    }).join('');
+
+    var targetInputs = CC.NUTRIENTS.map(function (nut) {
+      return '<label class="target-row"><span>' + nut.label + (nut.unit ? ' (' + nut.unit + ')' : '') + '</span>' +
+        '<input type="number" min="0" step="1" data-target="' + nut.key + '" value="' + targets[nut.key] + '"></label>';
+    }).join('');
+
+    $('settings-body').innerHTML =
+      '<label class="field"><span>Claude API key</span>' +
+      '<input id="key-input" type="password" placeholder="sk-ant-…" value="' + esc(apiKey) + '" autocomplete="off"></label>' +
+      '<p class="hint">Stored only in this browser. Get one at <b>console.anthropic.com</b> → API Keys. ' +
+      'Each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
+      '<label class="field"><span>Model</span><select id="model-input">' + modelOpts + '</select></label>' +
+      '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
+      '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
+      '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
+      '<button id="reset-targets" class="ghost">Reset targets</button></div>';
+
+    $('save-settings').addEventListener('click', saveSettings);
+    $('reset-targets').addEventListener('click', function () {
+      targets = Object.assign({}, CC.DEFAULT_TARGETS);
+      save(K_TARGETS, targets);
+      buildSettings();
+      renderLog();
+    });
+  }
+
+  function saveSettings() {
+    apiKey = $('key-input').value.trim();
+    localStorage.setItem(K_KEY, apiKey);
+    model = $('model-input').value;
+    localStorage.setItem(K_MODEL, model);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-target]'), function (inp) {
+      var k = inp.getAttribute('data-target');
+      var v = parseFloat(inp.value);
+      if (isFinite(v) && v >= 0) targets[k] = v;
+    });
+    save(K_TARGETS, targets);
+    toggleSettings(false);
+    renderLog();
+    showStatus('Settings saved.');
+    setTimeout(function () { showStatus(''); }, 2000);
+    updateKeyPill();
+  }
+
+  function toggleSettings(open) {
+    var panel = $('settings');
+    var show = open == null ? panel.hasAttribute('hidden') : open;
+    if (show) { buildSettings(); panel.removeAttribute('hidden'); }
+    else panel.setAttribute('hidden', '');
+  }
+
+  function updateKeyPill() {
+    var pill = $('key-pill');
+    if (apiKey) { pill.textContent = 'AI on'; pill.className = 'pill good'; }
+    else { pill.textContent = 'no key'; pill.className = 'pill'; }
+  }
+
+  // ---- examples ----
+  var EXAMPLES = ['a Jersey Mike\'s Italian sub, original size', 'a homemade grilled cheese', 'a large handful of sour gummy worms', '2 eggs, toast, and black coffee'];
+  function buildExamples() {
+    var html = EXAMPLES.map(function (ex) { return '<span class="chip" data-ex="' + esc(ex) + '">' + esc(ex) + '</span>'; }).join('');
+    $('examples').innerHTML = html;
+    Array.prototype.forEach.call($('examples').querySelectorAll('[data-ex]'), function (c) {
+      c.addEventListener('click', function () { $('food-input').value = c.getAttribute('data-ex'); runEstimate(); });
+    });
+  }
+
+  // ---- init ----
+  function init() {
+    $('estimate-btn').addEventListener('click', runEstimate);
+    $('food-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); runEstimate(); }
+    });
+    $('settings-toggle').addEventListener('click', function () { toggleSettings(); });
+    $('settings-close').addEventListener('click', function () { toggleSettings(false); });
+    buildExamples();
+    updateKeyPill();
+    renderLog();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+</script>
+</body>
+</html>
