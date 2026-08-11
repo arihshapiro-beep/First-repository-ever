@@ -341,10 +341,66 @@ function longestStreak(history, ok) {
   return best;
 }
 
+// ---- learned foods: match a query against the user's own past AI lookups ----
+
+var STOPWORDS = { a:1, an:1, the:1, of:1, and:1, or:1, with:1, my:1, your:1, some:1,
+  for:1, to:1, in:1, on:1, at:1, from:1, plus:1 };
+
+// Significant tokens of a food description. Numbers are KEPT (so "2 eggs" and
+// "6 eggs" don't match and reuse each other's totals); filler words are dropped.
+function queryTokens(str) {
+  var parts = String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/);
+  var out = [], seen = {};
+  for (var i = 0; i < parts.length; i++) {
+    var t = parts[i];
+    if (!t || STOPWORDS[t]) continue;
+    if (t.length < 2 && !/^[0-9]+$/.test(t)) continue;
+    if (!seen[t]) { seen[t] = 1; out.push(t); }
+  }
+  return out;
+}
+
+// Jaccard overlap of two token lists (0..1).
+function jaccard(a, b) {
+  if (!a.length || !b.length) return 0;
+  var setB = {}, inter = 0;
+  for (var i = 0; i < b.length; i++) setB[b[i]] = 1;
+  for (var j = 0; j < a.length; j++) if (setB[a[j]]) inter++;
+  var uni = a.length + b.length - inter;
+  return uni ? inter / uni : 0;
+}
+
+// Best match for `query` among the user's learned foods. Conservative: only
+// returns a match at high token overlap so a different food/quantity re-asks AI.
+// Returns { n: <nutrition copy>, score } or null.
+function matchLearned(query, learned) {
+  if (!learned || !learned.length) return null;
+  var qt = queryTokens(query);
+  if (!qt.length) return null;
+  var best = null, bestScore = 0;
+  for (var i = 0; i < learned.length; i++) {
+    var e = learned[i];
+    var s = jaccard(qt, queryTokens(e.q || e.name || ''));
+    if (s > bestScore) { bestScore = s; best = e; }
+  }
+  if (best && bestScore >= 0.6) {
+    return { score: bestScore, n: {
+      name: best.name, assumptions: best.assumptions,
+      calories: best.calories, sugar_g: best.sugar_g, carbs_g: best.carbs_g, sodium_mg: best.sodium_mg,
+      protein_g: best.protein_g, fat_g: best.fat_g, sat_fat_g: best.sat_fat_g, fiber_g: best.fiber_g,
+      confidence: best.confidence, source: 'learned'
+    } };
+  }
+  return null;
+}
+
 var CC = {
   DEFAULT_TARGETS: DEFAULT_TARGETS,
   NUTRIENTS: NUTRIENTS,
   FOOD_DB: FOOD_DB,
+  queryTokens: queryTokens,
+  jaccard: jaccard,
+  matchLearned: matchLearned,
   matchFood: matchFood,
   parseNutritionJSON: parseNutritionJSON,
   relatableComparisons: relatableComparisons,

@@ -43,6 +43,13 @@ can't come from a fixed list — so the app asks an AI model to estimate them.
 - **Without a key**: the app still works using a built-in database of ~35 common foods and popular
   items (including the three examples above), so you can try it immediately.
 
+### Your food list grows as you use it
+Every food the AI looks up is **saved to a personal bank** on your device. The next time you type that
+food — or a close re-phrasing of it — it's served from the bank for **free**, with no AI lookup. So each
+new food costs at most one tiny lookup, ever; after that it's part of your list. Matching is deliberately
+conservative — a different quantity ("6 eggs" vs a saved "2 eggs") re-asks the AI rather than reusing the
+wrong numbers. Manage or clear the bank under **⚙️ Settings → Your saved foods**.
+
 ### Getting a key
 
 1. Go to **console.anthropic.com** → **API Keys** → create a key (starts with `sk-ant-…`).
