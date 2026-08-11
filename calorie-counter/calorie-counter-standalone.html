@@ -233,6 +233,15 @@
     padding: 7px 11px; border-radius: 8px; cursor: pointer;
   }
   .hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+  .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 18px 0 6px; }
+  .switch-label { font-size: 13px; font-weight: 600; }
+  .switch-label small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 3px; }
+  .switch { position: relative; flex-shrink: 0; width: 46px; height: 28px; }
+  .switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+  .slider { position: absolute; inset: 0; background: #d3d8d3; border-radius: 999px; transition: background .15s; }
+  .slider::before { content: ""; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+  .switch input:checked + .slider { background: var(--brand); }
+  .switch input:checked + .slider::before { transform: translateX(18px); }
   .targets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .target-row { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
   .target-row input { padding: 9px 10px; font-size: 15px; }
@@ -673,6 +682,7 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
   var K_MODEL = 'cc_model';
   var K_TARGETS = 'cc_targets';
   var K_HISTORY = 'cc_history';
+  var K_PREFER = 'cc_prefer_db';
 
   var MODELS = [
     { id: 'claude-haiku-4-5', label: 'Haiku 4.5 — fast & inexpensive (recommended)' },
@@ -695,6 +705,7 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
   var history = load(K_HISTORY, {});
   var lastResult = null; // most recent estimate awaiting "Add to today"
   var statMetric = localStorage.getItem('cc_statmetric') || 'calories'; // which metric the trend charts show
+  var preferDB = load(K_PREFER, true); // check the free built-in list before paying for an AI lookup
 
   function todayKey() {
     var d = new Date();
@@ -782,6 +793,11 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
     };
 
     if (apiKey) {
+      // Money-saver: use the free built-in list first; only pay for AI on foods it doesn't know.
+      if (preferDB) {
+        var pre = CC.matchFood(query);
+        if (pre) { done(pre, 'Free built-in estimate — no AI lookup used. (Turn off “Check built-in foods first” in Settings to always use AI.)'); return; }
+      }
       estimateWithAI(query).then(function (n) { done(n); }).catch(function (err) {
         // Fall back to the built-in database if the network/API fails.
         var m = CC.matchFood(query);
@@ -1107,6 +1123,9 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
       'It’s sent only to Anthropic, never to us. Get one at <b>console.anthropic.com</b> → API Keys; ' +
       'each lookup costs a fraction of a cent. Without a key, the app still works for ~35 common foods.</p>' +
       '<label class="field"><span>Model</span><select id="model-input">' + modelOpts + '</select></label>' +
+      '<label class="switch-row"><span class="switch-label">Check built-in foods first' +
+      '<small>Saves money — only pays for an AI lookup when a food isn’t in the built-in list.</small></span>' +
+      '<span class="switch"><input type="checkbox" id="prefer-db"' + (preferDB ? ' checked' : '') + '><span class="slider"></span></span></label>' +
       '<div class="field"><span>Daily targets to compare against</span><div class="targets">' + targetInputs + '</div>' +
       '<p class="hint">Defaults are the U.S. FDA Daily Values (2,000-calorie diet). Adjust for your own goals.</p></div>' +
       '<div class="settings-actions"><button id="save-settings" class="primary">Save</button>' +
@@ -1132,6 +1151,8 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = CC; }
     localStorage.setItem(K_KEY, apiKey);
     model = $('model-input').value;
     localStorage.setItem(K_MODEL, model);
+    preferDB = $('prefer-db').checked;
+    save(K_PREFER, preferDB);
     Array.prototype.forEach.call(document.querySelectorAll('[data-target]'), function (inp) {
       var k = inp.getAttribute('data-target');
       var v = parseFloat(inp.value);
