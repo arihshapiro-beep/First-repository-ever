@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#33507a" />
+<meta name="description" content="Tutor Desk — students, scheduling, hours, and payments for a tutoring practice. Runs entirely in your browser." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Tutor Desk" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<title>Tutor Desk</title>
+<style>
+  :root {
+    /* Brand palette — matches the SHSAT practice page (warm paper + navy). */
+    --paper: #faf8f3;
+    --card: #ffffff;
+    --card-2: #f4f1e9;
+    --ink: #1c1f26;
+    --ink-soft: #565b66;
+    --faint: #8b8778;
+    --line: #e7e0d2;
+    --accent: #33507a;
+    --accent-ink: #ffffff;
+    --accent-soft: #eef1f7;
+    --ok: #2f7a56;
+    --ok-bg: #eef6f0;
+    --warn: #9a7b2e;
+    --warn-bg: #f7f0dd;
+    --danger: #a2452f;
+    --danger-bg: #f7e9e3;
+    --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(28,31,38,.06), 0 6px 18px rgba(28,31,38,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14161b; --card: #1a1d24; --card-2: #212530;
+      --ink: #e9e7e1; --ink-soft: #a9aaa2; --faint: #83807a; --line: #2b2f39;
+      --accent: #93b2de; --accent-ink: #10131a; --accent-soft: #1b2534;
+      --ok: #74c99a; --ok-bg: #16251d;
+      --warn: #d6b45f; --warn-bg: #2a2411;
+      --danger: #e08a6f; --danger-bg: #2c1a14;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14161b; --card: #1a1d24; --card-2: #212530;
+    --ink: #e9e7e1; --ink-soft: #a9aaa2; --faint: #83807a; --line: #2b2f39;
+    --accent: #93b2de; --accent-ink: #10131a; --accent-soft: #1b2534;
+    --ok: #74c99a; --ok-bg: #16251d;
+    --warn: #d6b45f; --warn-bg: #2a2411;
+    --danger: #e08a6f; --danger-bg: #2c1a14;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky; top: 0; z-index: 30;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 16px 12px;
+  }
+  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  header h1 {
+    font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0;
+    letter-spacing: -.01em;
+  }
+  header .sub { font-size: 12.5px; color: var(--faint); margin: 2px 0 0; }
+  .icon-btn {
+    width: auto; flex: 0 0 auto; background: transparent; border: 1px solid var(--line);
+    color: var(--ink-soft); border-radius: 9px; padding: 7px 10px; font-size: 13px; font-weight: 600;
+  }
+
+  main { padding: 16px; }
+  section[hidden] { display: none; }
+
+  /* ---------- cards & type ---------- */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow);
+  }
+  .card > h2 {
+    font-family: var(--serif); font-size: 16px; font-weight: 600; margin: 0 0 10px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  }
+  .card > h2 .count { font-family: var(--sans); font-size: 12px; color: var(--faint); font-weight: 500; }
+  .section-title {
+    font-family: var(--serif); font-size: 22px; font-weight: 600; margin: 0 0 2px; letter-spacing: -.01em;
+  }
+  .section-note { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 16px; }
+  .muted { color: var(--ink-soft); font-size: 13px; }
+  .faint { color: var(--faint); font-size: 12px; }
+  .empty {
+    text-align: center; color: var(--faint); font-size: 13.5px;
+    padding: 22px 12px; border: 1px dashed var(--line); border-radius: var(--radius);
+  }
+  .empty b { display: block; color: var(--ink-soft); font-size: 14.5px; margin-bottom: 4px; font-weight: 600; }
+
+  /* ---------- forms ---------- */
+  label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 4px; font-weight: 600; }
+  input, select, textarea {
+    width: 100%; background: var(--card-2); border: 1px solid var(--line); color: var(--ink);
+    border-radius: 9px; padding: 10px 11px; font-size: 15px; font-family: inherit;
+    outline: none; appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; line-height: 1.45; min-height: 74px; }
+  select {
+    background-image: linear-gradient(45deg, transparent 50%, var(--faint) 50%), linear-gradient(135deg, var(--faint) 50%, transparent 50%);
+    background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+    background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 30px;
+  }
+  .field { margin-bottom: 11px; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; min-width: 0; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); }
+  .check input { width: auto; flex: 0 0 auto; }
+
+  button {
+    border: none; border-radius: 9px; font-size: 15px; font-weight: 600; font-family: inherit;
+    padding: 11px 14px; cursor: pointer; color: var(--accent-ink); background: var(--accent);
+    width: 100%; transition: filter .15s;
+  }
+  button:active { filter: brightness(1.12); }
+  button.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); font-weight: 500; }
+  button.small { width: auto; padding: 7px 11px; font-size: 13px; }
+  button.danger { background: transparent; border: 1px solid var(--line); color: var(--danger); }
+  button.link { background: none; border: none; color: var(--accent); width: auto; padding: 4px 0; font-size: 13px; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row > * { flex: 1; }
+
+  /* ---------- pills / badges ---------- */
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600;
+    border-radius: 999px; padding: 3px 9px; border: 1px solid var(--line);
+    background: var(--accent-soft); color: var(--accent); white-space: nowrap;
+  }
+  .pill.ok { background: var(--ok-bg); color: var(--ok); border-color: transparent; }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+  .pill.danger { background: var(--danger-bg); color: var(--danger); border-color: transparent; }
+  .pill.quiet { background: transparent; color: var(--faint); }
+
+  /* ---------- stats ---------- */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 12px 10px; text-align: center; box-shadow: var(--shadow);
+  }
+  .stat .v {
+    font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.1;
+    font-variant-numeric: tabular-nums; display: block;
+  }
+  .stat .k { font-size: 11px; color: var(--faint); margin-top: 3px; display: block; letter-spacing: .02em; }
+  .stat.alert .v { color: var(--danger); }
+
+  /* ---------- list rows ---------- */
+  .list { display: flex; flex-direction: column; gap: 9px; }
+  .item {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 12px; display: flex; gap: 11px; align-items: flex-start; box-shadow: var(--shadow);
+    cursor: pointer; text-align: left; width: 100%; color: inherit; font: inherit;
+  }
+  .item:active { background: var(--card-2); }
+  .item .avatar {
+    flex: 0 0 auto; width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); display: flex; align-items: center;
+    justify-content: center; font-weight: 700; font-size: 13px; letter-spacing: .01em;
+  }
+  .item .body { flex: 1; min-width: 0; }
+  .item .title { font-weight: 600; font-size: 14.5px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .item .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .item .side { flex: 0 0 auto; text-align: right; }
+  .item .side .amt { font-weight: 600; font-variant-numeric: tabular-nums; font-size: 14.5px; }
+  .item.dim { opacity: .55; }
+
+  .daygroup { margin-bottom: 16px; }
+  .dayhead {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: .08em;
+    text-transform: uppercase; margin: 0 2px 8px;
+  }
+  .dayhead .h { font-weight: 600; letter-spacing: 0; text-transform: none; font-size: 12px; }
+
+  /* ---------- tabs ---------- */
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 2px; }
+  .tabs button {
+    width: auto; flex: 0 0 auto; background: var(--card); border: 1px solid var(--line);
+    color: var(--ink-soft); font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 999px;
+  }
+  .tabs button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  /* ---------- bottom nav ---------- */
+  nav.bottom {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
+    display: flex; background: var(--card); border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+    max-width: 720px; margin: 0 auto;
+  }
+  nav.bottom button {
+    flex: 1; background: none; border: none; border-radius: 0; color: var(--faint);
+    font-size: 11px; font-weight: 600; padding: 9px 4px 10px; display: flex;
+    flex-direction: column; align-items: center; gap: 3px; width: auto;
+  }
+  nav.bottom button .ico { font-size: 17px; line-height: 1; }
+  nav.bottom button[aria-current="page"] { color: var(--accent); }
+
+  /* ---------- floating add ---------- */
+  .fab {
+    position: fixed; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 41;
+    width: 52px; height: 52px; border-radius: 50%; font-size: 26px; line-height: 1; padding: 0;
+    box-shadow: 0 6px 20px rgba(51,80,122,.35); display: flex; align-items: center; justify-content: center;
+  }
+  @media (min-width: 752px) { .fab { right: calc(50% - 360px + 16px); } }
+
+  /* ---------- modal ---------- */
+  .modal-back {
+    position: fixed; inset: 0; z-index: 60; background: rgba(20,22,27,.55);
+    display: flex; align-items: flex-end; justify-content: center; overflow-y: auto;
+  }
+  .modal-back[hidden] { display: none; }
+  .modal {
+    background: var(--paper); width: 100%; max-width: 720px; border-radius: 18px 18px 0 0;
+    padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); max-height: 92vh; overflow-y: auto;
+  }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-bottom: 14px; position: sticky; top: 0; background: var(--paper); padding-top: 2px;
+  }
+  .modal-head h3 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 0; }
+  .modal-head button { width: auto; flex: 0 0 auto; }
+  @media (min-width: 640px) {
+    .modal-back { align-items: center; }
+    .modal { border-radius: 16px; margin: 20px; max-width: 560px; }
+  }
+
+  .detail-block { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+  .detail-block h4 {
+    font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: .07em;
+    text-transform: uppercase; margin: 0 0 8px;
+  }
+  .kv { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 14px; }
+  .kv .k { color: var(--ink-soft); }
+  .kv .v { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+  .kv.total { border-top: 1px solid var(--line); margin-top: 5px; padding-top: 9px; font-size: 15px; }
+  .note-body { white-space: pre-wrap; font-size: 14px; color: var(--ink); }
+
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(94px + env(safe-area-inset-bottom)); z-index: 70;
+    background: var(--ink); color: var(--paper); font-size: 13.5px; font-weight: 600;
+    padding: 10px 16px; border-radius: 999px; box-shadow: var(--shadow); pointer-events: none;
+    opacity: 0; transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-row">
+    <div>
+      <h1 id="appTitle">Tutor Desk</h1>
+      <p class="sub" id="headSub">Ari Shapiro Tutoring</p>
+    </div>
+    <button class="icon-btn" id="btnSettings" type="button">Settings</button>
+  </div>
+</header>
+
+<main>
+  <!-- ============ TODAY ============ -->
+  <section id="view-today">
+    <div class="stats">
+      <div class="stat"><span class="v" id="statWeekSessions">0</span><span class="k">sessions this week</span></div>
+      <div class="stat"><span class="v" id="statMonthHours">0</span><span class="k">hours this month</span></div>
+      <div class="stat" id="statOwedWrap"><span class="v" id="statOwed">$0</span><span class="k">outstanding</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Today <span class="count" id="todayDate"></span></h2>
+      <div class="list" id="todayList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Coming up <span class="count">next 7 days</span></h2>
+      <div class="list" id="upcomingList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Needs attention</h2>
+      <div class="list" id="attentionList"></div>
+    </div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section id="view-schedule" hidden>
+    <h2 class="section-title">Schedule</h2>
+    <p class="section-note">Log a session, mark it done, and the hours and billing follow automatically.</p>
+    <div class="tabs" id="scheduleTabs">
+      <button type="button" data-range="upcoming" aria-pressed="true">Upcoming</button>
+      <button type="button" data-range="week">This week</button>
+      <button type="button" data-range="past">Past</button>
+      <button type="button" data-range="all">All</button>
+    </div>
+    <div id="scheduleList"></div>
+  </section>
+
+  <!-- ============ STUDENTS ============ -->
+  <section id="view-students" hidden>
+    <h2 class="section-title">Students</h2>
+    <p class="section-note">Rates, contacts, and everything you've covered together.</p>
+    <div class="tabs" id="studentTabs">
+      <button type="button" data-filter="active" aria-pressed="true">Active</button>
+      <button type="button" data-filter="inactive">Inactive</button>
+      <button type="button" data-filter="all">All</button>
+    </div>
+    <div class="list" id="studentList"></div>
+  </section>
+
+  <!-- ============ MONEY ============ -->
+  <section id="view-money" hidden>
+    <h2 class="section-title">Hours &amp; pay</h2>
+    <p class="section-note">Completed sessions become billable hours. Record what's been paid and see what's still owed.</p>
+    <div class="tabs" id="moneyTabs">
+      <button type="button" data-period="month" aria-pressed="true">This month</button>
+      <button type="button" data-period="lastmonth">Last month</button>
+      <button type="button" data-period="year">This year</button>
+      <button type="button" data-period="all">All time</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="v" id="mHours">0</span><span class="k">hours taught</span></div>
+      <div class="stat"><span class="v" id="mBilled">$0</span><span class="k">billed</span></div>
+      <div class="stat"><span class="v" id="mPaid">$0</span><span class="k">collected</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Balances by student</h2>
+      <div class="list" id="balanceList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Payments <span class="count" id="paymentCount"></span></h2>
+      <div class="list" id="paymentList"></div>
+      <div style="margin-top:12px"><button class="ghost" id="btnAddPayment" type="button">Record a payment</button></div>
+    </div>
+  </section>
+</main>
+
+<button class="fab" id="fab" type="button" aria-label="Add">+</button>
+
+<nav class="bottom" id="nav">
+  <button type="button" data-view="today" aria-current="page"><span class="ico">☀️</span>Today</button>
+  <button type="button" data-view="schedule"><span class="ico">🗓️</span>Schedule</button>
+  <button type="button" data-view="students"><span class="ico">🎓</span>Students</button>
+  <button type="button" data-view="money"><span class="ico">💵</span>Hours &amp; pay</button>
+</nav>
+
+<div class="modal-back" id="modalBack" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
