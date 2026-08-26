@@ -72,3 +72,10 @@ Open `index.html` in a browser (keep `app.js` and `taxData.js` in the same folde
 - OCR quality depends on the photo. Good lighting and a flat receipt help; always double-check the parsed items.
 - Item categories are auto-guessed (e.g. "IPA" → alcohol) but you should verify each one.
 - Your check is saved in the browser's local storage so a refresh won't lose it. "Start over" clears it.
+
+## Also in this repo
+
+Other single-page apps built the same way — static files, no server, data stays on your device:
+
+- [`tutoring/`](tutoring/) — **Tutor Desk**: students, scheduling, hours, and payments for a tutoring practice.
+- [`calorie-counter/`](calorie-counter/) — **Calorie Counter**: log what you eat with a built-in food database.
