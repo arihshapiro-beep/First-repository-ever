@@ -1,0 +1,181 @@
+{
+ "updated": "2026-11-23T15:07:30.070606+00:00",
+ "people": [],
+ "feeds": {
+  "https://deadline.com/feed/": 12,
+  "https://deadline.com/category/film/feed/": 0,
+  "https://deadline.com/category/tv/feed/": 0,
+  "https://deadline.com/category/business/feed/": 0,
+  "https://variety.com/feed/": 10,
+  "https://variety.com/v/film/feed/": 10,
+  "https://variety.com/v/tv/feed/": 10,
+  "https://variety.com/v/biz/feed/": 10,
+  "https://www.hollywoodreporter.com/feed/": 10,
+  "https://www.hollywoodreporter.com/c/business/feed/": 10
+ },
+ "search_cursor": 0,
+ "alerted": [],
+ "items": [
+  {
+   "id": "acd14862d788e3ce",
+   "title": "UTA Moving To New London HQ With Curtis Brown & Soccer Agency ROOF For First Time",
+   "link": "https://deadline.com/2026/11/uta-new-london-hq-curtis-brown-roof-rathbone-square-1237231504/",
+   "summary": "UTA is moving to a new London HQ alongside Curtis Brown and soccer agency ROOF for the first time. The agency is bringing all of its London businesses together in a 70,000 square foot HQ in New Rathbone Square, which is round the corner from its current Newman Street HQ, where it has been for […]",
+   "source": "Deadline",
+   "author": "Max Goldbart",
+   "published": "2026-11-23T15:00:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "63d104b36295a1c2",
+   "title": "Allison Janae Hamilton Launches Production Outfit Swampwife Pictures & Sets ‘Holler’ Starring Valerie June As First Project",
+   "link": "https://deadline.com/2026/11/allison-janae-hamilton-swampwife-pictures-holler-1237228932/",
+   "summary": "EXCLUSIVE: Artist and filmmaker Allison Janae Hamilton has set her next project, a narrative short titled Holler, starring musician Valerie June. The film will be produced under Hamilton’s newly minted production company, Swampwife Pictures. Set against the rural landscape of West Tennessee, the film follows a hard-living Memphis nightclub owner who returns to her family’s […]",
+   "source": "Deadline",
+   "author": "Zac Ntim",
+   "published": "2026-11-23T15:00:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "c950bb1a2b4930df",
+   "title": "Ben Petrie, Juliette Gariépy, Chris Locke, Romina D’Ugo to Star in ‘Man Vs Truck’ Dark Comedy (Exclusive)",
+   "link": "https://www.hollywoodreporter.com/movies/movie-news/man-vs-truck-dark-comedy-ben-petrie-chris-locke-1236760057/",
+   "summary": "Director Ted Stenson’s Canadian indie puts the classic American pickup truck at the intersection of politics, ego and masculinity.",
+   "source": "THR",
+   "author": "Etan Vlessing",
+   "published": "2026-11-23T14:30:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "ce914b5a8263b6d5",
+   "title": "Make-Up Artists & Hair Stylists Guild Sets Ronnie Specter & Lola Kemp As 2027 Career Honorees",
+   "link": "https://deadline.com/2026/11/make-up-artists-hair-stylists-guild-2027-honorees-1237230773/",
+   "summary": "The Make-Up Artists & Hair Stylists Guild has its 2027 career award recipients. Emmy-winning and Oscar-nominated makeup artist Ronnie Specter and Emmy-nommed hairstylist Lola Kemp will be honored February 20 during the 14th annual MUAHS Awards at the Westin Bonaventure in Los Angeles. The MUAHS Lifetime Achievement Awards honor a makeup artist and a hairstylist […]",
+   "source": "Deadline",
+   "author": "Erik Pedersen",
+   "published": "2026-11-23T14:00:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "a3bde05b0c6f3169",
+   "title": "Crave Renews ‘Yaga’ For Season 2 With Carrie-Anne Moss Returning",
+   "link": "https://deadline.com/2026/11/crave-renews-yaga-season-2-carrie-anne-moss-returning-1237231510/",
+   "summary": "Carrie-Anne Moss will return for a second season of Crave’s mystery thriller series Yaga. Canadian streaming service Crave greenlit Season 2 after the first run debuted on October 23 as its top series on the launch weekend and good performances on the likes of AMC+, where it was the number one series launch for the […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-23T14:00:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "6858a3531c5551de",
+   "title": "Canada’s Crave Orders Season 2 of ‘Yaga,’ Starring Carrie-Anne Moss, Hudson Williams",
+   "link": "https://www.hollywoodreporter.com/tv/tv-news/crave-second-season-yaga-1236761048/",
+   "summary": "Clark Backo and Noah Reid also star in Kat Sandler's adaptation for AMC+ in the U.S., set for a finale on Nov. 27.",
+   "source": "THR",
+   "author": "Etan Vlessing",
+   "published": "2026-11-23T14:00:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "643adac710bd7f4d",
+   "title": "Rotterdam Film Festival Appoints Pepijn Kuyper as Managing Director",
+   "link": "https://variety.com/2026/film/global/rotterdam-film-festival-pepijn-kuyper-1236955817/",
+   "summary": "International Film Festival Rotterdam has appointed Pepijn Kuyper as its managing director, succeeding Clare Stewart. He will join IFFR mid-January and work alongside Stewart during a handover period through to the conclusion of the 2027 edition of the festival, which runs from Jan. 28 – Feb. 7. IFFR has a dual leadership structure, with the […]",
+   "source": "Variety",
+   "author": "Leo Barraclough",
+   "published": "2026-11-23T13:49:03+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "4944034d825935a5",
+   "title": "Tom Misselbrook Exits ‘Sunny Nights’ Firm Cineflix After Six Years",
+   "link": "https://deadline.com/2026/11/tom-misselbrook-exits-cineflix-after-six-years-1237231492/",
+   "summary": "EXCLUSIVE: Long-serving Cineflix scripted exec Tom Misselbrook has left the Sunny Nights company. The much-liked exec, who is based out of London, confirmed his exit from the Montreal-headquartered company’s sales arm, Cineflix Rights, after six years. In a note on LinkedIn, Misselbrook said he is now working as an exec producer and strategic advisor. Cineflix […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-23T13:14:00+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "71edd763ae5d32d4",
+   "title": "CAA Signs ‘Sister Wives’ and ‘The Intimacy Coordinator’ Filmmaker and Actress Louisa Connolly-Burnham (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/global/caa-signs-louisa-connolly-burnham-sister-wives-1236955764/",
+   "summary": "British filmmaker and actress Louisa Connolly-Burnham has signed with CAA. Connolly-Burnham wrote, directed and produced “The Intimacy Coordinator,” an erotic thriller currently on the international festival circuit and qualified for both the Oscars and BAFTAs. The short film, which won best director at HollyShorts, best actress at FilmQuest and the Women in Film Award at […]",
+   "source": "Variety",
+   "author": "Alex Ritman",
+   "published": "2026-11-23T12:27:01+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "bc2fb8e503c25794",
+   "title": "Former Cineworld CEO Mooky Greidinger Leads Acquisition of Showcase Cinemas in U.K., Inks Major Imax Deal",
+   "link": "https://variety.com/2026/biz/global/mooky-greidinger-acquisitionshowcase-cinemas-uk-imax-1236953380/",
+   "summary": "Mooky Greidinger, the former CEO of cinema giant Cineworld who stepped away from the company in 2023 as it emerged from post-pandemic bankruptcy, is back in the U.K. exhibition space. The Israeli businessman, who oversaw Cineworld’s acquisition of Regal Cinemas in the U.S. in 2018, has now led the acquisition of Showcase through his company […]",
+   "source": "Variety",
+   "author": "Alex Ritman",
+   "published": "2026-11-19T18:31:20+00:00",
+   "found": "2026-11-23T15:07:30.070606+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  }
+ ]
+}
