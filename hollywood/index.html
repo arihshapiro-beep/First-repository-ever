@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trades Tracker</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trades">
+<meta name="theme-color" content="#111114">
+<style>
+:root{
+  --bg:#111114; --card:#1b1b20; --line:#2a2a31; --text:#f1f1f3; --muted:#9a9aa6;
+  --accent:#f5c451; --accent-ink:#1a1400; --me:#3ecf8e;
+  --deadline:#e2383f; --variety:#4b8bf5; --thr:#b98cf5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 40px)}
+.wrap{max-width:720px;margin:0 auto}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+h1{font-size:26px;margin:0;letter-spacing:-.02em}
+.updated{color:var(--muted);font-size:13px}
+.sites{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.sites a{display:block;text-align:center;padding:12px 6px;border-radius:12px;font-weight:700;
+  text-decoration:none;color:#fff;font-size:15px}
+.sites .d{background:var(--deadline)} .sites .v{background:var(--variety)} .sites .t{background:#6c46b8}
+.tabs{display:flex;background:var(--card);border-radius:12px;padding:4px;gap:4px;margin-bottom:10px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;
+  padding:10px;border-radius:9px}
+.tabs button.on{background:var(--accent);color:var(--accent-ink)}
+.count{font-size:12px;opacity:.8;margin-left:4px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;
+  font-size:13px;padding:6px 11px;border-radius:999px}
+.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+input[type=search]{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card);color:var(--text);font:inherit;margin-bottom:12px}
+.item{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:12px 14px;margin-bottom:10px;position:relative}
+.item.new{border-color:var(--accent)}
+.meta{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:4px;flex-wrap:wrap}
+.src{font-weight:800;letter-spacing:.02em}
+.src.Deadline{color:var(--deadline)} .src.Variety{color:var(--variety)} .src.THR{color:var(--thr)}
+.badge-new{background:var(--accent);color:var(--accent-ink);font-weight:800;border-radius:5px;padding:0 5px}
+.title{font-weight:650;font-size:16px;line-height:1.3}
+.sum{color:var(--muted);font-size:14px;margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:2px 7px;border-radius:999px}
+.who{font-size:12px;font-weight:700;color:#0d2a1d;background:var(--me);padding:2px 8px;border-radius:999px}
+.dim{opacity:.6}
+.empty{color:var(--muted);text-align:center;padding:30px 10px;background:var(--card);border-radius:14px;border:1px dashed var(--line)}
+.empty a,.foot a{color:var(--accent)}
+.foot{color:var(--muted);font-size:13px;text-align:center;margin-top:18px}
+.people{color:var(--muted);font-size:13px;margin:-4px 0 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Trades</h1>
+    <span class="updated" id="updated">loading…</span>
+  </header>
+
+  <nav class="sites">
+    <a class="d" href="https://deadline.com/">Deadline</a>
+    <a class="v" href="https://variety.com/">Variety</a>
+    <a class="t" href="https://www.hollywoodreporter.com/">THR</a>
+  </nav>
+
+  <div class="tabs">
+    <button id="tab-people" class="on">My People<span class="count" id="c-people"></span></button>
+    <button id="tab-biz">Deals &amp; Hires<span class="count" id="c-biz"></span></button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+  <input type="search" id="q" placeholder="Search names, companies, shows…" autocomplete="off">
+  <div class="people" id="peopleLine"></div>
+  <div id="list"></div>
+
+  <p class="foot">
+    <a id="editLink" href="#">Edit my list of people</a> · <a href="#" id="markRead">Mark all as seen</a>
+  </p>
+</div>
+
+<script>
+const REPO = "arihshapiro-beep/first-repository-ever";
+const BRANCH = "claude/receipt-check-splitter-y8r3pf";
+document.getElementById('editLink').href = `https://github.com/${REPO}/edit/${BRANCH}/hollywood/people.txt`;
+
+const TAGS = ["Writers & Directors", "Agents & Managers", "Casting", "Deals & Projects"];
+const SOURCES = ["Deadline", "Variety", "THR"];
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let state = { tab: store.get('tab', 'people'), tag: null, src: null, q: '' };
+let data = null;
+const lastSeen = store.get('lastSeen', null);
+
+function ago(iso){
+  const s = (Date.now() - new Date(iso)) / 1000;
+  if (s < 3600) return Math.max(1, Math.round(s/60)) + 'm ago';
+  if (s < 86400) return Math.round(s/3600) + 'h ago';
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, {month:'short', day:'numeric'});
+}
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function renderChips(){
+  const el = document.getElementById('chips');
+  const mk = (label, on, fn) => { const b = document.createElement('button'); b.className = 'chip' + (on ? ' on' : ''); b.textContent = label; b.onclick = fn; el.appendChild(b); };
+  el.innerHTML = '';
+  mk('All', !state.tag && !state.src, () => { state.tag = null; state.src = null; render(); });
+  TAGS.forEach(t => mk(t, state.tag === t, () => { state.tag = state.tag === t ? null : t; render(); }));
+  SOURCES.forEach(s => mk(s, state.src === s, () => { state.src = state.src === s ? null : s; render(); }));
+}
+
+function render(){
+  document.getElementById('tab-people').classList.toggle('on', state.tab === 'people');
+  document.getElementById('tab-biz').classList.toggle('on', state.tab === 'biz');
+  store.set('tab', state.tab);
+  renderChips();
+  const list = document.getElementById('list');
+  const pl = document.getElementById('peopleLine');
+  if (!data){ list.innerHTML = '<div class="empty">Loading…</div>'; return; }
+
+  const people = data.items.filter(i => i.people && i.people.length);
+  const biz = data.items.filter(i => i.business);
+  document.getElementById('c-people').textContent = people.length ? `(${people.length})` : '';
+  document.getElementById('c-biz').textContent = biz.length ? `(${biz.length})` : '';
+
+  let rows = state.tab === 'people' ? people : biz;
+  if (state.tag) rows = rows.filter(i => i.tags.includes(state.tag));
+  if (state.src) rows = rows.filter(i => i.source === state.src);
+  if (state.q){
+    const q = state.q.toLowerCase();
+    rows = rows.filter(i => (i.title + ' ' + i.summary + ' ' + (i.people||[]).join(' ')).toLowerCase().includes(q));
+  }
+
+  if (state.tab === 'people'){
+    const n = (data.people || []).length;
+    pl.textContent = n ? `Watching ${n} ${n === 1 ? 'person' : 'people'}.` : '';
+  } else pl.textContent = 'Only deals, hires, signings, castings and agency/management moves — no box office, reviews or gossip.';
+
+  if (!rows.length){
+    if (state.tab === 'people' && !(data.people || []).length){
+      list.innerHTML = `<div class="empty">You haven't added anyone yet.<br><br><a href="${document.getElementById('editLink').href}">Add names to your list →</a></div>`;
+    } else if (state.tab === 'people'){
+      list.innerHTML = `<div class="empty">No stories about your people ${state.tag || state.src || state.q ? 'match these filters' : 'yet'}.<br>The tracker checks the trades every 15 minutes.</div>`;
+    } else list.innerHTML = '<div class="empty">Nothing matches these filters.</div>';
+    return;
+  }
+
+  list.innerHTML = rows.slice(0, 300).map(i => {
+    const isNew = lastSeen && i.found > lastSeen;
+    return `<a class="item${isNew ? ' new' : ''}${state.tab === 'people' && !i.business ? ' dim' : ''}" href="${esc(i.link)}" target="_blank" rel="noopener">
+      <div class="meta"><span class="src ${esc(i.source)}">${esc(i.source)}</span><span>${ago(i.published)}</span>${isNew ? '<span class="badge-new">NEW</span>' : ''}</div>
+      <div class="title">${esc(i.title)}</div>
+      ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ''}
+      <div class="tags">${(i.people||[]).map(p => `<span class="who">${esc(p)}</span>`).join('')}${i.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+    </a>`;
+  }).join('');
+}
+
+document.getElementById('tab-people').onclick = () => { state.tab = 'people'; render(); };
+document.getElementById('tab-biz').onclick = () => { state.tab = 'biz'; render(); };
+document.getElementById('q').oninput = e => { state.q = e.target.value.trim(); render(); };
+document.getElementById('markRead').onclick = e => { e.preventDefault(); store.set('lastSeen', new Date().toISOString()); location.reload(); };
+
+async function load(){
+  try{
+    const r = await fetch('data.json?t=' + Date.now(), {cache: 'no-store'});
+    data = await r.json();
+    document.getElementById('updated').textContent = 'checked ' + ago(data.updated);
+    if (!lastSeen) store.set('lastSeen', new Date().toISOString());
+  }catch(e){
+    data = {items: [], people: []};
+    document.getElementById('updated').textContent = 'not run yet';
+  }
+  render();
+}
+// remember when you last looked, so the next visit can highlight what's NEW
+window.addEventListener('pagehide', () => { if (data && data.updated) store.set('lastSeen', data.updated); });
+render(); load();
+</script>
+</body>
+</html>

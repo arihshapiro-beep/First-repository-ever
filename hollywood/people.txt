@@ -1,0 +1,13 @@
+# YOUR PEOPLE — one name per line, exactly as the trades would print it.
+#
+# Lines starting with # are ignored.
+# Optional: after a "|" add a note (it shows on the page), and nicknames with "aka:".
+#
+#   Jane Doe
+#   Jane Doe | writer, we were on Show X together
+#   Robert Smith | my old manager, aka: Bobby Smith, Rob Smith
+#
+# Tip: very common names (e.g. "John Smith") will cause false matches — add a nickname
+# or middle name if the trades use one.
+#
+# ---- put your names below this line ----
