@@ -1,11 +1,13 @@
 {
- "updated": "2026-11-23T16:01:05.841978+00:00",
+ "updated": "2026-11-23T16:01:44.207665+00:00",
  "people": [],
  "feeds": {
   "https://deadline.com/feed/": 12,
-  "https://deadline.com/category/film/feed/": 0,
-  "https://deadline.com/category/tv/feed/": 0,
-  "https://deadline.com/category/business/feed/": 0,
+  "https://deadline.com/feed/?paged=2": 12,
+  "https://deadline.com/feed/?paged=3": 12,
+  "https://deadline.com/v/film/feed/": 12,
+  "https://deadline.com/v/tv/feed/": 12,
+  "https://deadline.com/v/business/feed/": 12,
   "https://variety.com/feed/": 10,
   "https://variety.com/v/film/feed/": 10,
   "https://variety.com/v/tv/feed/": 10,
@@ -26,9 +28,9 @@
    "published": "2026-11-23T15:00:00+00:00",
    "found": "2026-11-23T16:01:05.841978+00:00",
    "tags": [
-    "Writers & Directors",
     "Casting",
-    "Deals & Projects"
+    "Deals & Projects",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
@@ -58,9 +60,9 @@
    "published": "2026-11-23T14:30:00+00:00",
    "found": "2026-11-23T16:01:05.841978+00:00",
    "tags": [
-    "Writers & Directors",
     "Casting",
-    "Deals & Projects"
+    "Deals & Projects",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
@@ -75,8 +77,38 @@
    "published": "2026-11-23T14:00:00+00:00",
    "found": "2026-11-23T16:01:05.841978+00:00",
    "tags": [
-    "Writers & Directors",
     "Casting",
+    "Deals & Projects",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "a3bde05b0c6f3169",
+   "title": "Crave Renews ‘Yaga’ For Season 2 With Carrie-Anne Moss Returning",
+   "link": "https://deadline.com/2026/11/crave-renews-yaga-season-2-carrie-anne-moss-returning-1237231510/",
+   "summary": "Carrie-Anne Moss will return for a second season of Crave’s mystery thriller series Yaga. Canadian streaming service Crave greenlit Season 2 after the first run debuted on October 23 as its top series on the launch weekend and good performances on the likes of AMC+, where it was the number one series launch for the […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-23T14:00:00+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "ce914b5a8263b6d5",
+   "title": "Make-Up Artists & Hair Stylists Guild Sets Ronnie Specter & Lola Kemp As 2027 Career Honorees",
+   "link": "https://deadline.com/2026/11/make-up-artists-hair-stylists-guild-2027-honorees-1237230773/",
+   "summary": "The Make-Up Artists & Hair Stylists Guild has its 2027 career award recipients. Emmy-winning and Oscar-nominated makeup artist Ronnie Specter and Emmy-nommed hairstylist Lola Kemp will be honored February 20 during the 14th annual MUAHS Awards at the Westin Bonaventure in Los Angeles. The MUAHS Lifetime Achievement Awards honor a makeup artist and a hairstylist […]",
+   "source": "Deadline",
+   "author": "Erik Pedersen",
+   "published": "2026-11-23T14:00:00+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
     "Deals & Projects"
    ],
    "business": true,
@@ -91,6 +123,39 @@
    "author": "Leo Barraclough",
    "published": "2026-11-23T13:49:03+00:00",
    "found": "2026-11-23T16:01:05.841978+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "4944034d825935a5",
+   "title": "Tom Misselbrook Exits ‘Sunny Nights’ Firm Cineflix After Six Years",
+   "link": "https://deadline.com/2026/11/tom-misselbrook-exits-cineflix-after-six-years-1237231492/",
+   "summary": "EXCLUSIVE: Long-serving Cineflix scripted exec Tom Misselbrook has left the Sunny Nights company. The much-liked exec, who is based out of London, confirmed his exit from the Montreal-headquartered company’s sales arm, Cineflix Rights, after six years. In a note on LinkedIn, Misselbrook said he is now working as an exec producer and strategic advisor. Cineflix […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-23T13:14:00+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "5fbd832951d472e7",
+   "title": "Rotterdam Hires Pepijn Kuyper As Managing Director",
+   "link": "https://deadline.com/2026/11/pepijn-kuyper-rotterdam-managing-director-1237231512/",
+   "summary": "The Rotterdam Film Festival (IFFR) has hired Pepijn Kuyper as its new Managing Director. Kuyper succeeds Clare Stewart, who stepped down in September. Kuyper will join IFFR in mid-January 2027 and work alongside Stewart during a handover period through to the conclusion of the 2027 edition of the festival, which runs from 28 January to […]",
+   "source": "Deadline",
+   "author": "Zac Ntim",
+   "published": "2026-11-23T13:04:05+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
    "tags": [
     "Writers & Directors",
     "Agents & Managers"
@@ -107,6 +172,120 @@
    "author": "Alex Ritman",
    "published": "2026-11-23T12:27:01+00:00",
    "found": "2026-11-23T16:01:05.841978+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "b8c8fa094b195882",
+   "title": "Ex-CAA Agent Svenja Liebrecht Joins ‘The Swarm’ Producer NDF",
+   "link": "https://deadline.com/2026/11/ex-caa-agent-svenja-liebrecht-joins-ndf-1237231474/",
+   "summary": "Former CAA agent Svenja Liebrecht is joining German producer NDF in a newly-created international role. On January 1, 2027, Liebrecht will become Director of International Business & Creative Affairs at the Unterföhring-based company, which makes the likes of The Swarm and The Sommerdahl Murders. In the newly created role, she will look to pair established […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-23T11:20:02+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Casting",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "00f5d8a49440c083",
+   "title": "Susan Sarandon Joins Natalie Dormer, Richard Armitage & Susan Wokoma In Signing Open Letter Calling For Entertainment Industry To “Acknowledge Role It Plays” In Enabling Bad Behavior",
+   "link": "https://deadline.com/2026/11/uk-stars-open-letter-brand-walliams-dormer-armitage-1237224955/",
+   "summary": "UPDATE, 02.01 a.m. PT: Susan Sarandon has become the first big American star to lend her name to the open letter calling for an end to a “culture of open secrets” in the British entertainment industry following the Russell Brand and David Walliams scandals. Sarandon is now one of more than 500 actors, directors, writers […]",
+   "source": "Deadline",
+   "author": "Max Goldbart",
+   "published": "2026-11-23T10:01:00+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Casting",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "c42b24ed1ae7d3e8",
+   "title": "‘The Uprising’ VFX Company Outpost Hires Andy McNamara As Director of Creative Innovation",
+   "link": "https://deadline.com/2026/11/outpost-vfx-andy-mcnamara-director-of-creative-innovation-1237231456/",
+   "summary": "EXCLUSIVE: Outpost VFX ( The Uprising) has hired Andy McNamara as Director of Creative Innovation. McNamara joins from Cinesite, where he led AI innovation initiatives. Before that, he worked as Director of CGI and Innovation at Publicis Production. He also holds advisory roles at the London College of Communication and the National Film and Television […]",
+   "source": "Deadline",
+   "author": "Zac Ntim",
+   "published": "2026-11-23T09:59:18+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Agents & Managers",
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "3ed9f1fbd9411354",
+   "title": "Dogwoof Moves Into Microdrama Game With Tattle TV Deal",
+   "link": "https://deadline.com/2026/11/dogwoof-tattle-tv-microdrama-family-i-had-fear-of-13-1237231454/",
+   "summary": "EXCLUSIVE: Dogwoof is getting into the microdrama game. The Naza UK distributor has struck a deal with Brit microdrama outfit Tattle TV to repurpose some of its docs for vertical video. The deal begins with two docs, 2017’s The Family I Had, directed by Katie Green and Carlye Rubin, and 2015’s David Sington-directed The Fear […]",
+   "source": "Deadline",
+   "author": "Max Goldbart",
+   "published": "2026-11-23T09:58:31+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "2dbe126b5fd622a6",
+   "title": "Mahershala Ali Says Having 2 Oscars “Doesn’t Matter” When Getting Cast: “It Doesn’t Translate To Anything Real”",
+   "link": "https://deadline.com/2026/11/mahershala-ali-2-oscars-doesnt-matter-getting-cast-1237231259/",
+   "summary": "With several acclaimed roles under his belt, Mahershala Ali still finds himself on equal footing in many casting rooms. The 2x Academy Award winner recently explained that having the Oscar statuettes “doesn’t matter” in casting conversations, explaining that the coveted acting honor is “kind of just talk” and “doesn’t translate to anything real.” “It’s a […]",
+   "source": "Deadline",
+   "author": "Glenn Garner",
+   "published": "2026-11-22T23:01:58+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "11748e2c875f3c8b",
+   "title": "Lincoln Center Theater Names Naomi Weinstock New Executive Director Of Development; Robert Jones Upped",
+   "link": "https://deadline.com/2026/11/lincoln-center-theater-naomi-weinstock-1237230896/",
+   "summary": "New York’s Lincoln Center Theater has appointed Naomi Weinstock as Executive Director of Development, a position in which she will set the direction for LCT’s contributed revenue and lead the development team in building the resources for realize the organization’s artistic and institutional ambitions. The move is effective January 4, 2027. As the Executive Director, […]",
+   "source": "Deadline",
+   "author": "Greg Evans",
+   "published": "2026-11-21T13:52:48+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "66bfb0bb283bdd91",
+   "title": "Jill Scott, Grammy Award-Winning Singer & Actress, Signs With Independent Artist Group",
+   "link": "https://deadline.com/2026/11/jill-scott-independent-artist-group-agency-1237230457/",
+   "summary": "EXCLUSIVE: Three-time Grammy Award-winning singer, songwriter, actress, and producer Jill Scott has signed with Independent Artist Group for representation across film and TV, branding, literary, and international touring. The news arrives in the same week that Scott received five nominations for the 2027 Grammy Awards, recognizing her sixth studio album, “To Whom This May Concern.” […]",
+   "source": "Deadline",
+   "author": "Rosy Cordero",
+   "published": "2026-11-20T20:46:24+00:00",
+   "found": "2026-11-23T16:01:44.207665+00:00",
    "tags": [
     "Writers & Directors",
     "Agents & Managers",
