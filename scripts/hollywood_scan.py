@@ -37,9 +37,11 @@ SEARCH_BATCH = 40       # people searched per run (rotates through the list)
 
 FEEDS = [
     ("Deadline", "https://deadline.com/feed/"),
-    ("Deadline", "https://deadline.com/category/film/feed/"),
-    ("Deadline", "https://deadline.com/category/tv/feed/"),
-    ("Deadline", "https://deadline.com/category/business/feed/"),
+    ("Deadline", "https://deadline.com/feed/?paged=2"),
+    ("Deadline", "https://deadline.com/feed/?paged=3"),
+    ("Deadline", "https://deadline.com/v/film/feed/"),
+    ("Deadline", "https://deadline.com/v/tv/feed/"),
+    ("Deadline", "https://deadline.com/v/business/feed/"),
     ("Variety", "https://variety.com/feed/"),
     ("Variety", "https://variety.com/v/film/feed/"),
     ("Variety", "https://variety.com/v/tv/feed/"),
