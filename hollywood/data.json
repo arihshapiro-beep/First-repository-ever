@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-24T05:22:11.311438+00:00",
+ "updated": "2026-11-24T05:34:29.440818+00:00",
  "people": [
   {
    "name": "",
@@ -222,24 +222,42 @@
   "https://deadline.com/feed/": 12,
   "https://deadline.com/feed/?paged=2": 12,
   "https://deadline.com/feed/?paged=3": 12,
+  "https://deadline.com/feed/?paged=4": 12,
+  "https://deadline.com/feed/?paged=5": 12,
+  "https://deadline.com/feed/?paged=6": 12,
   "https://deadline.com/v/film/feed/": 12,
   "https://deadline.com/v/tv/feed/": 12,
   "https://deadline.com/v/business/feed/": 12,
   "https://variety.com/feed/": 10,
+  "https://variety.com/feed/?paged=2": 10,
+  "https://variety.com/feed/?paged=3": 10,
   "https://variety.com/v/film/feed/": 10,
   "https://variety.com/v/tv/feed/": 10,
   "https://variety.com/v/biz/feed/": 10,
   "https://www.hollywoodreporter.com/feed/": 10,
+  "https://www.hollywoodreporter.com/feed/?paged=2": 10,
+  "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 40,
+ "search_cursor": 12,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
+  "401a58bb8b923743",
   "4a1f4158f487e5fa",
+  "4a279d84164f75a2",
   "53dbee48898ccc7d",
+  "56b17c0a7db31f4a",
+  "6324c10c4818b1cf",
+  "677b47ba1a90accd",
+  "6f3d9dbc7ed0959a",
+  "7fdbd765b5ad52f7",
+  "b006f9bb33131433",
   "b67f73a10caf85c0",
-  "d353f0957d4a9f56"
+  "ca2197a6701fd82c",
+  "cc10a16f4e4cdd3e",
+  "d353f0957d4a9f56",
+  "ecd3b491c726cc92"
  ],
  "items": [
   {
@@ -315,8 +333,42 @@
    "published": "2026-11-23T23:44:21+00:00",
    "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
+    "Agents & Managers",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "b6d347531087c205",
+   "title": "Music Industry Moves: Gram Parsons Estate Signs With Peermusic; Roger Miller Posthumously Inducted Into Songwriters Hall of Fame",
+   "link": "https://variety.com/2026/music/news/gram-parsons-estate-signs-with-peermusic-1236956337/",
+   "summary": "Peermusic has signed a publishing deal for the song catalog of Gram Parsons and will assume worldwide administration, it was announced last week by Peermusic CEO Mary Megan Peer and U.S./ Canada president Jamie Cerreta. Perhaps more than any other artist, Parsons — who was inducted posthumously into the Rock & Roll Hall of Fame […]",
+   "source": "Variety",
+   "author": "Jem Aswad",
+   "published": "2026-11-23T22:20:13+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
     "Writers & Directors",
-    "Agents & Managers"
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "88f67d5cd355753e",
+   "title": "Dakota Johnson to Star and Produce Relationship Dramedy ‘Tell Me Everything’ for Lionsgate",
+   "link": "https://variety.com/2026/film/news/dakota-johnson-tell-me-everything-lionsgate-spec-sale-1236956258/",
+   "summary": "Dakota Johnson is set to star in and produce the relationship-dramedy “Tell Me Everything” for Lionsgate. The studio landed rights to the hot title in a competitive spec sale with multiple preemptive offers. Gaelyn Golde (Netflix’s “Saturn Return,” Hulu’s “Chad Powers”) penned the script and will executive produce the film. In “Tell Me Everything,” Johnson […]",
+   "source": "Variety",
+   "author": "Angelique Jackson",
+   "published": "2026-11-23T21:20:35+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting",
+    "Deals & Projects"
    ],
    "business": true,
    "people": []
@@ -353,6 +405,21 @@
    "people": []
   },
   {
+   "id": "b91fa038ebd77adc",
+   "title": "‘Ted Lasso’ Lands Season 5 Renewal at Apple TV",
+   "link": "https://www.hollywoodreporter.com/tv/tv-news/ted-lasso-renewed-season-5-apple-tv-1236761387/",
+   "summary": "The Emmy-winning comedy shifted its focus to a women's soccer team in its fourth season.",
+   "source": "THR",
+   "author": "Rick Porter",
+   "published": "2026-11-23T20:31:19+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
    "id": "da7deee10888c8af",
    "title": "Ray McKinnon Joins AMC NASCAR Drama Series ‘Thunder Road’",
    "link": "https://deadline.com/2026/11/ray-mckinnon-amc-nascar-series-thunder-road-1237231832/",
@@ -363,6 +430,22 @@
    "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Agents & Managers",
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "38195cb7ffb889ed",
+   "title": "Sadie Sandler to Star in Netflix Horror Movie ‘Malibu’ From Vertigo, Happy Madison (Exclusive)",
+   "link": "https://www.hollywoodreporter.com/movies/movie-news/sadie-sandler-netflix-horror-malibu-vertigo-happy-madison-1236761327/",
+   "summary": "Room 101 also produces director Tod \"Kip\" Williams' feature about a dog-sitting gig gone wrong.",
+   "source": "THR",
+   "author": "Ryan Gajewski",
+   "published": "2026-11-23T20:15:51+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
     "Casting"
    ],
    "business": true,
@@ -432,6 +515,39 @@
    "people": []
   },
   {
+   "id": "62b24408a5d85577",
+   "title": "Jimmy Jenkins’s ‘God With Us,’ Starring Rotimi & Lil Rel Howery, Lands PVOD Release",
+   "link": "https://deadline.com/2026/11/jimmy-jenkins-god-with-us-rotimi-lil-rel-howery-pvod-1237231734/",
+   "summary": "EXCLUSIVE: God With Us, the latest feature from independent filmmaker Jimmy Jenkins, will be available to rent and purchase on PVOD platforms from December 1. The film, a modern American twist on the nativity story, lands on PVOD platforms after a booming performance on a limited theatrical release via Variance Films in partnership with Blue […]",
+   "source": "Deadline",
+   "author": "Zac Ntim",
+   "published": "2026-11-23T18:08:08+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "2bfd894cf4a269d5",
+   "title": "Steven Spielberg to Direct Paul Thomas Anderson-Penned ‘Heart in Winter,’ Set to Star Jessie Buckley, Cillian Murphy, Mark Rylance",
+   "link": "https://www.hollywoodreporter.com/movies/movie-news/steven-spielberg-the-heart-in-winter-paul-thomas-anderson-1236761238/",
+   "summary": "Focus Features is developing the feature that is based on author Kevin Barry's 2024 Western novel.",
+   "source": "THR",
+   "author": "Ryan Gajewski",
+   "published": "2026-11-23T18:05:47+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
    "id": "8c6248b5feec1a7a",
    "title": "UTA to Host Creators Summit For Next Generation of Agents",
    "link": "https://www.hollywoodreporter.com/business/business-news/uta-creators-summit-1236759971/",
@@ -441,8 +557,73 @@
    "published": "2026-11-23T18:00:00+00:00",
    "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
+    "Agents & Managers",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "a3e77f7d6d04725a",
+   "title": "‘Shōgun’ Star Hiroyuki Sanada Joins Destin Daniel Cretton’s ‘Naruto’ At Lionsgate",
+   "link": "https://deadline.com/2026/11/shogun-hiroyuki-sanada-destin-daniel-cretton-naruto-movie-1237231404/",
+   "summary": "EXCLUSIVE: Lionsgate is in final negotiations with Hiroyuki Sanada to play the role of Hiruzen Sarutobi in its upcoming live-action film Naruto. Destin Daniel Cretton will write and direct the pic. Charles Melton is also in talks to star. Lionsgate had no comment. Sony Pictures is a co-financier on the film. Avi Arad, Ari Arad, […]",
+   "source": "Deadline",
+   "author": "Justin Kroll",
+   "published": "2026-11-23T18:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
     "Writers & Directors",
-    "Agents & Managers"
+    "Agents & Managers",
+    "Casting",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "ee2790f7f51b242c",
+   "title": "Shawn Levy’s 21 Laps Inks First Look Film Deal At Sony Pictures",
+   "link": "https://deadline.com/2026/11/shawn-levy-sony-21-laps-deal-1237231675/",
+   "summary": "Following his new TV deal at Disney’s 20th Television, Shawn Levy and his 21 Laps has landed an overall feature deal at Sony Pictures. We hear that the Culver City studio was very aggressive about landing the Deadpool & Wolverine and Star Wars: Starfighter filmmaker, and notched the deal in a competitive process. 21 Laps […]",
+   "source": "Deadline",
+   "author": "Anthonypauldalessandro",
+   "published": "2026-11-23T18:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "858cb0add947287f",
+   "title": "James Marsden-Led Apple Series ‘Disavowed’ Adds Four To Cast",
+   "link": "https://deadline.com/2026/11/james-marsden-disavowed-cast-apple-tv-julia-jones-1237231128/",
+   "summary": "EXCLUSIVE: Apple TV has rounded out the cast of Disavowed, its upcoming thriller series, adding Julia Jones (Dexter: New Blood, The Weight), Leila Farzad (I Hate Suzie, Two Weeks in August), Michael Landes (Cruel Summer, The Offer) and Pip Torrens (The Crown, War) in recurring roles. Character details are being kept under wraps. Starring and […]",
+   "source": "Deadline",
+   "author": "Denise Petski",
+   "published": "2026-11-23T18:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "806fccc6213d0904",
+   "title": "Kasi Lemmons Adapting Nike Exec Larry Miller’s ‘JUMP: My Secret Journey From The Streets To The Boardroom’ For Scott Budnick’s 1Community",
+   "link": "https://deadline.com/2026/11/kasi-lemmons-adapting-jump-larry-miller-memoir-1community-1237231715/",
+   "summary": "EXCLUSIVE: Kasi Lemmons, the director of the Oscar-nominated Harriet Tubman biopic Harriet and TriStar’s Whitney Houston: I Wanna Dance with Somebody, has been tapped to adapt an executive memoir for Scott Budnick’s 1Community. The book, by former Nike Jordan Brand chairman Larry Miller and daughter Laila Lacy, is titled JUMP: My Secret Journey from the […]",
+   "source": "Deadline",
+   "author": "Matthewgrobar",
+   "published": "2026-11-23T17:53:54+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting"
    ],
    "business": true,
    "people": []
@@ -457,8 +638,40 @@
    "published": "2026-11-23T17:37:54+00:00",
    "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
+    "Agents & Managers",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "30d67f4cf905774a",
+   "title": "Steven Spielberg Sets Adaptation Of ‘The Heart In Winter’ As Next Film At Focus With Jessie Buckley, Cillian Murphy And Mark Rylance Starring And Paul Thomas Anderson Adapting The Script",
+   "link": "https://deadline.com/2026/11/steven-spielberg-the-heart-in-winter-paul-thomas-anderson-1237231172/",
+   "summary": "EXCLUSIVE: For years, Steven Spielberg has talked about how much he’s wanted to direct a Western and it now looks like the three-time Oscar winner has found the perfect project to saddle up for. Sources tell Deadline, Spielberg is developing an untitled film for Focus Features and has assembled an all-star roster of A-list talent […]",
+   "source": "Deadline",
+   "author": "Justin Kroll",
+   "published": "2026-11-23T17:30:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
     "Writers & Directors",
-    "Agents & Managers"
+    "Casting",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "ee0caa9c7dbcde77",
+   "title": "Supriya Ganesh, Benito Skinner, Amy Landecker & Bradley Whitford Round Out Cast Of Mary Beth Barone Rom-Com ‘Still We Met’",
+   "link": "https://deadline.com/2026/11/still-we-met-cast-adds-supriya-ganesh-benito-skinner-more-1237231669/",
+   "summary": "EXCLUSIVE: Still We Met, the indie rom-com written by and starring comedian Mary Beth Barone, has wrapped production in New York with four major additions to the cast: The Pitt‘s Supriya Ganesh, plus Overcompensating‘s Benito Skinner, and the husband & wife duo of Amy Landecker (Misty Green) and Bradley Whitford (The Diplomat). Character details are […]",
+   "source": "Deadline",
+   "author": "Matthewgrobar",
+   "published": "2026-11-23T17:19:26+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Casting"
    ],
    "business": true,
    "people": []
@@ -507,6 +720,23 @@
    "found": "2026-11-23T16:01:05.841978+00:00",
    "tags": [
     "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "998a11b36ea4536b",
+   "title": "Allison Janae Hamilton Launches Production Outfit Swampwife Pictures & Sets ‘Holler’ Starring Edwina Findley & Valerie June As First Project",
+   "link": "https://deadline.com/2026/11/allison-janae-hamilton-swampwife-pictures-holler-1237228932/",
+   "summary": "EXCLUSIVE: Artist and filmmaker Allison Janae Hamilton has set her next project, a narrative short titled Holler, starring Edwina Findley and musician Valerie June. The film will be produced under Hamilton’s newly minted production company, Swampwife Pictures. Set against the rural landscape of West Tennessee, the film follows a hard-living Memphis nightclub owner who returns […]",
+   "source": "Deadline",
+   "author": "Zac Ntim",
+   "published": "2026-11-23T15:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting",
+    "Deals & Projects"
    ],
    "business": true,
    "people": []
@@ -618,8 +848,8 @@
    "published": "2026-11-23T13:04:05+00:00",
    "found": "2026-11-23T16:01:44.207665+00:00",
    "tags": [
-    "Writers & Directors",
-    "Agents & Managers"
+    "Agents & Managers",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
@@ -756,6 +986,21 @@
    "people": []
   },
   {
+   "id": "ecd3b491c726cc92",
+   "title": "'The Hunger Games,' 'Cliff Booth' and This Week's Best Events",
+   "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPclFGVGswNGtCYVBpN1BRQWtPTlp3MnJIYU1JUGVLdzdmRDRXSHFGX3M0RjdIWnBWbVliWTJuNnVtTkdrQWJUcEN6V3cwNUpKakJNeFNaZnNpa2d0UVlkWUpKQkhGckZTQWs3Q3g4cHlUek1zOGpWU0F0MjBhczEwVTRiRXkzWGVmemVqM011M3pSYllVLU5jWTIxal8?oc=5",
+   "summary": "'The Hunger Games,' 'Cliff Booth' and This Week's Best Events The Hollywood Reporter",
+   "source": "THR",
+   "author": "",
+   "published": "2026-11-20T17:30:26+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Jefferson White"
+   ]
+  },
+  {
    "id": "bc2fb8e503c25794",
    "title": "Former Cineworld CEO Mooky Greidinger Leads Acquisition of Showcase Cinemas in U.K., Inks Major Imax Deal",
    "link": "https://variety.com/2026/biz/global/mooky-greidinger-acquisitionshowcase-cinemas-uk-imax-1236953380/",
@@ -769,6 +1014,41 @@
    ],
    "business": true,
    "people": []
+  },
+  {
+   "id": "7fdbd765b5ad52f7",
+   "title": "Kathryn Newton, Nina Dobrev, Adam Devine & Scott Eastwood To Star In Rom-Com ‘Sorry About My Friends’",
+   "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPa3JfckZXN2pWVzZvQWlUUkZ2dDNzTEE0RWxXRWw1NEFwbzduZmh6dUdRemo1Rm84Q09qSUJjX3hmVlNIOXpfNGNRY1M2cGp4dWRHZWpDU1pkNWRmdm82aDFLTkV2UlMyLVEtVmx1NmEyNlluT0h2NzZDdTZBQzdNY3QtVFRNQUhfZklqVVQtS2hXNDYyWEtlc0VBSTk2T2dhUGhKWA?oc=5",
+   "summary": "Kathryn Newton, Nina Dobrev, Adam Devine & Scott Eastwood To Star In Rom-Com ‘Sorry About My Friends’ Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-11-18T21:48:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Casting"
+   ],
+   "business": true,
+   "people": [
+    "Lucas Hedges"
+   ]
+  },
+  {
+   "id": "6f3d9dbc7ed0959a",
+   "title": "'Hunger Games' Helmer Hails Cast Past, Present At 'Sunrise On The Reaping' Premiere",
+   "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPZTNsdEU5MDRTRFM1V0M0Vk1VOEJnQ1dvcUMtNlloNVBxLTgxR19wcXVYLTNCM2hLZzFvWllxbzJMVHFOX0dsTjhxSENOV3oxZkVoSXVCbHlsaTNhUVhQNndiNmIyYzNPem84WVlfc2xyYllXRFpTQW5BTWtQem01Qm9hTDJITXAzMHY2dmktVWRlSDJKTk82YWN5bWFZMlc0d2tDNA?oc=5",
+   "summary": "'Hunger Games' Helmer Hails Cast Past, Present At 'Sunrise On The Reaping' Premiere Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-11-17T21:44:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting"
+   ],
+   "business": true,
+   "people": [
+    "Jefferson White"
+   ]
   },
   {
    "id": "b67f73a10caf85c0",
@@ -801,6 +1081,51 @@
    ]
   },
   {
+   "id": "56b17c0a7db31f4a",
+   "title": "The Best Streaming Deals on Sling TV",
+   "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1aa1czLU1oZXlCRjJYRXFlbDFCWUh5TVNPUWJyZHJYQmxEOWQwSjhaUVpEaWZtQktFX0xId2ZYemNVazF0TzZWUGdFaHJ1UjVUbXRRZ09GY2N0aXp4?oc=5",
+   "summary": "The Best Streaming Deals on Sling TV The Hollywood Reporter",
+   "source": "THR",
+   "author": "",
+   "published": "2026-11-17T04:59:31+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Jefferson White"
+   ]
+  },
+  {
+   "id": "cc10a16f4e4cdd3e",
+   "title": "'The Hunger Games: Sunrise On The Reaping' NYC Premiere Red Carpet Photos: Jennifer Lawrence, Mckenna Grace, Rachel Zegler & More",
+   "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOU1JuY2VNZk0tMWNILU9McldkcDZraDlyci1mZzFhNk41RjY5YUhyV0RnVTZYbWloNklYOUw4V19pakt5T00wTWc2YmkzdG90dHhvU0cyRlMxWGd2MTY0WFJJQ1BqeTlUS19adFZ3Nm1SN0NHdExJSnZ2dExKejJVejJja09DYktiZDY5Y3VQdkRvMWZlSTlaX01TNXhXV2QweWN1eGg3REtLMXI5ZVhN?oc=5",
+   "summary": "'The Hunger Games: Sunrise On The Reaping' NYC Premiere Red Carpet Photos: Jennifer Lawrence, Mckenna Grace, Rachel Zegler & More Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-11-16T23:29:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Jefferson White"
+   ]
+  },
+  {
+   "id": "ca2197a6701fd82c",
+   "title": "Seville European Film Festival Prizes: ‘You Don’t Belong Here,’ ‘Falling House,’ ’Adult Supervision’ Win Big",
+   "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPNmVlRDdZWld6WVBYOWZoQ0wzUXdLNXkweEQwZWdORFRnLVpQa2MwZDdvT0Z1d0ZueWYxNGp3WENNbUpsdVVWNGZ1Z2thOXNUYlB4cGpDU2NGR2JnamFqdlZVdFVGNjV5aGxnRURwQXR0bU1UMzBqclhYTVFXRmI5c2lFN2IwamluYU4wNkR0R1FzVDFfRjNNZXRsS2tjZ3VfaGJUcWRmTDZKWVE?oc=5",
+   "summary": "Seville European Film Festival Prizes: ‘You Don’t Belong Here,’ ‘Falling House,’ ’Adult Supervision’ Win Big Variety",
+   "source": "Variety",
+   "author": "",
+   "published": "2026-11-15T08:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Alejandro Hernandez"
+   ]
+  },
+  {
    "id": "d353f0957d4a9f56",
    "title": "Brandon Sklenar on ‘Iron Jane,’ Body Dysmorphia and His Rapid Hollywood Rise",
    "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQcGd1akE5Y2NXc01ZUGp0UFYwWTBUdE55NEtVZ1hnNDhGUjJWQWZDbzdkb2dVS3gyRFA3ejRScEV3VUxySWNFM1RFNEM5VzZ1RlY0bWs4V29qd2dSVzI2Vkh5Z2NNNXNISGJzeDBEaHNWdzlNVjhwazcxdUhSeWo4OHdmV1N6TmdLWFZwTG1iYnhES1hYNzJrWU1EdFZMZmlyVnhScURPeTlJVVhWeVlSYURHY3E?oc=5",
@@ -813,6 +1138,38 @@
    "business": false,
    "people": [
     "Ramin Bahrani"
+   ]
+  },
+  {
+   "id": "b006f9bb33131433",
+   "title": "Patrick Schwarzenegger’s Climb to Stardom Leads to His First Lead Film Role in ‘The Journeyman’",
+   "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQeUFJSF9ZblpjQmtfR0hBZXFkaDVtV0V5ZjFNYnY5YTQ5Q095dG53bGlUS3Bsd0xOVExNYWllaEo3M09vVndhbGRSS01mcnk1TmNJZUp1c3ZEcS1ZY3Rtc2RhSHo5YjR5RzF5Wjc2SExKUXFYZU9NVXVnaDB3VENPSVNvNFlvX1ZVYnNpRmVNbw?oc=5",
+   "summary": "Patrick Schwarzenegger’s Climb to Stardom Leads to His First Lead Film Role in ‘The Journeyman’ Variety",
+   "source": "Variety",
+   "author": "",
+   "published": "2026-11-10T08:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Casting"
+   ],
+   "business": false,
+   "people": [
+    "Lucas Hedges"
+   ]
+  },
+  {
+   "id": "677b47ba1a90accd",
+   "title": "Seville European Film Festival Honors Agnieszka Holland, Thierry Frémaux and Cartoon Saloon",
+   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQVHprQlJtSGgzNkN5aVN5WVhqWEt5ZjJsTUo2TTFmWDNLc3Rxay1uMnVNRUJoeXM2eTF3VTludm1nc0t2NVAxZVBiMmZ2NXBGMFRWQ3UtYUg3ZGI0cDI4Mld1anZ0UmRENFRkenEwbFFtbVE5aEZpUk5jTTAzT2F2VG84N1UwUlVwandFMDM5bXQ3X3Z1SHd1bHJZWjEwcC1nOWpmUzB5TDY?oc=5",
+   "summary": "Seville European Film Festival Honors Agnieszka Holland, Thierry Frémaux and Cartoon Saloon Variety",
+   "source": "Variety",
+   "author": "",
+   "published": "2026-11-06T08:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Alejandro Hernandez"
    ]
   },
   {
@@ -860,6 +1217,53 @@
    "business": false,
    "people": [
     "Cole Eckerle"
+   ]
+  },
+  {
+   "id": "401a58bb8b923743",
+   "title": "Simon Helberg, Molly Shannon & Lucas Hedges To Guest Star On ‘Elsbeth’ Season 4",
+   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNU3VHWHViQXdobHRzSmhiZHREV2Q0NXVoQnRCNGxtd0VCZzZOS2RLR0tMZ1YzZVdjOHBOOHRmd2ZVbmJWMTR3anhvbmVtbF9GcUZ5cFlqUjdaVTNubUVsZXVLbnlXUVgxdldtTmJkTE9KRTUwVzdOX2JDLTIzZGZVaW1uVURvenV1Ul8xOUphWlBZY1AyZ1NTeElDa3JMa0k?oc=5",
+   "summary": "Simon Helberg, Molly Shannon & Lucas Hedges To Guest Star On ‘Elsbeth’ Season 4 Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-10-29T07:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Lucas Hedges"
+   ]
+  },
+  {
+   "id": "4a279d84164f75a2",
+   "title": "October 2026 – Page 8",
+   "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5xWU9VWjVmTy1QV0gwZDBQdnpPMU5rS3VPYUdYYllRaE1NQXZRTTZKM1M1V2NEMFR3dlVCaF9DNTV2M0RPZWRlcU55alE?oc=5",
+   "summary": "October 2026 – Page 8 Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-10-29T07:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Lucas Hedges"
+   ]
+  },
+  {
+   "id": "6324c10c4818b1cf",
+   "title": "Simple Town Movie 'Big Break' Lands North American Deal With Greenwich",
+   "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQY2RqdnR0WVAzeGlKaVZqb08zdzkxX2xCcFp5X2ZEUVNKWllGWnhjM0xUVHVwb3pmQng5TkpTZUZzcEJiM1h4cEZfckVZX19xZ1NGMk9IZGM0YUVVVGMxZGxMaVY5cWlndkJ3X0dSbnh0akQ5Q3BIcWtBOHFicmdQZzBGeXZtaXlrcWNpSDBhbU9HUlJhOXB0UzVIUGYyRlo1WXBENFFn?oc=5",
+   "summary": "Simple Town Movie 'Big Break' Lands North American Deal With Greenwich Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-10-26T07:00:00+00:00",
+   "found": "2026-11-24T05:34:29.440818+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": [
+    "Jefferson White"
    ]
   }
  ]
