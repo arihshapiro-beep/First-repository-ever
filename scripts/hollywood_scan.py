@@ -33,20 +33,27 @@ DATA_FILE = os.path.join(HOLLY, "data.json")
 
 KEEP_DAYS = 21          # how long stories stay on the page
 PEOPLE_KEEP_DAYS = 120  # stories about your people are kept longer
-SEARCH_BATCH = 40       # people searched per run (rotates through the list)
+SEARCH_BATCH = 80       # people searched per run (rotates through the list if longer)
 
 FEEDS = [
     ("Deadline", "https://deadline.com/feed/"),
     ("Deadline", "https://deadline.com/feed/?paged=2"),
     ("Deadline", "https://deadline.com/feed/?paged=3"),
+    ("Deadline", "https://deadline.com/feed/?paged=4"),
+    ("Deadline", "https://deadline.com/feed/?paged=5"),
+    ("Deadline", "https://deadline.com/feed/?paged=6"),
     ("Deadline", "https://deadline.com/v/film/feed/"),
     ("Deadline", "https://deadline.com/v/tv/feed/"),
     ("Deadline", "https://deadline.com/v/business/feed/"),
     ("Variety", "https://variety.com/feed/"),
+    ("Variety", "https://variety.com/feed/?paged=2"),
+    ("Variety", "https://variety.com/feed/?paged=3"),
     ("Variety", "https://variety.com/v/film/feed/"),
     ("Variety", "https://variety.com/v/tv/feed/"),
     ("Variety", "https://variety.com/v/biz/feed/"),
     ("THR", "https://www.hollywoodreporter.com/feed/"),
+    ("THR", "https://www.hollywoodreporter.com/feed/?paged=2"),
+    ("THR", "https://www.hollywoodreporter.com/feed/?paged=3"),
     ("THR", "https://www.hollywoodreporter.com/c/business/feed/"),
 ]
 

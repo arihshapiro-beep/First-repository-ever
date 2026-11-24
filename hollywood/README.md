@@ -5,7 +5,7 @@ castings, agency and management moves) and flags any story that mentions **peopl
 
 - **Sources:** Deadline, Variety, The Hollywood Reporter (their RSS feeds), plus a Google News search for each person
   limited to those three sites, which catches names that appear only in the body of an article.
-- **How often:** GitHub Actions runs `scripts/hollywood_scan.py` every ~15 minutes
+- **How often:** GitHub Actions runs `scripts/hollywood_scan.py` every ~2 hours
   (`.github/workflows/hollywood-tracker.yml`) and saves the results to `hollywood/data.json`.
 - **Alerts:** when someone on your list shows up, the workflow opens a GitHub issue labeled `trades-alert`,
   which GitHub sends to your phone (GitHub app) and email.
