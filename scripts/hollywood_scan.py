@@ -129,7 +129,7 @@ NOISE = [
 TAG_RES = {t: re.compile("|".join(p), re.I) for t, p in TAGS.items()}
 NOISE_RE = re.compile("|".join(NOISE), re.I)
 STRONG_BIZ_RE = re.compile(
-    r"\b(?:signs|inks|boards|joins|taps|tapped|hires|lands|nabs|sets|acquires|"
+    r"\b(?:signs|inks|boards|joins?|taps|tapped|hires|lands|nabs|sets|acquires|guest star|to star|stars? in|toplines?|"
     r"to direct|to write|to pen|to helm|to star|set to star|deal|pact|promoted|"
     r"upped|exits|ankles|cast|casting|rounds out|series order|greenlit|options?|promotes|names|named|"
     r"appoints|appointed|hired|hiring|adds|partner|partners|launches|exec|executive|showrunner|"

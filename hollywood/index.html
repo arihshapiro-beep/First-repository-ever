@@ -59,6 +59,21 @@ input[type=search]{width:100%;padding:11px 12px;border-radius:10px;border:1px so
 .empty a,.foot a{color:var(--accent)}
 .foot{color:var(--muted);font-size:13px;text-align:center;margin-top:18px}
 .people{color:var(--muted);font-size:13px;margin:-4px 0 12px}
+.congrats{display:inline-flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.congrats button{border:1px solid var(--me);background:transparent;color:var(--me);font:inherit;font-size:13px;
+  font-weight:700;padding:7px 12px;border-radius:999px}
+.congrats button.done{border-color:var(--line);color:var(--muted)}
+.item{cursor:pointer}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;z-index:9}
+.sheet .box{background:var(--card);width:100%;max-width:720px;border-radius:18px 18px 0 0;padding:16px 16px calc(env(safe-area-inset-bottom) + 16px)}
+.sheet h3{margin:0 0 10px;font-size:17px}
+.sheet label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+.sheet input,.sheet textarea{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
+  color:var(--text);font:inherit;font-size:15px}
+.sheet textarea{min-height:190px;resize:vertical}
+.sheet .row{display:flex;gap:8px;margin-top:12px}
+.sheet .row button{flex:1;padding:12px;border-radius:12px;border:0;font:inherit;font-weight:700}
+.sheet .go{background:#ea4335;color:#fff} .sheet .alt{background:var(--line);color:var(--text)}
 </style>
 </head>
 <body>
@@ -161,14 +176,141 @@ function render(){
 
   list.innerHTML = rows.slice(0, 300).map(i => {
     const isNew = lastSeen && i.found > lastSeen;
-    return `<a class="item${isNew ? ' new' : ''}${state.tab === 'people' && !i.business ? ' dim' : ''}" href="${esc(i.link)}" target="_blank" rel="noopener">
+    const named = state.tab === 'people' ? (i.people||[]).filter(p => namedInHeadline(i, p)) : [];
+    const congrats = named.length
+      ? `<div class="congrats">${named.map(p => `<button data-congrats="${esc(i.id)}" data-person="${esc(p)}" class="${sentTo(i.id, p) ? 'done' : ''}">${sentTo(i.id, p) ? '✓ Sent' : '✉️ Congrats'} ${esc(p.split(' ')[0])}</button>`).join('')}</div>`
+      : '';
+    return `<div class="item${isNew ? ' new' : ''}${state.tab === 'people' && !i.business ? ' dim' : ''}" data-link="${esc(i.link)}">
       <div class="meta"><span class="src ${esc(i.source)}">${esc(i.source)}</span><span>${ago(i.published)}</span>${isNew ? '<span class="badge-new">NEW</span>' : ''}</div>
       <div class="title">${esc(i.title)}</div>
       ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ''}
       <div class="tags">${(i.people||[]).map(p => `<span class="who">${esc(p)}</span>`).join('')}${i.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-    </a>`;
+      ${congrats}
+    </div>`;
   }).join('');
 }
+
+
+// ---------- Congrats emails (drafted here, sent from your Gmail) ----------
+// Emails and your sign-off are saved only on this phone, never on the public site.
+const emails = () => store.get('emails', {});
+const sentTo = (id, p) => !!store.get('sent', {})[id + '|' + p];
+function markSent(id, p){ const s = store.get('sent', {}); s[id + '|' + p] = new Date().toISOString(); store.set('sent', s); }
+
+// Does the headline itself name this person? (full name, or last name for 2+ word names)
+function namedInHeadline(item, person){
+  const norm = x => x.toLowerCase().replace(/[’']/g, "'");
+  const t = norm(item.title), full = norm(person);
+  return t.includes(full);
+}
+function projectTitle(t){
+  // a quoted title: opening quote at a word start, closing quote not followed by a letter
+  const m = t.match(/(?:^|[\s(])['‘“"]((?:[^'‘’“”"]|[’'](?=[a-z]))+?)[’'”"](?![A-Za-z])/);
+  return m ? m[1].replace(/[\s,;:]+$/, '').trim() : '';
+}
+function draftFor(item, person){
+  const first = person.split(' ')[0];
+  const t = item.title;
+  const pub = item.source === 'THR' ? 'The Hollywood Reporter' : item.source;
+  const proj = projectTitle(t);
+  const on = proj ? ` ${proj}` : '';
+  let subj, why;
+  const am = t.match(/\bsign(?:s|ed)?(?: on)? with (.+)$/i);
+  const agency = am ? [null, am[1].split(/\s(?:for|in|after|ahead|as|on|following|amid|and|&)\s|[;,:(–—]|\s-\s/i)[0].trim()] : null;
+  if (agency){
+    subj = `Congrats on signing with ${agency[1]}!`;
+    why = `Congrats on signing with ${agency[1]}. That's a huge move, and so well deserved.`;
+  } else if (/\b(promot|upped|named|appoint|elevat|partner)/i.test(t)){
+    subj = 'Congrats on the promotion!';
+    why = `Congrats on the promotion. So well deserved.`;
+  } else if (/\b(to direct|to helm|directs|directing|set to direct)\b/i.test(t)){
+    subj = proj ? `Congrats on directing ${proj}!` : 'Congrats on the directing gig!';
+    why = `Congrats on directing${on || ' the new project'}! I can't wait to see what you do with it.`;
+  } else if (/\b(to write|to pen|writes|writing|pens|adapt|showrunner|creator)\b/i.test(t)){
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the writing gig!';
+    why = `Congrats on${on || ' the new writing gig'}! That's such a great fit for you, and I can't wait to see it.`;
+  } else if (/\bguest[- ]star/i.test(t)){
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the guest spot!';
+    why = `Congrats on guest starring${proj ? ` on ${proj}` : ''}! That's so fun. Can't wait to watch.`;
+  } else if (/\b(to star|stars? in|set for|joins?|boards?|cast|rounds? out|series regular|recurring|lead role|toplines?)\b/i.test(t)){
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the new role!';
+    why = `Congrats on${proj ? ` ${proj}` : ' the new role'}! That's so exciting. Can't wait to watch.`;
+  } else if (/\b(exec(utive)?[- ]produc|to produce|producing)\b/i.test(t)){
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the new project!';
+    why = `Congrats on producing${on || ' the new project'}! That's fantastic.`;
+  } else if (/\b(renew|orders?|greenlit|green-?light|picks? up|pickup)\b/i.test(t)){
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the news!';
+    why = `Congrats on${proj ? ` ${proj}` : ' the news'} moving forward! That's fantastic.`;
+  } else if (/\b(wins?|won|award|prize|honor|nominat)/i.test(t)){
+    subj = 'Congrats on the recognition!';
+    why = `Congrats on the recognition! So well deserved.`;
+  } else if (/\b(deal|pact|inks|lands|nabs|sells|sold|acquires|options?)\b/i.test(t)){
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the deal!';
+    why = `Congrats on the deal${proj ? ` for ${proj}` : ''}! That's fantastic news.`;
+  } else {
+    subj = proj ? `Congrats on ${proj}!` : 'Congrats on the news!';
+    why = `Congrats! So great to see this.`;
+  }
+  const sign = store.get('signoff', '');
+  const body = `Hi ${first},\n\nJust saw the news in ${pub}: "${t}". ${why}\n\n${item.link}\n\nWould love to catch up sometime soon and hear more about it.\n\n${sign ? `Best,\n${sign}` : 'Best,'}`;
+  return { subj, body };
+}
+
+function gmailUrl(to, subj, body){
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const android = /Android/.test(navigator.userAgent);
+  if (ios) return `googlegmail://co?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+  if (android) return `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+}
+
+function openCongrats(item, person){
+  const d = draftFor(item, person);
+  const el = document.createElement('div');
+  el.className = 'sheet';
+  el.innerHTML = `<div class="box">
+    <h3>Congrats ${esc(person)}</h3>
+    <label>${esc(person)}'s email (saved on this phone for next time)</label>
+    <input id="cg-to" type="email" inputmode="email" autocomplete="off" placeholder="name@example.com" value="${esc(emails()[person] || '')}">
+    <label>Subject</label>
+    <input id="cg-subj" value="${esc(d.subj)}">
+    <label>Message — edit anything</label>
+    <textarea id="cg-body">${esc(d.body)}</textarea>
+    <label>Sign emails as (saved)</label>
+    <input id="cg-sign" placeholder="Your first name" value="${esc(store.get('signoff', ''))}">
+    <div class="row"><button class="alt" id="cg-copy">Copy</button><button class="alt" id="cg-cancel">Cancel</button><button class="go" id="cg-go">Open in Gmail</button></div>
+  </div>`;
+  document.body.appendChild(el);
+  const $ = id => el.querySelector('#' + id);
+  $('cg-sign').oninput = e => {
+    const old = store.get('signoff', ''); const nu = e.target.value.trim();
+    const b = $('cg-body');
+    b.value = old && b.value.endsWith('\n' + old) ? b.value.slice(0, -old.length) + nu
+            : b.value.endsWith('Best,') ? b.value + '\n' + nu : b.value;
+    store.set('signoff', nu);
+  };
+  const save = () => { const e = emails(); const v = $('cg-to').value.trim(); if (v) { e[person] = v; store.set('emails', e); } };
+  $('cg-cancel').onclick = () => el.remove();
+  el.onclick = e => { if (e.target === el) el.remove(); };
+  $('cg-copy').onclick = async () => { try { await navigator.clipboard.writeText($('cg-body').value); $('cg-copy').textContent = 'Copied ✓'; } catch(e) { $('cg-body').select(); } };
+  $('cg-go').onclick = () => {
+    save(); markSent(item.id, person);
+    location.href = gmailUrl($('cg-to').value.trim(), $('cg-subj').value, $('cg-body').value);
+    setTimeout(() => { el.remove(); render(); }, 800);
+  };
+}
+
+document.getElementById('list').addEventListener('click', e => {
+  const b = e.target.closest('[data-congrats]');
+  if (b){
+    e.stopPropagation();
+    const item = data.items.find(i => i.id === b.dataset.congrats);
+    if (item) openCongrats(item, b.dataset.person);
+    return;
+  }
+  const card = e.target.closest('.item');
+  if (card && card.dataset.link) window.open(card.dataset.link, '_blank', 'noopener');
+});
 
 document.getElementById('tab-people').onclick = () => { state.tab = 'people'; render(); };
 document.getElementById('tab-biz').onclick = () => { state.tab = 'biz'; render(); };
