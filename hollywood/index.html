@@ -154,7 +154,7 @@ function render(){
     if (state.tab === 'people' && !(data.people || []).length){
       list.innerHTML = `<div class="empty">You haven't added anyone yet.<br><br><a href="${document.getElementById('editLink').href}">Add names to your PEOPLE_LIST secret →</a></div>`;
     } else if (state.tab === 'people'){
-      list.innerHTML = `<div class="empty">No stories about your people ${state.tag || state.src || state.q ? 'match these filters' : 'yet'}.<br>The tracker checks the trades every 2 hours.</div>`;
+      list.innerHTML = `<div class="empty">No stories about your people ${state.tag || state.src || state.q ? 'match these filters' : 'yet'}.<br>The tracker checks the trades every hour.</div>`;
     } else list.innerHTML = '<div class="empty">Nothing matches these filters.</div>';
     return;
   }
