@@ -1,3 +1,18 @@
+# My apps
+
+Three separate phone apps live in this one repository. Each has its own folder and its own link:
+
+| App | Open it | Folder |
+|---|---|---|
+| 🧾 Check Splitter | https://arihshapiro-beep.github.io/First-repository-ever/ | files in the top level |
+| 🥗 Calorie Counter | https://arihshapiro-beep.github.io/First-repository-ever/calorie-counter/ | `calorie-counter/` |
+| 🎬 Trades Tracker | https://arihshapiro-beep.github.io/First-repository-ever/hollywood/ | `hollywood/` (+ `scripts/`, `.github/workflows/`) |
+
+The Trades Tracker's list of people is the **PEOPLE_LIST** secret under Settings → Secrets and variables → Actions.
+Secrets belong to the whole repository, not to one app, so it's in the right place even though the repo is named for the Check Splitter.
+
+---
+
 # 🧾 Check Splitter
 
 Split a restaurant bill by **who ordered what**, with **location-aware tax** (food vs. alcohol),

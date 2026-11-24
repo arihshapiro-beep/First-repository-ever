@@ -90,9 +90,10 @@ input[type=search]{width:100%;padding:11px 12px;border-radius:10px;border:1px so
 </div>
 
 <script>
-const REPO = "arihshapiro-beep/first-repository-ever";
+const REPO = "arihshapiro-beep/First-repository-ever";
 const BRANCH = "claude/receipt-check-splitter-y8r3pf";
-document.getElementById('editLink').href = `https://github.com/${REPO}/edit/${BRANCH}/hollywood/people.txt`;
+// Your list lives in the private PEOPLE_LIST secret; this opens where you edit it.
+document.getElementById('editLink').href = `https://github.com/${REPO}/settings/secrets/actions/PEOPLE_LIST`;
 
 const TAGS = ["Writers & Directors", "Agents & Managers", "Casting", "Deals & Projects"];
 const SOURCES = ["Deadline", "Variety", "THR"];
@@ -151,7 +152,7 @@ function render(){
 
   if (!rows.length){
     if (state.tab === 'people' && !(data.people || []).length){
-      list.innerHTML = `<div class="empty">You haven't added anyone yet.<br><br><a href="${document.getElementById('editLink').href}">Add names to your list →</a></div>`;
+      list.innerHTML = `<div class="empty">You haven't added anyone yet.<br><br><a href="${document.getElementById('editLink').href}">Add names to your PEOPLE_LIST secret →</a></div>`;
     } else if (state.tab === 'people'){
       list.innerHTML = `<div class="empty">No stories about your people ${state.tag || state.src || state.q ? 'match these filters' : 'yet'}.<br>The tracker checks the trades every 15 minutes.</div>`;
     } else list.innerHTML = '<div class="empty">Nothing matches these filters.</div>';
