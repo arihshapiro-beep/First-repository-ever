@@ -13,7 +13,9 @@ Standard library only, so the workflow needs no installs.
 """
 from __future__ import annotations
 
+import csv
 import email.utils
+import io
 import hashlib
 import html
 import json
@@ -229,23 +231,59 @@ def classify(it: dict) -> tuple[list[str], bool]:
 
 
 # --------------------------------------------------------------------------
+def _sheet_csv_url(url: str) -> str:
+    """Turn any Google Sheets link into its CSV export link."""
+    m = re.search(r"/spreadsheets/d/([A-Za-z0-9_-]+)", url)
+    if not m or "/export" in url or "output=csv" in url:
+        return url
+    gid = re.search(r"[#&?]gid=(\d+)", url)
+    return (f"https://docs.google.com/spreadsheets/d/{m.group(1)}/export?format=csv"
+            + (f"&gid={gid.group(1)}" if gid else ""))
+
+
+def _sheet_lines() -> list[str]:
+    """Rows of the Google Sheet in PEOPLE_SHEET_URL, as 'Name | note, aka: ...' lines.
+
+    Columns: A = Name, B = Note (optional), C = Also known as (optional, comma-separated).
+    """
+    url = os.environ.get("PEOPLE_SHEET_URL", "").strip()
+    if not url:
+        return []
+    raw = fetch(_sheet_csv_url(url))
+    if not raw or raw.lstrip()[:1] == b"<":
+        print("  ! couldn't read the Google Sheet. Is it shared as 'Anyone with the link: Viewer'?",
+              file=sys.stderr)
+        return []
+    lines = []
+    for row in csv.reader(io.StringIO(raw.decode("utf-8-sig", "replace"))):
+        row = [c.strip() for c in row] + ["", "", ""]
+        name, note, aka = row[0], row[1], row[2]
+        if not name or name.lower() in ("name", "names") or name.startswith("#"):
+            continue
+        extra = ", ".join(x for x in (note, f"aka: {aka}" if aka else "") if x)
+        lines.append(f"{name} | {extra}" if extra else name)
+    print(f"  Google Sheet: {len(lines)} people")
+    return lines
+
+
+def list_is_private() -> bool:
+    return bool(os.environ.get("PEOPLE_LIST", "").strip() or os.environ.get("PEOPLE_SHEET_URL", "").strip())
+
+
 def load_people() -> list[dict]:
-    """people.txt: one person per line.  Optional extras after a '|':
+    """Your list, from the Google Sheet (PEOPLE_SHEET_URL) plus the PEOPLE_LIST secret.
+    If neither is set, hollywood/people.txt is used. Line format:
 
         Jane Doe
         Jane Doe | writer, worked together on Show X
         Robert "Bobby" Smith | aka: Bobby Smith, Rob Smith
     """
     people = []
-    # A private list in the PEOPLE_LIST repository secret wins over people.txt.
-    secret = os.environ.get("PEOPLE_LIST", "").strip()
-    if secret:
-        lines = secret.splitlines()
-    elif os.path.exists(PEOPLE_FILE):
+    lines = _sheet_lines() + os.environ.get("PEOPLE_LIST", "").splitlines()
+    if not list_is_private() and os.path.exists(PEOPLE_FILE):
         with open(PEOPLE_FILE, encoding="utf-8") as f:
             lines = f.read().splitlines()
-    else:
-        return people
+    seen = set()
     for line in lines:
         line = line.strip()
         if not line or line.startswith("#"):
@@ -258,8 +296,9 @@ def load_people() -> list[dict]:
         if m:
             aliases += [a.strip() for a in m.group(1).split(",") if a.strip()]
             note = note[: m.start()].strip(" ,;")
-        if len(name) < 4:
+        if len(name) < 4 or name.lower() in seen:
             continue
+        seen.add(name.lower())
         people.append({"name": name, "note": note, "aliases": aliases})
     return people
 
@@ -373,7 +412,7 @@ def main() -> int:
     data = {
         "updated": now.isoformat(),
         # With a private list, publish only how many people are watched, not who.
-        "people": ([{"name": "", "note": ""}] * len(people)) if os.environ.get("PEOPLE_LIST", "").strip()
+        "people": ([{"name": "", "note": ""}] * len(people)) if list_is_private()
                   else [{"name": p["name"], "note": p["note"]} for p in people],
         "feeds": feed_status,
         "search_cursor": new_cursor,

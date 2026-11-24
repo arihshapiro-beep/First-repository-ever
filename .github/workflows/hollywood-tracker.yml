@@ -31,6 +31,7 @@ jobs:
         env:
           ALERTS_OUT: ${{ runner.temp }}/alerts.json
           PEOPLE_LIST: ${{ secrets.PEOPLE_LIST }}
+          PEOPLE_SHEET_URL: ${{ secrets.PEOPLE_SHEET_URL }}
         run: python scripts/hollywood_scan.py
 
       - name: Save results
