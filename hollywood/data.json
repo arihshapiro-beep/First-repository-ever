@@ -1,6 +1,223 @@
 {
- "updated": "2026-11-24T02:52:53.467388+00:00",
- "people": [],
+ "updated": "2026-11-24T05:22:11.311438+00:00",
+ "people": [
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  },
+  {
+   "name": "",
+   "note": ""
+  }
+ ],
  "feeds": {
   "https://deadline.com/feed/": 12,
   "https://deadline.com/feed/?paged=2": 12,
@@ -15,9 +232,47 @@
   "https://www.hollywoodreporter.com/feed/": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 0,
- "alerted": [],
+ "search_cursor": 40,
+ "alerted": [
+  "0359c18088737022",
+  "13eb7ff74db5d319",
+  "4a1f4158f487e5fa",
+  "53dbee48898ccc7d",
+  "b67f73a10caf85c0",
+  "d353f0957d4a9f56"
+ ],
  "items": [
+  {
+   "id": "76c20ea4d1d8f078",
+   "title": "Berlinale Alum Sreemoyee Singh’s WAVES Film Bazaar Selection ‘Fireflowers,’ About a Mother’s Lost Singing Voice, Boards Dutch Co-Producer (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/markets-festivals/waves-film-bazaar-doc-fireflowers-dutch-co-producer-1236956745/",
+   "summary": "Indian filmmaker Sreemoyee Singh’s personal documentary “Fireflowers,” about a mother who lost her singing voice after her husband died, has added Dutch outfit New Amsterdam Film Company, through Sander Verdonk, as co-producer. The project is also among the selections at this year’s WAVES Film Bazaar, the market component of the International Film Festival of India […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-24T04:58:03+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [
+    "Casting",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "8aabe6e16b6c3963",
+   "title": "Skydance Products & Publishing Chief Josh Silverman Sets Exec Team And Reveals A Departure",
+   "link": "https://deadline.com/2026/11/skydance-products-publishing-chief-sets-executive-team-1237232267/",
+   "summary": "Josh Silverman, President of Global Products & Publishing for Skydance, has set the division’s senior leadership team and announced the departure of one high-level executive. Since the close of the $110 billion merger of Paramount and Warner Bros. Discovery last month, which created the new iteration of Skydance, senior execs across the company have announced […]",
+   "source": "Deadline",
+   "author": "Dade Hayes",
+   "published": "2026-11-24T03:56:13+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "fdba76f3856d888c",
    "title": "“Not True”: Antoine Fuqua Alleged Gun Assault Of Bar Manager Over Daughter Rebuked By Reps",
@@ -26,7 +281,7 @@
    "source": "Deadline",
    "author": "Dominic Patten",
    "published": "2026-11-24T01:50:35+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Agents & Managers",
     "Writers & Directors"
@@ -42,7 +297,7 @@
    "source": "Deadline",
    "author": "Anthonypauldalessandro",
    "published": "2026-11-24T01:41:15+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Casting",
     "Deals & Projects"
@@ -58,10 +313,10 @@
    "source": "Variety",
    "author": "Payton Turkeltaub",
    "published": "2026-11-23T23:44:21+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
-    "Agents & Managers",
-    "Writers & Directors"
+    "Writers & Directors",
+    "Agents & Managers"
    ],
    "business": true,
    "people": []
@@ -74,7 +329,7 @@
    "source": "Deadline",
    "author": "Justin Kroll",
    "published": "2026-11-23T21:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Casting",
     "Deals & Projects"
@@ -90,7 +345,7 @@
    "source": "Variety",
    "author": "Ethan Shanfeld",
    "published": "2026-11-23T21:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Deals & Projects"
    ],
@@ -105,7 +360,7 @@
    "source": "Deadline",
    "author": "Rosy Cordero",
    "published": "2026-11-23T20:21:03+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Agents & Managers",
     "Casting"
@@ -121,26 +376,10 @@
    "source": "Deadline",
    "author": "Anthonypauldalessandro",
    "published": "2026-11-23T20:02:26+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Agents & Managers",
     "Casting"
-   ],
-   "business": true,
-   "people": []
-  },
-  {
-   "id": "6ea351ba02e3166b",
-   "title": "FX’s ‘Seven Sisters’ Drama Series Casts Rodrigo Santoro As Recurring",
-   "link": "https://deadline.com/2026/11/rodrigo-santoro-seven-sisters-fx-cast-elizabeth-olsen-1237231782/",
-   "summary": "EXCLUSIVE: Rodrigo Santoro (Westworld, 300) has been tapped for a major recurring role opposite Elizabeth Olsen in FX’s upcoming drama series Seven Sisters, Deadline has learned. From writer Will Arbery, director Sean Durkin and producer Garrett Basch, in addition to Olsen, Seven Sisters also stars Cristin Milioti, J. Smith-Cameron, Odessa Young, Zoë Winters, Meredith Hagner, […]",
-   "source": "Deadline",
-   "author": "Denise Petski",
-   "published": "2026-11-23T20:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
-   "tags": [
-    "Casting",
-    "Writers & Directors"
    ],
    "business": true,
    "people": []
@@ -153,7 +392,7 @@
    "source": "Deadline",
    "author": "Jillg366",
    "published": "2026-11-23T19:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Deals & Projects"
    ],
@@ -168,7 +407,7 @@
    "source": "Deadline",
    "author": "Rosy Cordero",
    "published": "2026-11-23T19:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Casting"
    ],
@@ -183,77 +422,11 @@
    "source": "Deadline",
    "author": "Matthewgrobar",
    "published": "2026-11-23T18:13:16+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Agents & Managers",
     "Deals & Projects",
     "Writers & Directors"
-   ],
-   "business": true,
-   "people": []
-  },
-  {
-   "id": "62b24408a5d85577",
-   "title": "Jimmy Jenkins’s ‘God With Us,’ Starring Rotimi & Lil Rel Howery, Lands PVOD Release",
-   "link": "https://deadline.com/2026/11/jimmy-jenkins-god-with-us-rotimi-lil-rel-howery-pvod-1237231734/",
-   "summary": "EXCLUSIVE: God With Us, the latest feature from independent filmmaker Jimmy Jenkins, will be available to rent and purchase on PVOD platforms from December 1. The film, a modern American twist on the nativity story, lands on PVOD platforms after a booming performance on a limited theatrical release via Variance Films in partnership with Blue […]",
-   "source": "Deadline",
-   "author": "Zac Ntim",
-   "published": "2026-11-23T18:08:08+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
-   "tags": [
-    "Writers & Directors",
-    "Casting",
-    "Deals & Projects"
-   ],
-   "business": true,
-   "people": []
-  },
-  {
-   "id": "a3e77f7d6d04725a",
-   "title": "‘Shōgun’ Star Hiroyuki Sanada Joins Destin Daniel Cretton’s ‘Naruto’ At Lionsgate",
-   "link": "https://deadline.com/2026/11/shogun-hiroyuki-sanada-destin-daniel-cretton-naruto-movie-1237231404/",
-   "summary": "EXCLUSIVE: Lionsgate is in final negotiations with Hiroyuki Sanada to play the role of Hiruzen Sarutobi in its upcoming live-action film Naruto. Destin Daniel Cretton will write and direct the pic. Charles Melton is also in talks to star. Lionsgate had no comment. Sony Pictures is a co-financier on the film. Avi Arad, Ari Arad, […]",
-   "source": "Deadline",
-   "author": "Justin Kroll",
-   "published": "2026-11-23T18:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
-   "tags": [
-    "Writers & Directors",
-    "Agents & Managers",
-    "Casting",
-    "Deals & Projects"
-   ],
-   "business": true,
-   "people": []
-  },
-  {
-   "id": "ee2790f7f51b242c",
-   "title": "Shawn Levy’s 21 Laps Inks First Look Film Deal At Sony Pictures",
-   "link": "https://deadline.com/2026/11/shawn-levy-sony-21-laps-deal-1237231675/",
-   "summary": "Following his new TV deal at Disney’s 20th Television, Shawn Levy and his 21 Laps has landed an overall feature deal at Sony Pictures. We hear that the Culver City studio was very aggressive about landing the Deadpool & Wolverine and Star Wars: Starfighter filmmaker, and notched the deal in a competitive process. 21 Laps […]",
-   "source": "Deadline",
-   "author": "Anthonypauldalessandro",
-   "published": "2026-11-23T18:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
-   "tags": [
-    "Writers & Directors",
-    "Deals & Projects"
-   ],
-   "business": true,
-   "people": []
-  },
-  {
-   "id": "858cb0add947287f",
-   "title": "James Marsden-Led Apple Series ‘Disavowed’ Adds Four To Cast",
-   "link": "https://deadline.com/2026/11/james-marsden-disavowed-cast-apple-tv-julia-jones-1237231128/",
-   "summary": "EXCLUSIVE: Apple TV has rounded out the cast of Disavowed, its upcoming thriller series, adding Julia Jones (Dexter: New Blood, The Weight), Leila Farzad (I Hate Suzie, Two Weeks in August), Michael Landes (Cruel Summer, The Offer) and Pip Torrens (The Crown, War) in recurring roles. Character details are being kept under wraps. Starring and […]",
-   "source": "Deadline",
-   "author": "Denise Petski",
-   "published": "2026-11-23T18:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
-   "tags": [
-    "Casting"
    ],
    "business": true,
    "people": []
@@ -266,7 +439,7 @@
    "source": "THR",
    "author": "Caitlin Huston",
    "published": "2026-11-23T18:00:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Writers & Directors",
     "Agents & Managers"
@@ -282,7 +455,7 @@
    "source": "Deadline",
    "author": "Jesse Whittock",
    "published": "2026-11-23T17:37:54+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Writers & Directors",
     "Agents & Managers"
@@ -298,7 +471,7 @@
    "source": "Deadline",
    "author": "Matthewgrobar",
    "published": "2026-11-23T16:30:00+00:00",
-   "found": "2026-11-24T02:52:53.467388+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
    "tags": [
     "Agents & Managers",
     "Deals & Projects"
@@ -596,6 +769,98 @@
    ],
    "business": true,
    "people": []
+  },
+  {
+   "id": "b67f73a10caf85c0",
+   "title": "‘Hershey’ Review: Finn Wittrock Plays the American Chocolate Titan in a Sickly Sweet Biopic",
+   "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPT0tQNW5IQmV3c0YwTWUtX1NoNEx1ek0yaWF3Ykw1QkF4WHFwT1pSYVNNWkNtMnQyYWxHWUJqYjFrZk1NZDMwaVl5VEdMV0dHY1dxSzBnVEsyM1pGdUJtWll0VHNVZkE5SXg2VGh4VW4xRDUxRTlyNnJUMGVaa2FBejd4V3FraUpyZ0QxQ0p5ZDUwX2p4NURUdmJ2cTVTdjhaLXRXcUdNSHNTYldEYV9Rd1EzMHd0N3lVWFdmdmt5MktEZw?oc=5",
+   "summary": "‘Hershey’ Review: Finn Wittrock Plays the American Chocolate Titan in a Sickly Sweet Biopic The Hollywood Reporter",
+   "source": "THR",
+   "author": "",
+   "published": "2026-11-17T18:19:51+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Joshua Harris"
+   ]
+  },
+  {
+   "id": "53dbee48898ccc7d",
+   "title": "‘Asphalt’ and ‘Sandbag Dam’ Among Lee Strasberg Film Festival 10th Edition Award Winners",
+   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQQUxJVGNVVks1UHhYaS1GTkFwNzVCb0NZQjJQQ1IzS0tQZkF0aEtGXzFWNjl6ZmxyRGtTQUlpZkJLWk52RXM2QjNZMUU0ZXZYYUNBZnl3OFdTU1I2dUE0RlplWG1NVGFRbzdMMmwtUUU1T1NXNW1qS01QUlQzckNOS1NxUW82UjRnVnNLS0tyQ05TMkU4MHpIUGd6azFoVUcwSmtv?oc=5",
+   "summary": "‘Asphalt’ and ‘Sandbag Dam’ Among Lee Strasberg Film Festival 10th Edition Award Winners Variety",
+   "source": "Variety",
+   "author": "",
+   "published": "2026-11-17T17:45:00+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Max Tullio"
+   ]
+  },
+  {
+   "id": "d353f0957d4a9f56",
+   "title": "Brandon Sklenar on ‘Iron Jane,’ Body Dysmorphia and His Rapid Hollywood Rise",
+   "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQcGd1akE5Y2NXc01ZUGp0UFYwWTBUdE55NEtVZ1hnNDhGUjJWQWZDbzdkb2dVS3gyRFA3ejRScEV3VUxySWNFM1RFNEM5VzZ1RlY0bWs4V29qd2dSVzI2Vkh5Z2NNNXNISGJzeDBEaHNWdzlNVjhwazcxdUhSeWo4OHdmV1N6TmdLWFZwTG1iYnhES1hYNzJrWU1EdFZMZmlyVnhScURPeTlJVVhWeVlSYURHY3E?oc=5",
+   "summary": "Brandon Sklenar on ‘Iron Jane,’ Body Dysmorphia and His Rapid Hollywood Rise The Hollywood Reporter",
+   "source": "THR",
+   "author": "",
+   "published": "2026-11-10T08:00:00+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Ramin Bahrani"
+   ]
+  },
+  {
+   "id": "0359c18088737022",
+   "title": "Emile Hirsch, Benjamin Norris Film 'In Tandem' Heads To AFM, First Look",
+   "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNWGpSZ2NGdjNWTGRaSkhEUnhUN1pMS012MVkzSUx3M0FJbUJPTUdzdXd6bUV4VEJIZzJEc29iQl9wYnMyWUtsMS1uRDlIZEV2VzJmVWd5ZGFUMUdZVVlZRlJmZ2xvWlA4VTJBem1vZjA5LUhoempMaWU1clB5Q1NwRXlfbXNkeHY1MlI2a2w3TWNmUmx3azM2UWJB?oc=5",
+   "summary": "Emile Hirsch, Benjamin Norris Film 'In Tandem' Heads To AFM, First Look Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-11-05T08:00:00+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": false,
+   "people": [
+    "Ramin Bahrani"
+   ]
+  },
+  {
+   "id": "13eb7ff74db5d319",
+   "title": "Nicolas Cage, Alexander Ludwig, Gabriel Basso Set For 'The Brand'",
+   "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPRm05di1lUlRMdDVLM0lGZU94ZGJZM294Ykx6d0tNNDduRzV1ZzEzQWJYd2tXMDNtTmZDNG9MeXFUd3kwSlVob1VUeXFEQTRNbExHaV80cEM2RTZhUGwtNXhJUWpBekl0ZEdoVU93MGFxOEV1TUI3dWJ4REh5dFBwVEVQRjltTG45QlA2bHg4VnZDOG5mbTd2dThPQkFsamNl?oc=5",
+   "summary": "Nicolas Cage, Alexander Ludwig, Gabriel Basso Set For 'The Brand' Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-11-04T08:00:00+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Joshua Harris"
+   ]
+  },
+  {
+   "id": "4a1f4158f487e5fa",
+   "title": "Kate Mara, Leslie Mann, Ashton Kutcher Set For 'Home Shopper'",
+   "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPdVhISEF3VktNRG54aUVrM3VZMmdldzRoODVLM1F5M0s3UzZHS2VNdUhFVkFNNXdOVTI3TXJjQ1JBUnlkUGJQT1NocUpyQklVWXNiWXZ5OEMwa1JRVEVBSjRUOUdZdXIwUHAtamNfRUhMeXN2TEJJcndUQkdPVmxzUW5ZUnViSktmX01IRzA4ZUpUb05rZmN4dmdUTQ?oc=5",
+   "summary": "Kate Mara, Leslie Mann, Ashton Kutcher Set For 'Home Shopper' Deadline",
+   "source": "Deadline",
+   "author": "",
+   "published": "2026-11-04T08:00:00+00:00",
+   "found": "2026-11-24T05:22:11.311438+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Cole Eckerle"
+   ]
   }
  ]
 }
