@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T02:34:36.578274+00:00",
+ "updated": "2026-11-25T13:07:59.140140+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 46,
+ "search_cursor": 48,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -356,6 +356,147 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "ea573f622e65010d",
+   "title": "Generative AI Indian Feature ‘Maharaja in Denims,’ Inspired by Sikh Ruler Maharaja Ranjit Singh, Sets April 2027 Release (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/news/generative-ai-feature-maharaja-in-denims-april-2027-release-1236957865/",
+   "summary": "“Maharaja in Denims,” author Khushwant Singh’s novel about a young man who relives the life of 19th-century Sikh ruler Maharaja Ranjit Singh, is nearing the finish line as a feature-length generative AI film – one its makers say they effectively had to make three times. The team hopes to release the film by April 2027, […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-25T12:17:16+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "ca03fcd41f6f25ab",
+   "title": "‘Ramayana’ Language App Cinedubs Named IFFI Accessibility Partner After Reaching More Than 100,000 Moviegoers in 42 Countries",
+   "link": "https://variety.com/2026/film/festivals/ramayana-app-cinedubs-iffi-2026-accessibility-partner-1236957861/",
+   "summary": "The mobile app that let more than 100,000 moviegoers in 42 countries hear “Ramayana” in a language of their choosing has signed on as accessibility partner for the International Film Festival of India (IFFI) 2026 in Goa. The platform, Cinedubs, has brought its audio description and closed-caption technology to the festival, so that visually impaired […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-25T11:52:25+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "0c59b10edbedd933",
+   "title": "Damian Lewis Boards Short Film ‘Odessa’ as Executive Producer (Exclusive)",
+   "link": "https://www.hollywoodreporter.com/movies/movie-news/damian-lewis-boards-short-film-odessa-as-executive-producer-1236762810/",
+   "summary": "Harald Swinkels' Oscar-qualified World War II-era drama was shot on 35mm in the Austrian-Italian Dolomites.",
+   "source": "THR",
+   "author": "Georg Szalai",
+   "published": "2026-11-25T11:00:00+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "6acf1943a5eced96",
+   "title": "Wacom and India’s IICT Ink Pact at IFFI Goa With Scholarships, Manga and Anime Masterclasses",
+   "link": "https://variety.com/2026/film/festivals/wacom-india-iict-scholarships-manga-masterclasses-1236957791/",
+   "summary": "Eighteen students at the Indian Institute of Creative Technologies (IICT), India’s national center of excellence for animation, visual effects, gaming, comics and extended reality (AVGC-XR), will have half their tuition covered under a pact with Wacom India signed at the International Film Festival of India (IFFI) in Goa. Wacom India is the local arm of […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-25T09:14:28+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "8060a505afb712e2",
+   "title": "Presenter & YouTube Creator Patricia Bright Signs With HLD Talent & Launches Feel-Good Show ‘Unpacked & Upgraded’",
+   "link": "https://deadline.com/2026/11/patricia-bright-signs-hld-talent-unpacked-upgraded-series-1237232602/",
+   "summary": "EXCLUSIVE: YouTuber and presenter Patricia Bright has signed with HLD Talent, and is launching her latest series tomorrow. HLD will work with Bright on the UK and U.S. strategies, partnerships and businesses, and look to solidify her name in the finance, beauty and social media spaces. Bright is a British YouTuber, content creator, author and […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-25T09:00:00+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "bfde92a663f3eb70",
+   "title": "‘Minotaur’ Star Iris Lebedeva Signs With Independent Talent Group (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/news/minotaur-star-iris-lebedeva-signs-independent-talent-group-1236957640/",
+   "summary": "Iris Lebedeva, the Russian actor at the center of Andrey Zvyagintsev’s “Minotaur,” has signed with Independent Talent Group. She will be represented at the agency by Caoimhe Baxter, who works within Duncan Heath’s team. “Iris is the breakout star of ‘Minotaur’ and we’re so happy to be signing her at this exciting juncture in her […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-25T09:00:00+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "52e2d6c95ede8edf",
+   "title": "Noomi Rapace Launches Production Company Boom Films, Dedicated to Female-Driven Projects and Backed by Thomas Benski’s Lumina Media (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/global/noomi-rapace-production-company-boom-films-1236956766/",
+   "summary": "Noomi Rapace is venturing into the film and TV production space by officially launching Boom Films, co-founded with her longtime manager and production partner Stella Härnström. The London and Stockholm-based company is being backed by former Pulse Films boss Thomas Benski’s Lumina Media. The actor, who first captured global attention with her potent portrayal of […]",
+   "source": "Variety",
+   "author": "Nvivarelli",
+   "published": "2026-11-25T08:30:00+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "ed672876daf48a21",
+   "title": "Lionsgate Play Sets ‘Eklavya’ As First AI-Led Series For Tiger TV",
+   "link": "https://deadline.com/2026/11/lionsgate-play-eklavya-ai-series-tiger-tv-1237232555/",
+   "summary": "EXCLUSIVE: Lionsgate Play is setting its first AI-led original series, Eklavya. The series, based around Indian mythology, will feature Yug R.Ai, the AI actor character that Lionsgate Play CEO Rohit Jain recently unveiled. Above you can see a first-look image. It is based around an archer character from the Hindu epic Mahābhārata, and the plot […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-25T06:15:00+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "a03e4716f9ed2bb7",
+   "title": "‘Dancing With the Stars’ Names Historic Season 35 Winner: See All the Scores, Who Won",
+   "link": "https://www.hollywoodreporter.com/tv/tv-news/dwts-season-35-finale-winner-week-11-recap-scores-freestyle-1236762506/",
+   "summary": "Tatyana Ali, Ezra Frech, Amber Glenn, Maura Higgins and Connor Wood competed for their chance to win the Len Goodman Mirrorball Trophy.",
+   "source": "THR",
+   "author": "McKinley Franklin",
+   "published": "2026-11-25T00:58:00+00:00",
+   "found": "2026-11-25T13:07:59.140140+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "702a04143f06ca1d",
    "title": "Steven Hack, ‘American Horror Story’ Actor and Original Cast Member of ‘Cats,’ Dies at 68",
@@ -457,8 +598,8 @@
    "published": "2026-11-24T20:00:24+00:00",
    "found": "2026-11-25T02:34:36.578274+00:00",
    "tags": [
-    "Writers & Directors",
-    "Casting"
+    "Casting",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
@@ -602,8 +743,8 @@
    "published": "2026-11-24T18:30:00+00:00",
    "found": "2026-11-25T02:34:36.578274+00:00",
    "tags": [
-    "Writers & Directors",
-    "Deals & Projects"
+    "Deals & Projects",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
@@ -618,8 +759,8 @@
    "published": "2026-11-24T18:00:00+00:00",
    "found": "2026-11-25T02:34:36.578274+00:00",
    "tags": [
-    "Writers & Directors",
-    "Deals & Projects"
+    "Deals & Projects",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
