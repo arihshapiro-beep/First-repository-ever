@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T22:37:08.467797+00:00",
+ "updated": "2026-11-26T05:09:19.413958+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 50,
+ "search_cursor": 52,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -357,6 +357,68 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "11b6c42c85aabe78",
+   "title": "Lauren Ash & Mae Martin Among Cast Of Shozer’s Adult Animation High-School Comedy ‘Dirts’",
+   "link": "https://deadline.com/2026/11/lauren-ash-mae-martin-dirts-shozer-comedy-1237232683/",
+   "summary": "EXCLUSIVE: Lauren Ash (Superstore) and Mae Martin (Wayward) have been cast in Dirts, an ensemble adult animated high-school comedy series for New Metric Media’s streaming service Shozer. They will appear alongside the likes of Ash’s Superstore co-star Mark McKinney, Mark Little (Gary and His Demons) and Ryan Belleville (Workin’ Moms). The show, set to premiere […]",
+   "source": "Deadline",
+   "author": "Jesse Whittock",
+   "published": "2026-11-26T05:01:00+00:00",
+   "found": "2026-11-26T05:09:19.413958+00:00",
+   "tags": [
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "041a2fa9acf29f8d",
+   "title": "Crypto Exec Constance Wang Slams Her Portrayal in Netflix Series ‘The Altruists’ as ‘Racist’ and ‘Very Stereotypical’",
+   "link": "https://variety.com/2026/tv/news/ftx-constance-wang-slams-altruists-portrayal-racist-netflix-1236958694/",
+   "summary": "Former FTX COO Constance Wang is calling out Netflix’s “The Altruists.” Wang took to social media on Wednesday to respond to whether the streamer had consulted her about what she describes as a “very stereotypical” portrayal of her by actress Madison Hu. “People have asked whether Netflix consulted me. They didn’t,” wrote Wang on X. […]",
+   "source": "Variety",
+   "author": "Payton Turkeltaub",
+   "published": "2026-11-26T02:54:08+00:00",
+   "found": "2026-11-26T05:09:19.413958+00:00",
+   "tags": [
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "8b5e17a5af1bc7a6",
+   "title": "Judge Sides With ABC In First Amendment Lawsuit Against FCC; Puts Halt To Agency’s Early License Renewal Proceeding",
+   "link": "https://deadline.com/2026/11/abc-fcc-trump-first-amendment-lawsuit-1237158218/",
+   "summary": "A federal judge has largely sided with ABC in its First Amendment lawsuit claiming that an FCC order to review its broadcast licenses was a retaliatory act by the Trump administration designed to chill its content, whether that be news coverage or jokes from Jimmy Kimmel. U.S. District Judge Loren AliKhan issued a preliminary injunction […]",
+   "source": "Deadline",
+   "author": "Ted Johnson",
+   "published": "2026-11-26T00:30:46+00:00",
+   "found": "2026-11-26T05:09:19.413958+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "125ec0682db989f7",
+   "title": "‘Monster: The Lizzie Borden Story’ Team On Taking A Whack At Romance & Female Agency Inspired By ‘Atonement’ & ‘Saltburn’ — The Process",
+   "link": "https://deadline.com/video/monster-the-lizzie-borden-story-interview-ella-beatty-vicky-krieps-max-winkler-michael-bauman/",
+   "summary": "Talk about taking an axe to the heart. Putting together the opening of Netflix’s Monster: The Lizzie Borden Story was a beautiful challenge. As Lizzie (Ella Beatty) moves through this conception of a dollhouse filled with rage and yearning for freedom, each step gets more powerful than the last. Director Max Winkler and cinematographer Michael […]",
+   "source": "Deadline",
+   "author": "Destiny Jackson",
+   "published": "2026-11-25T23:50:00+00:00",
+   "found": "2026-11-26T05:09:19.413958+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "de1aabf852921a2d",
    "title": "Tony Romo, After Parting Ways With CBS Sports, Named ‘Chief Predictions Officer’ of Jake Paul’s Betr Betting App",
@@ -428,8 +490,8 @@
    "published": "2026-11-25T20:00:00+00:00",
    "found": "2026-11-25T22:37:08.467797+00:00",
    "tags": [
-    "Writers & Directors",
-    "Deals & Projects"
+    "Deals & Projects",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
