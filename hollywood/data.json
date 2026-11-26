@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-26T05:09:19.413958+00:00",
+ "updated": "2026-11-26T15:25:36.584155+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 52,
+ "search_cursor": 54,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -357,6 +357,69 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "476968003cfc2a02",
+   "title": "Former NBA Champ David M. West Scripting ‘The Neighbor’; Myles Truitt & Stonebwoy Among Cast With Filming Underway In South Africa",
+   "link": "https://deadline.com/2026/11/myles-truitt-stonebwoy-cast-the-neighbor-david-m-west-1237234010/",
+   "summary": "EXCLUSIVE: Former NBA champion and All-Star David M. West is stepping into the world of filmmaking as screenwriter and executive producer of The Neighbor, a psychological thriller inspired by true events and directed by Kyle Scott. Principal photography began November 4, 2026, in Cape Town, South Africa, where production is currently underway. The international cast […]",
+   "source": "Deadline",
+   "author": "Andreas Wiseman",
+   "published": "2026-11-26T14:53:22+00:00",
+   "found": "2026-11-26T15:25:36.584155+00:00",
+   "tags": [
+    "Casting",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "b889fcf22384b111",
+   "title": "How ‘The Lowdown’ Season 2 Finale Sets Up a (Hoped for) Third Season",
+   "link": "https://www.hollywoodreporter.com/tv/tv-features/the-lowdown-season-2-finale-ethan-hawke-sterlin-harjo-1236763783/",
+   "summary": "Creator Sterlin Harjo and Ethan Hawke break down Lee's growth as a person and the loose threads still left to explore.",
+   "source": "THR",
+   "author": "Rick Porter",
+   "published": "2026-11-26T14:00:00+00:00",
+   "found": "2026-11-26T15:25:36.584155+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "6578a9d4ed3111de",
+   "title": "‘Bandit Queen’ Sequel From Bobby Bedi, ‘Satluj’ Director Honey Trehan Targets Late 2027 or Early 2028 Release, Enters Casting (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/news/bandit-queen-sequel-bobby-bedi-honey-trehan-2027-28-release-1236958895/",
+   "summary": "The sequel to “Bandit Queen,” the 1994 drama about Indian outlaw Phoolan Devi, is aiming for a release at the end of 2027 or early 2028, producer Bobby Bedi tells Variety, with the screenplay now in its final draft and casting underway. Bedi, who produced Shekhar Kapur’s original, is calling the follow-up “Bandit Queen MP.” […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-26T11:49:33+00:00",
+   "found": "2026-11-26T15:25:36.584155+00:00",
+   "tags": [
+    "Casting",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "e5ee1794268c5f02",
+   "title": "Baz Bamigboye Pays Tribute To Legendary British Agent Jeremy Conway – With Help From Helena Bonham Carter",
+   "link": "https://deadline.com/2026/11/baz-bamigboye-tribute-jeremy-conway-helena-bonham-carter-1237233779/",
+   "summary": "Jeremy Conway — an artiste’s agent, and a titan of the industry with an unerring eye for the stars of the future — died earlier this month aged 87. His client list was legendary, a rollcall that included Anthony Hopkins, Brian Cox, Helena Bonham Carter, Benedict Cumberbatch, Claire Bloom, Greta Scacchi, Noma Dumezweni, Joanne Froggatt, […]",
+   "source": "Deadline",
+   "author": "Damon Wise",
+   "published": "2026-11-26T10:00:00+00:00",
+   "found": "2026-11-26T15:25:36.584155+00:00",
+   "tags": [
+    "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "11b6c42c85aabe78",
    "title": "Lauren Ash & Mae Martin Among Cast Of Shozer’s Adult Animation High-School Comedy ‘Dirts’",
@@ -413,8 +476,8 @@
    "published": "2026-11-25T23:50:00+00:00",
    "found": "2026-11-26T05:09:19.413958+00:00",
    "tags": [
-    "Writers & Directors",
-    "Agents & Managers"
+    "Agents & Managers",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
