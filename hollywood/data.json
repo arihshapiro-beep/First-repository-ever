@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27T09:43:46.944822+00:00",
+ "updated": "2026-11-27T19:30:36.083654+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 58,
+ "search_cursor": 60,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -358,6 +358,69 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "62caf3b824ecb586",
+   "title": "Wildling Pictures Acquires Screen Rights To WWII Spy Story ‘Operation Sparrow’ & Folk Horror Novel ‘Queen Mab’",
+   "link": "https://deadline.com/2026/11/wildling-pictures-buys-operation-sparrow-horror-queen-mab-1237234239/",
+   "summary": "EXCLUSIVE: Toronto-based film and TV company Wildling Pictures has optioned Emily McBride’s psychological folk horror novel Queen Mab and Jason Bell’s WWII spy story Operation Sparrow, with a view to turning both into features. Published in September this year, Bell’s archival research uncovers a little known but significant espionage operation from WWII which helped protect […]",
+   "source": "Deadline",
+   "author": "Andreas Wiseman",
+   "published": "2026-11-27T13:52:43+00:00",
+   "found": "2026-11-27T19:30:36.083654+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "de66a413f1150dbf",
+   "title": "Producer of Oscar-Nominated ‘A Friend Of Dorothy’ to Make Directorial Debut With Disability Drama ‘Hidden Creatures,’ Easyjet Founder Boards as EP (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/global/a-friend-of-dorothy-max-marlow-directing-hidden-creatures-1236959288/",
+   "summary": "Max Marlow, who produced this year’s Oscar-nominated short film “A Friend of Dorothy” starring Miriam Margolyes and Stephen Fry, is set to make his directorial debut. “Hidden Creatures” is a magical-realist short drama exploring invisible disability through what’s described as an “unconventional coming-of-age story.” Set in a cinema, the film follows 17-year-old Rafi on a […]",
+   "source": "Variety",
+   "author": "Alex Ritman",
+   "published": "2026-11-27T13:42:53+00:00",
+   "found": "2026-11-27T19:30:36.083654+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "dcaea666227e4675",
+   "title": "Spain Nears New India Co-Production Pact as It Wraps Country of Honor Run at IFFI Goa, WAVES Film Bazaar",
+   "link": "https://variety.com/2026/film/markets-festivals/spain-new-india-co-production-pact-iffi-goa-honor-run-1236959353/",
+   "summary": "Spain and India have moved closer to a fresh film and audiovisual co-production treaty as Spain wrapped its run as Country of Honor at the 57th International Film Festival of India (IFFI) in Goa and its market, WAVES Film Bazaar. On Nov. 21, Marta Serrano, director general of Spain’s Institute of Cinematography and Audiovisual Arts […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-27T12:31:57+00:00",
+   "found": "2026-11-27T19:30:36.083654+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "13c0bac9d655d6b0",
+   "title": "‘Dangal’ Casting Director Mukesh Chhabra Recalls Auditioning Nearly 14,000 Girls, Shares Self-Tape Tips at IFFI Masterclass",
+   "link": "https://variety.com/2026/film/festivals/dangal-casting-director-mukesh-chhabra-14000-auditions-1236959312/",
+   "summary": "Mukesh Chhabra, the casting director behind “Dangal” and Shah Rukh Khan’s upcoming “King,” took aspiring actors and filmmakers behind the scenes of the casting process at a masterclass at the 57th International Film Festival of India (IFFI) in Goa. The session, “The Casting Magic: Auditions Unplugged,” turned into an extended conversation, with participants asking about […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-27T11:03:53+00:00",
+   "found": "2026-11-27T19:30:36.083654+00:00",
+   "tags": [
+    "Writers & Directors",
+    "Casting"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "c16cdd4b4503a201",
    "title": "Northern Ireland Screen Appoints New Chief Executive",
