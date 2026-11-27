@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27T00:39:31.449464+00:00",
+ "updated": "2026-11-27T09:43:46.944822+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 56,
+ "search_cursor": 58,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -359,6 +359,21 @@
  ],
  "items": [
   {
+   "id": "c16cdd4b4503a201",
+   "title": "Northern Ireland Screen Appoints New Chief Executive",
+   "link": "https://deadline.com/2026/11/northern-ireland-screen-appoints-new-chief-executive-1237234222/",
+   "summary": "Northern Ireland Screen has appointed its new Chief Executive. Laura Livingstone will take on the role in January. Livingstone will take over from current CEO Richard Williams, who announced in June that he would step down from the role in December after over 23 years in the position. The exec has two decades of experience […]",
+   "source": "Deadline",
+   "author": "Andreas Wiseman",
+   "published": "2026-11-27T09:41:45+00:00",
+   "found": "2026-11-27T09:43:46.944822+00:00",
+   "tags": [
+    "Agents & Managers"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
    "id": "60ae725f633ff225",
    "title": "Elizabeth Holmes’ Partner Billy Evans Writes Her an Emotional Thanksgiving Love Letter: ‘Our Most Beautiful Days Are Still Ahead of Us’",
    "link": "https://variety.com/2026/film/news/elizabeth-holmes-billy-evans-thanksgiving-love-letter-1236959067/",
@@ -377,13 +392,16 @@
   {
    "id": "463682ba56a3cb7c",
    "title": "The Best Audible Books to Listen to Right Now: ‘ACOTAR,’ ‘Hunger Games,’ ‘Pride & Prejudice’ and More",
-   "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBnVm5wVEl3dk5vMUQ5NGppNXhzSGpZUE5VNVpoRlFCdUM4Unk0aS1ZRlh3dVphc09sWFEzZVlMNWxzekt0Wl9MM2lDRkNRVWlSd29FQ1FWbS14dkp4UDFkWFNPNUhWQQ?oc=5",
+   "link": "https://variety.com/shop/best-audible-books-1234982981/",
    "summary": "The Best Audible Books to Listen to Right Now: ‘ACOTAR,’ ‘Hunger Games,’ ‘Pride & Prejudice’ and More Variety",
    "source": "Variety",
    "author": "",
    "published": "2026-11-26T16:41:00+00:00",
    "found": "2026-11-27T00:39:31.449464+00:00",
-   "tags": [],
+   "tags": [
+    "Deals & Projects",
+    "Writers & Directors"
+   ],
    "business": false,
    "people": [
     "Jefferson White"
