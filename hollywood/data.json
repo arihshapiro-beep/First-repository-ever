@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-26T15:25:36.584155+00:00",
+ "updated": "2026-11-27T00:39:31.449464+00:00",
  "people": [
   {
    "name": "",
@@ -335,11 +335,12 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 54,
+ "search_cursor": 56,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
   "401a58bb8b923743",
+  "463682ba56a3cb7c",
   "4a1f4158f487e5fa",
   "4a279d84164f75a2",
   "53dbee48898ccc7d",
@@ -357,6 +358,37 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "60ae725f633ff225",
+   "title": "Elizabeth Holmes’ Partner Billy Evans Writes Her an Emotional Thanksgiving Love Letter: ‘Our Most Beautiful Days Are Still Ahead of Us’",
+   "link": "https://variety.com/2026/film/news/elizabeth-holmes-billy-evans-thanksgiving-love-letter-1236959067/",
+   "summary": "Billy Evans, Elizabeth Holmes’ partner and the father of their two children, took to X on Nov. 26 to write an emotional Thanksgiving message to her. The text is primarily about how much he misses her and how their kids need their mother. Holmes is currently serving an 11-year prison sentence for four wire fraud-related […]",
+   "source": "Variety",
+   "author": "William Earl",
+   "published": "2026-11-26T19:02:18+00:00",
+   "found": "2026-11-27T00:39:31.449464+00:00",
+   "tags": [
+    "Agents & Managers",
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
+  {
+   "id": "463682ba56a3cb7c",
+   "title": "The Best Audible Books to Listen to Right Now: ‘ACOTAR,’ ‘Hunger Games,’ ‘Pride & Prejudice’ and More",
+   "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBnVm5wVEl3dk5vMUQ5NGppNXhzSGpZUE5VNVpoRlFCdUM4Unk0aS1ZRlh3dVphc09sWFEzZVlMNWxzekt0Wl9MM2lDRkNRVWlSd29FQ1FWbS14dkp4UDFkWFNPNUhWQQ?oc=5",
+   "summary": "The Best Audible Books to Listen to Right Now: ‘ACOTAR,’ ‘Hunger Games,’ ‘Pride & Prejudice’ and More Variety",
+   "source": "Variety",
+   "author": "",
+   "published": "2026-11-26T16:41:00+00:00",
+   "found": "2026-11-27T00:39:31.449464+00:00",
+   "tags": [],
+   "business": false,
+   "people": [
+    "Jefferson White"
+   ]
+  },
   {
    "id": "476968003cfc2a02",
    "title": "Former NBA Champ David M. West Scripting ‘The Neighbor’; Myles Truitt & Stonebwoy Among Cast With Filming Underway In South Africa",
@@ -383,8 +415,8 @@
    "published": "2026-11-26T14:00:00+00:00",
    "found": "2026-11-26T15:25:36.584155+00:00",
    "tags": [
-    "Writers & Directors",
-    "Deals & Projects"
+    "Deals & Projects",
+    "Writers & Directors"
    ],
    "business": true,
    "people": []
