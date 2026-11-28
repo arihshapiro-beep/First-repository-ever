@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-28T02:45:34.771020+00:00",
+ "updated": "2026-11-28T11:56:39.685537+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 62,
+ "search_cursor": 64,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -358,6 +358,21 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "72b5f47cb8e073b2",
+   "title": "Anurag Kashyap, Ranjan Singh Back Haryana-Rooted Short ‘The Melody of Destiny’ as Executive Producers (EXCLUSIVE)",
+   "link": "https://variety.com/2026/film/news/anurag-kashyap-ranjan-singh-back-short-melody-of-destiny-1236959318/",
+   "summary": "Indian auteur Anurag Kashyap (“Gangs of Wasseypur”) and producer Ranjan Singh have boarded “The Melody of Destiny,” a short film rooted in the northern Indian state of Haryana, as presenters and executive producers, backing the film on the festival circuit. The short is the first film from Chaitanya Chugh, a 24-year-old self-taught director from Pehowa, […]",
+   "source": "Variety",
+   "author": "Naman Ramachandran",
+   "published": "2026-11-28T03:30:00+00:00",
+   "found": "2026-11-28T11:56:39.685537+00:00",
+   "tags": [
+    "Writers & Directors"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "c2bde4ae9396bb4a",
    "title": "Audible Names Its Top 10 Celebrity Memoirs of 2026 — Listen With 99-Cent Black Friday Deal",
