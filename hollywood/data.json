@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27T19:30:36.083654+00:00",
+ "updated": "2026-11-28T02:45:34.771020+00:00",
  "people": [
   {
    "name": "",
@@ -335,7 +335,7 @@
   "https://www.hollywoodreporter.com/feed/?paged=3": 10,
   "https://www.hollywoodreporter.com/c/business/feed/": 10
  },
- "search_cursor": 60,
+ "search_cursor": 62,
  "alerted": [
   "0359c18088737022",
   "13eb7ff74db5d319",
@@ -358,6 +358,21 @@
   "ecd3b491c726cc92"
  ],
  "items": [
+  {
+   "id": "c2bde4ae9396bb4a",
+   "title": "Audible Names Its Top 10 Celebrity Memoirs of 2026 — Listen With 99-Cent Black Friday Deal",
+   "link": "https://www.hollywoodreporter.com/lifestyle/shopping/best-celebrity-memoirs-2026-audible-black-friday-deal-promo-1236764202/",
+   "summary": "Catch up on the year's best tell-alls with the season's deepest discount.",
+   "source": "THR",
+   "author": "Erin Lassner",
+   "published": "2026-11-27T21:20:56+00:00",
+   "found": "2026-11-28T02:45:34.771020+00:00",
+   "tags": [
+    "Deals & Projects"
+   ],
+   "business": true,
+   "people": []
+  },
   {
    "id": "62caf3b824ecb586",
    "title": "Wildling Pictures Acquires Screen Rights To WWII Spy Story ‘Operation Sparrow’ & Folk Horror Novel ‘Queen Mab’",
